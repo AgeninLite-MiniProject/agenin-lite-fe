@@ -3,6 +3,7 @@ import MainLayout from "./components/layout/MainLayout";
 import DashboardPage from "@/pages/user/dashboard/DashboardPage";
 import AdminLayout from "@/components/layout/admin/AdminLayout";
 import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
+import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
 import "./App.css";
 
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboardPage />} />
+          <Route path="products" element={<AdminProductsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
