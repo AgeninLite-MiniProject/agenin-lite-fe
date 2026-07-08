@@ -20,7 +20,7 @@ const navItems = [
   },
   {
     title: "Audit Logs",
-    href: "/admin/audit-logs",
+    href: "/admin/audit",
     icon: FileText,
   },
 ];
