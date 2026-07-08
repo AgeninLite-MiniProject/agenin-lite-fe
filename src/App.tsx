@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
 import DashboardPage from "@/pages/user/dashboard/DashboardPage";
+import AdminLayout from "@/components/layout/admin/AdminLayout";
+import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import "./App.css";
 
 
@@ -11,6 +13,12 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboardPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
