@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-slate-900">Recent Activity</h2>
           <Link
-            to="/admin/audit-logs"
+            to="/admin/audit"
             className="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors"
           >
             View All

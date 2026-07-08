@@ -45,17 +45,12 @@ export default function AdminUsersPage() {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-3 p-2 bg-white rounded-3xl border border-slate-200 mb-6 shadow-sm">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-3.5 top-2.5 h-5 w-5 text-slate-400" />
-          <Input
-            placeholder="Search by name or phone number..."
-            className="pl-11 border-none shadow-none focus-visible:ring-0 bg-transparent h-10 text-base"
-          />
-        </div>
-        <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-10 shadow-sm font-semibold">
-          Search
-        </Button>
+      <div className="mb-6 max-w-md relative">
+        <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
+        <Input
+          placeholder="Search by name or phone number..."
+          className="pl-11 h-12 rounded-2xl border-slate-200 bg-white text-base shadow-sm focus-visible:ring-blue-500"
+        />
       </div>
 
       <div className="rounded-3xl border border-slate-200 shadow-sm bg-white overflow-hidden">
