@@ -51,38 +51,33 @@ export default function AdminAuditPage() {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row items-center gap-0 p-1.5 bg-white rounded-[2rem] border border-slate-200 mb-8 shadow-sm">
-        <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 h-11 shadow-sm font-medium shrink-0 flex items-center gap-2">
-          <Filter className="h-4 w-4" />
-          Apply Filter
-        </Button>
-        
-        <div className="h-8 w-px bg-slate-200 hidden md:block mx-2"></div>
-        
-        <div className="relative flex-1 w-full min-w-[200px] flex items-center border-b md:border-b-0 md:border-r border-slate-200 px-2">
-          <Calendar className="h-5 w-5 text-slate-400 shrink-0" />
-          <Input
-            placeholder="Select date..."
-            className="border-none shadow-none focus-visible:ring-0 bg-transparent h-11 text-base text-slate-600"
-          />
-        </div>
-        
-        <div className="relative flex-1 w-full min-w-[200px] flex items-center border-b md:border-b-0 md:border-r border-slate-200 px-2">
-          <select className="w-full appearance-none border-none bg-transparent h-11 text-base text-slate-600 focus:outline-none focus:ring-0 cursor-pointer pl-2 pr-8">
-            <option value="">All Actions</option>
-            <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
-            <option value="INVITATION_SENT">INVITATION_SENT</option>
-            <option value="PRODUCT_SAVED">PRODUCT_SAVED</option>
-          </select>
-          <ChevronDown className="absolute right-4 h-5 w-5 text-slate-400 pointer-events-none" />
-        </div>
-
-        <div className="relative flex-2 w-full min-w-[250px] flex items-center px-2">
-          <Search className="h-5 w-5 text-slate-400 shrink-0" />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div className="relative flex-1 w-full max-w-md">
+          <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
           <Input
             placeholder="Search actor phone..."
-            className="border-none shadow-none focus-visible:ring-0 bg-transparent h-11 text-base text-slate-600"
+            className="pl-11 h-12 rounded-2xl border-slate-200 bg-white text-base shadow-sm focus-visible:ring-blue-500"
           />
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-3">
+          <div className="relative flex items-center bg-white border border-slate-200 rounded-2xl h-12 px-3 shadow-sm min-w-[180px]">
+            <Calendar className="h-5 w-5 text-slate-400 shrink-0" />
+            <Input
+              placeholder="Select date..."
+              className="border-none shadow-none focus-visible:ring-0 bg-transparent h-full text-base text-slate-600"
+            />
+          </div>
+          
+          <div className="relative flex items-center bg-white border border-slate-200 rounded-2xl h-12 px-3 shadow-sm min-w-[180px]">
+            <select className="w-full appearance-none border-none bg-transparent h-full text-base text-slate-600 focus:outline-none focus:ring-0 cursor-pointer pl-1 pr-8">
+              <option value="">All Actions</option>
+              <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
+              <option value="INVITATION_SENT">INVITATION_SENT</option>
+              <option value="PRODUCT_SAVED">PRODUCT_SAVED</option>
+            </select>
+            <ChevronDown className="absolute right-3 h-5 w-5 text-slate-400 pointer-events-none" />
+          </div>
         </div>
       </div>
 
