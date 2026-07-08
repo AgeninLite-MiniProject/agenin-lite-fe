@@ -1,7 +1,18 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Home, Users, ArrowLeftRight, Clock, User, Bell, ChevronDown, Settings, HelpCircle, LogOut } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Home,
+  Users,
+  ArrowLeftRight,
+  Clock,
+  User,
+  Bell,
+  ChevronDown,
+  Settings,
+  HelpCircle,
+  LogOut,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,28 +20,29 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 const menuItems = [
-  { label: "Home",      path: "/dashboard", icon: Home },
-  { label: "Downline",  path: "/downline",  icon: Users },
+  { label: "Home", path: "/dashboard", icon: Home },
+  { label: "Downline", path: "/downline", icon: Users },
   { label: "Transaksi", path: "/transaksi", icon: ArrowLeftRight },
-  { label: "Riwayat",   path: "/riwayat",   icon: Clock },
-  { label: "Profil",    path: "/profile",   icon: User },
-]
+  { label: "Riwayat", path: "/riwayat", icon: Clock },
+];
 
 const Navbar = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const isActive = (path: string) => location.pathname === path
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-
         {/* LEFT — Logo (text only) */}
-        <Link to="/dashboard" className="font-heading text-lg font-bold text-primary">
+        <Link
+          to="/dashboard"
+          className="font-heading text-lg font-bold text-primary"
+        >
           AgeninLite
         </Link>
 
@@ -44,7 +56,7 @@ const Navbar = () => {
                 "inline-block font-heading text-sm font-medium transition-colors",
                 isActive(item.path)
                   ? "border-b-2 border-primary pb-1 text-primary"
-                  : "border-b-2 border-transparent pb-1 text-foreground hover:border-primary/30 hover:text-primary"
+                  : "border-b-2 border-transparent pb-1 text-foreground hover:border-primary/30 hover:text-primary",
               )}
             >
               {item.label}
@@ -54,25 +66,19 @@ const Navbar = () => {
 
         {/* RIGHT — Bell + Avatar */}
         <div className="flex items-center gap-4">
-
-          {/* Bell with red dot */}
-          <button
-            type="button"
-            className="relative rounded-full p-2 text-foreground transition-colors hover:bg-muted"
-            aria-label="Notifications"
-          >
-            <Bell className="size-5" />
-            <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-destructive" />
-          </button>
-
           {/* Avatar + name dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 rounded-full px-2 py-1 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
               <Avatar className="size-8">
-                <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="Budi Santoso" />
+                <AvatarImage
+                  src="https://i.pravatar.cc/150?img=12"
+                  alt="Budi Santoso"
+                />
                 <AvatarFallback>BS</AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-foreground">Budi Santoso</span>
+              <span className="text-sm font-medium text-foreground">
+                Budi Santoso
+              </span>
               <ChevronDown className="size-4 text-muted-foreground" />
             </DropdownMenuTrigger>
 
@@ -82,14 +88,6 @@ const Navbar = () => {
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 <User className="size-4" />
                 Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="size-4" />
-                Pengaturan
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <HelpCircle className="size-4" />
-                Bantuan
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive focus:text-destructive">
@@ -101,7 +99,7 @@ const Navbar = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
