@@ -10,11 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ProductModal } from "@/components/admin/product/ProductModal";
 
 const products = [
   {
     id: 1,
     name: "Paket Perdana Premium",
+    costPrice: "Rp 40.000",
     price: "Rp 50.000",
     agentFee: "10%",
     superAgentFee: "5%",
@@ -23,6 +25,7 @@ const products = [
   {
     id: 2,
     name: "Paket Data 10GB",
+    costPrice: "Rp 90.000",
     price: "Rp 100.000",
     agentFee: "15%",
     superAgentFee: "5%",
@@ -31,6 +34,7 @@ const products = [
   {
     id: 3,
     name: "Voucher Game 1000",
+    costPrice: "Rp 18.000",
     price: "Rp 20.000",
     agentFee: "5%",
     superAgentFee: "2%",
@@ -48,10 +52,7 @@ export default function AdminProductsPage() {
             Manage master products, prices, and commission fees.
           </p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-sm px-6 h-11 self-start md:self-auto">
-          <Plus className="mr-2 h-5 w-5" />
-          Add Product
-        </Button>
+        <ProductModal />
       </div>
 
       <div className="mb-6 max-w-md relative">
@@ -68,6 +69,7 @@ export default function AdminProductsPage() {
             <TableRow className="bg-slate-50/50 hover:bg-slate-50/50 border-slate-100">
               <TableHead className="text-xs font-bold text-slate-500 tracking-wider py-4 pl-6 w-[80px]">ID</TableHead>
               <TableHead className="text-xs font-bold text-slate-500 tracking-wider">PRODUCT NAME</TableHead>
+              <TableHead className="text-xs font-bold text-slate-500 tracking-wider">COST PRICE</TableHead>
               <TableHead className="text-xs font-bold text-slate-500 tracking-wider">SELLING PRICE</TableHead>
               <TableHead className="text-xs font-bold text-slate-500 tracking-wider">AGENT FEE</TableHead>
               <TableHead className="text-xs font-bold text-slate-500 tracking-wider">SUPER AGENT FEE</TableHead>
@@ -80,6 +82,7 @@ export default function AdminProductsPage() {
               <TableRow key={product.id} className="border-slate-100 hover:bg-slate-50/50">
                 <TableCell className="font-medium text-slate-600 py-4 pl-6">{product.id}</TableCell>
                 <TableCell className="font-semibold text-slate-900 py-4">{product.name}</TableCell>
+                <TableCell className="text-slate-600 py-4">{product.costPrice}</TableCell>
                 <TableCell className="text-slate-600 py-4">{product.price}</TableCell>
                 <TableCell className="py-4">
                   <Badge variant="secondary" className="bg-indigo-100/70 text-indigo-700 hover:bg-indigo-100/70 shadow-none border-transparent font-semibold">
