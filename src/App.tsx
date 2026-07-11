@@ -6,6 +6,7 @@ import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
+import RegisterPage from "@/pages/user/register/RegisterPage";
 import "./App.css";
 
 
@@ -17,6 +18,9 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
+        
+        {/* Auth Routes */}
+        <Route path="/register" element={<RegisterPage />} />
         
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>

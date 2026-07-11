@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "@/lib/axios";
 import { AxiosError } from "axios";
 import toast, { Toaster } from "react-hot-toast";
+
 export default function Register() {
   const navigate = useNavigate();
   const {
@@ -22,15 +23,12 @@ export default function Register() {
     const { confirm_password, ...payload } = data;
     
     try {
-      console.log("Data Siap Kirim ke API!", payload);
-      // axios fetching
       const response = await apiClient.post('/api/auth/register', payload);
       if(response.status === 201) {
         toast.success("Registrasi Akun Berhasil! Silakan login.");
         navigate("/login")
       }
     } catch (error) {
-      console.error("Gagal Mendaftar!", error);
       if (error instanceof AxiosError && error.response) {
         const errorCode = error.response.data?.code || error.response.data?.errorCode;
         const errorMessage = error.response.data?.message;
@@ -45,13 +43,12 @@ export default function Register() {
             setError('referral_code', { type: 'manual', message: 'Kode referral tidak valid atau tidak ditemukan.' });
             break;
           case 'AUTH_0007':
-            setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah mencapai batas maksimum downliner (10).' });
+            setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah mencapai batas maksimum downliner.' });
             break;
           case 'AUTH_0008':
             setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah tidak aktif/dihapus.' });
             break;
           default:
-            // Error generic kalau tidak masuk case di atas
             toast.error(errorMessage || 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
         }
       }
@@ -59,204 +56,223 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen font-sans">
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="bg-surface-container-lowest flex-1 flex font-body-md text-on-surface">
+      <div className="flex-1 flex text-gray-900 bg-gray-50">
+        
         {/* Bagian Kiri: Hero Section */}
-        <div className="hidden lg:flex lg:w-[40%] relative flex-col justify-between p-12 bg-gradient-to-br from-[#1B56FD] to-[#0118D8] overflow-hidden">
-          {/* Abstract Background Pattern */}
-          <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="hidden lg:flex lg:w-[45%] relative flex-col justify-between p-12 bg-gradient-to-br from-blue-700 to-blue-900 overflow-hidden">
+          <div className="absolute inset-0 opacity-20 pointer-events-none">
             <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <circle cx="20" cy="20" r="10" fill="white"></circle>
-              <circle cx="80" cy="50" r="15" fill="white"></circle>
-              <circle cx="30" cy="80" r="12" fill="white"></circle>
-              <line x1="20" y1="20" x2="80" y2="50" stroke="white" strokeWidth="2"></line>
-              <line x1="80" y1="50" x2="30" y2="80" stroke="white" strokeWidth="2"></line>
+              <circle cx="20" cy="20" r="15" fill="white" className="animate-pulse"></circle>
+              <circle cx="80" cy="50" r="20" fill="white"></circle>
+              <circle cx="30" cy="80" r="18" fill="white"></circle>
+              <line x1="20" y1="20" x2="80" y2="50" stroke="white" strokeWidth="1"></line>
+              <line x1="80" y1="50" x2="30" y2="80" stroke="white" strokeWidth="1"></line>
             </svg>
           </div>
 
-          {/* Logo */}
           <div className="relative z-10 flex items-center space-x-3">
-            <span className="material-symbols-outlined text-white text-4xl">hub</span>
-            <span className="font-headline-xl text-white">Agentin</span>
+            <span className="material-symbols-outlined text-white text-5xl">hub</span>
+            <span className="text-3xl font-bold text-white tracking-tight">AgeninLite</span>
           </div>
 
-          {/* Headline */}
           <div className="relative z-10 space-y-6">
-            <h2 className="font-headline-xl text-white leading-tight">
-              Mulai jual produk dan bangun jaringan Agent kamu
+            <h2 className="text-5xl font-bold text-white leading-tight">
+              Mulai jual produk & <br/>bangun jaringan Agent kamu.
             </h2>
+            <p className="text-blue-100 text-lg max-w-md">
+              Bergabunglah dengan ribuan agent lainnya untuk meraih keuntungan maksimal.
+            </p>
           </div>
-          
-          {/* Decorative spacer for bottom */}
           <div className="relative z-10"></div>
         </div>
 
         {/* Bagian Kanan: Form */}
-        <div className="w-full lg:w-[60%] flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 bg-surface-container-lowest relative">
-          <div className="max-w-[480px] w-full space-y-8">
-            
+        <div className="w-full lg:w-[55%] flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative">
+          
+          <div className="max-w-[500px] w-full">
             {/* Mobile Logo */}
             <div className="flex lg:hidden flex-col items-center justify-center space-y-4 mb-8">
               <div className="flex items-center space-x-2">
-                <span className="material-symbols-outlined text-primary text-4xl">hub</span>
-                <span className="font-headline-xl text-primary">Agentin</span>
+                <span className="material-symbols-outlined text-blue-700 text-4xl">hub</span>
+                <span className="text-2xl font-bold text-blue-700">AgeninLite</span>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <h1 className="font-headline-lg text-on-surface">Daftar Akun Agentin</h1>
-              <p className="font-body-md text-outline lg:hidden">Mulai jual produk dan bangun jaringan Agent kamu</p>
-            </div>
-
-            {/* form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* CARD WRAPPER */}
+            <div className="bg-white shadow-xl shadow-blue-900/5 rounded-2xl border border-gray-100 p-8 sm:p-10">
               
-              {/* Nama Lengkap */}
-              <div className="space-y-2">
-                <label htmlFor="name" className="block font-label-md text-on-surface">
-                  Nama Lengkap
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  placeholder="Contoh: Budi Santoso"
-                  {...register("name")}
-                  className={`block w-full rounded-full h-12 px-4 focus:ring-primary focus:border-primary sm:text-sm text-on-surface ${
-                    errors.name
-                      ? "border-error focus:ring-error focus:border-error"
-                      : "border-outline-variant"
-                  }`}
-                />
-                {errors.name && (
-                  <p className="font-label-sm text-error mt-1 px-2">{errors.name.message}</p>
-                )}
+              <div className="mb-8 text-center lg:text-left">
+                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Daftar Akun</h1>
+                <p className="text-gray-500 mt-2">Silakan lengkapi data diri kamu di bawah ini.</p>
               </div>
 
-              {/* Nomor Telepon */}
-              <div className="space-y-2">
-                <label htmlFor="phone" className="block font-label-md text-on-surface">Nomor Telepon</label>
-                <input
-                  id="phone"
-                  type="tel"
-                  placeholder="08xxxxxxxxxx"
-                  {...register("phone")}
-                  className={`block w-full rounded-full h-12 px-4 focus:ring-primary focus:border-primary sm:text-sm text-on-surface ${
-                    errors.phone ? "border-error focus:ring-error focus:border-error" : "border-outline-variant"
-                  }`}
-                />
-                {errors.phone ? (
-                  <p className="font-label-sm text-error mt-1 px-2">{errors.phone.message}</p>
-                ) : (
-                  <p className="font-label-sm text-outline mt-1 px-2">Digunakan sebagai ID unik & untuk login</p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center px-1">
-                  <label htmlFor="email" className="block font-label-md text-on-surface">Email</label>
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="nama@email.com"
-                  {...register("email")}
-                  className={`block w-full rounded-full h-12 px-4 focus:ring-primary focus:border-primary sm:text-sm text-on-surface ${
-                    errors.email ? "border-error focus:ring-error focus:border-error" : "border-outline-variant"
-                  }`}
-                />
-                {errors.email && (
-                  <p className="font-label-sm text-error mt-1 px-2">{errors.email.message}</p>
-                )}
-              </div>
-
-              {/* Password */}
-              <div className="space-y-2">
-                <label htmlFor="password" className="block font-label-md text-on-surface">Password</label>
-                <div className="relative">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                
+                {/* Nama Lengkap */}
+                <div className="space-y-1.5">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    Nama Lengkap
+                  </label>
                   <input
-                    id="password"
-                    type="password"
-                    placeholder="•••••••••••••••"
-                    {...register("password")}
-                    className={`block w-full rounded-full h-12 px-4 pr-12 focus:ring-primary focus:border-primary sm:text-sm text-on-surface ${
-                      errors.password ? "border-error focus:ring-error focus:border-error" : "border-outline-variant"
+                    id="name"
+                    type="text"
+                    placeholder="Contoh: Budi Santoso"
+                    {...register("name")}
+                    className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
+                      errors.name
+                        ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+                        : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
                     }`}
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 cursor-pointer">
-                    <span className="material-symbols-outlined text-outline">visibility</span>
-                  </div>
+                  {errors.name && (
+                    <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+                  )}
                 </div>
-                {errors.password ? (
-                  <p className="font-label-sm text-error mt-1 px-2">{errors.password.message}</p>
-                ) : (
-                  <p className="font-label-sm text-outline mt-1 px-2">8-15 karakter</p>
-                )}
-              </div>
 
-              {/* Konfirmasi Password */}
-              <div className="space-y-2">
-                <label htmlFor="confirm_password" className="block font-label-md text-on-surface">Konfirmasi Password</label>
-                <div className="relative">
+                {/* Nomor Telepon */}
+                <div className="space-y-1.5">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                    Nomor Telepon
+                  </label>
                   <input
-                    id="confirm_password"
-                    type="password"
-                    placeholder="•••••••••••••••"
-                    {...register("confirm_password")}
-                    className={`block w-full rounded-full h-12 px-4 pr-12 focus:ring-primary focus:border-primary sm:text-sm text-on-surface ${
-                      errors.confirm_password ? "border-error focus:ring-error focus:border-error" : "border-outline-variant"
+                    id="phone"
+                    type="tel"
+                    placeholder="08xxxxxxxxxx"
+                    {...register("phone")}
+                    className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
+                      errors.phone
+                        ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+                        : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
                     }`}
                   />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 cursor-pointer">
-                    <span className="material-symbols-outlined text-outline">visibility_off</span>
+                  {errors.phone ? (
+                    <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
+                  ) : (
+                    <p className="text-xs text-gray-400 mt-1">Gunakan format angka, misal: 08123456789</p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="space-y-1.5">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-gray-400 font-normal">(Opsional)</span></label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="nama@email.com"
+                    {...register("email")}
+                    className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
+                      errors.email
+                        ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+                        : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
+                    }`}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+                  )}
+                </div>
+
+                {/* Password Group (Side by Side on Desktop) */}
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                    <div className="relative">
+                      <input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        {...register("password")}
+                        className={`block w-full rounded-lg border bg-white h-12 pl-4 pr-10 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
+                          errors.password
+                            ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+                            : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
+                        }`}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                        <span className="material-symbols-outlined text-[20px]">lock</span>
+                      </div>
+                    </div>
+                    {errors.password ? (
+                      <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
+                    ) : (
+                      <p className="text-xs text-gray-400 mt-1">Minimal 8 karakter</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="confirm_password" className="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+                    <div className="relative">
+                      <input
+                        id="confirm_password"
+                        type="password"
+                        placeholder="••••••••"
+                        {...register("confirm_password")}
+                        className={`block w-full rounded-lg border bg-white h-12 pl-4 pr-10 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
+                          errors.confirm_password
+                            ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+                            : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
+                        }`}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                        <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+                      </div>
+                    </div>
+                    {errors.confirm_password && (
+                      <p className="text-sm text-red-500 mt-1">{errors.confirm_password.message}</p>
+                    )}
                   </div>
                 </div>
-                {errors.confirm_password && (
-                  <p className="font-label-sm text-error mt-1 px-2">{errors.confirm_password.message}</p>
-                )}
-              </div>
 
-              {/* Kode Referral */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center px-1">
-                  <label htmlFor="referral_code" className="block font-label-md text-on-surface">Kode Referral</label>
-                  <span className="inline-flex items-center rounded-full bg-surface-variant px-2.5 py-0.5 font-label-sm text-on-surface-variant">Opsional</span>
+                {/* Kode Referral */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label htmlFor="referral_code" className="block text-sm font-medium text-gray-700">Kode Referral</label>
+                    <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">Opsional</span>
+                  </div>
+                  <input
+                    id="referral_code"
+                    type="text"
+                    placeholder="AGN-XXXX"
+                    {...register("referral_code")}
+                    className={`block w-full rounded-lg border bg-white h-12 px-4 uppercase outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
+                      errors.referral_code
+                        ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
+                        : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
+                    }`}
+                  />
+                  {errors.referral_code && (
+                    <p className="text-sm text-red-500 mt-1">{errors.referral_code.message}</p>
+                  )}
                 </div>
-                <input
-                  id="referral_code"
-                  type="text"
-                  placeholder="AGN-7X2K"
-                  {...register("referral_code")}
-                  className={`block w-full rounded-full h-12 px-4 focus:ring-primary focus:border-primary sm:text-sm text-on-surface uppercase ${
-                    errors.referral_code ? "border-error focus:ring-error focus:border-error" : "border-outline-variant"
-                  }`}
-                />
-                {errors.referral_code ? (
-                  <p className="font-label-sm text-error mt-1 px-2">{errors.referral_code.message}</p>
-                ) : (
-                  <p className="font-label-sm text-outline mt-1 px-2">Isi jika kamu diajak Agent lain</p>
-                )}
+
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex w-full justify-center items-center h-12 rounded-lg bg-blue-700 text-white font-semibold shadow-sm hover:bg-blue-800 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-70 transition-all"
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center space-x-2">
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Mendaftar...</span>
+                      </span>
+                    ) : "Daftar Sekarang"}
+                  </button>
+                </div>
+              </form>
+
+              <div className="mt-8 text-center">
+                <p className="text-sm text-gray-600">
+                  Sudah punya akun? <a className="font-semibold text-blue-700 hover:text-blue-800 transition-colors" href="/login">Masuk di sini</a>
+                </p>
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex w-full justify-center items-center h-12 rounded-full bg-primary px-4 py-3.5 font-label-md text-on-primary shadow-sm hover:bg-primary-container disabled:opacity-50 transition-colors"
-                >
-                  {isSubmitting ? "Mendaftar..." : "Daftar Sekarang"}
-                </button>
-              </div>
-            </form>
-
-            <div className="text-center pt-2">
-              <p className="font-body-sm text-on-surface-variant">
-                Sudah punya akun? <a className="font-label-md text-primary hover:text-primary-container underline" href="/login">Masuk di sini</a>
-              </p>
             </div>
-
           </div>
         </div>
       </div>
