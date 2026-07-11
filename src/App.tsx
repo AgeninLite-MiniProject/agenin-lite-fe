@@ -4,6 +4,8 @@ import DashboardPage from "@/pages/user/dashboard/DashboardPage";
 import AdminLayout from "@/components/layout/admin/AdminLayout";
 import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
+import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
+import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
 import "./App.css";
 
 
@@ -21,6 +23,8 @@ function App() {
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="products" element={<AdminProductsPage />} />
+          <Route path="users" element={<AdminUsersPage />} />
+          <Route path="audit" element={<AdminAuditPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

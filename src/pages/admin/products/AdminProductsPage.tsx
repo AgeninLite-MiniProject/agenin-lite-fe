@@ -2,7 +2,8 @@ import { Plus, Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
 import { adminProductApi } from "@/lib/api/admin-product.api";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AdminSearch } from "@/components/admin/ui/AdminSearch";
+import { AdminPagination } from "@/components/admin/ui/AdminPagination";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -46,13 +47,10 @@ export default function AdminProductsPage() {
         <ProductModal onSuccess={fetchProducts} />
       </div>
 
-      <div className="mb-6 max-w-md relative">
-        <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
-        <Input
-          placeholder="Search product name..."
-          className="pl-11 h-12 rounded-2xl border-slate-200 bg-white text-base shadow-sm focus-visible:ring-blue-500"
-        />
-      </div>
+      <AdminSearch 
+        placeholder="Search product name..." 
+        className="mb-6 w-full"
+      />
 
       <div className="rounded-3xl border border-slate-200 shadow-sm bg-white overflow-hidden">
         <Table>
@@ -117,23 +115,13 @@ export default function AdminProductsPage() {
           </TableBody>
         </Table>
         
-        {/* Pagination Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-white">
-          <p className="text-sm text-slate-500 font-medium">
-            Showing 1 to 3 of 3 entries
-          </p>
-          <div className="flex items-center space-x-1">
-            <Button variant="outline" size="sm" className="h-9 px-4 rounded-lg border-slate-200 text-slate-500 font-medium hover:bg-slate-50" disabled>
-              Prev
-            </Button>
-            <Button variant="default" size="sm" className="h-9 w-9 p-0 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium">
-              1
-            </Button>
-            <Button variant="outline" size="sm" className="h-9 px-4 rounded-lg border-slate-200 text-slate-500 font-medium hover:bg-slate-50" disabled>
-              Next
-            </Button>
-          </div>
-        </div>
+        <AdminPagination 
+          currentPage={1} 
+          totalPages={1} 
+          startEntry={1} 
+          endEntry={3} 
+          totalEntries={3} 
+        />
       </div>
     </div>
   );
