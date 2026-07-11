@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, type RegisterFormValues } from "@/validations/auth.schema";
+import { registerSchema, type RegisterFormValues } from "@/schemas/auth.schema";
 import Footer from "@/components/layout/Footer";
 import { useNavigate } from "react-router-dom";
 import apiClient from "@/lib/axios";
