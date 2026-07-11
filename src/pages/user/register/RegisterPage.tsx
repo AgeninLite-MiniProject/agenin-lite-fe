@@ -2,11 +2,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormValues } from "@/validations/auth.schema";
 import Footer from "@/components/layout/Footer";
-
+import { useNavigate } from "react-router-dom";
+import apiClient from "@/lib/axios";
+import { AxiosError } from "axios";
+import toast, { Toaster } from "react-hot-toast";
 export default function Register() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -14,19 +19,48 @@ export default function Register() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    // Kita buang confirm_password agar tidak terkirim ke backend
     const { confirm_password, ...payload } = data;
     
     try {
       console.log("Data Siap Kirim ke API!", payload);
       // axios fetching
+      const response = await apiClient.post('/api/auth/register', payload);
+      if(response.status === 201) {
+        toast.success("Registrasi Akun Berhasil! Silakan login.");
+        navigate("/login")
+      }
     } catch (error) {
       console.error("Gagal Mendaftar!", error);
+      if (error instanceof AxiosError && error.response) {
+        const errorCode = error.response.data?.code || error.response.data?.errorCode;
+        const errorMessage = error.response.data?.message;
+        switch (errorCode) {
+          case 'AUTH_0001':
+            setError('phone', { type: 'manual', message: 'Nomor telepon sudah terdaftar!' });
+            break;
+          case 'AUTH_0004':
+            setError('email', { type: 'manual', message: 'Email ini sudah terdaftar!' });
+            break;
+          case 'AUTH_0006':
+            setError('referral_code', { type: 'manual', message: 'Kode referral tidak valid atau tidak ditemukan.' });
+            break;
+          case 'AUTH_0007':
+            setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah mencapai batas maksimum downliner (10).' });
+            break;
+          case 'AUTH_0008':
+            setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah tidak aktif/dihapus.' });
+            break;
+          default:
+            // Error generic kalau tidak masuk case di atas
+            toast.error(errorMessage || 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
+        }
+      }
     }
   };
 
   return (
     <div className="flex flex-col min-h-screen">
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="bg-surface-container-lowest flex-1 flex font-body-md text-on-surface">
         {/* Bagian Kiri: Hero Section */}
         <div className="hidden lg:flex lg:w-[40%] relative flex-col justify-between p-12 bg-gradient-to-br from-[#1B56FD] to-[#0118D8] overflow-hidden">
