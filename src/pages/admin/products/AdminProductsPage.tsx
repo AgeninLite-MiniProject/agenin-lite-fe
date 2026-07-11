@@ -1,4 +1,10 @@
+<<<<<<< Updated upstream
 import { Search, Plus, Pencil } from "lucide-react";
+=======
+import { Plus, Pencil } from "lucide-react";
+import { useState, useEffect } from "react";
+import { adminProductApi } from "@/lib/api/admin-product.api";
+>>>>>>> Stashed changes
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -11,38 +17,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ProductModal } from "@/components/admin/product/ProductModal";
-
-const products = [
-  {
-    id: 1,
-    name: "Paket Perdana Premium",
-    costPrice: "Rp 40.000",
-    price: "Rp 50.000",
-    agentFee: "10%",
-    superAgentFee: "5%",
-    status: "ACTIVE",
-  },
-  {
-    id: 2,
-    name: "Paket Data 10GB",
-    costPrice: "Rp 90.000",
-    price: "Rp 100.000",
-    agentFee: "15%",
-    superAgentFee: "5%",
-    status: "ACTIVE",
-  },
-  {
-    id: 3,
-    name: "Voucher Game 1000",
-    costPrice: "Rp 18.000",
-    price: "Rp 20.000",
-    agentFee: "5%",
-    superAgentFee: "2%",
-    status: "INACTIVE",
-  },
-];
+import { EditProductModal } from "@/components/admin/product/EditProductModal";
 
 export default function AdminProductsPage() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchProducts = async () => {
+    try {
+      const data = await adminProductApi.getAllProducts();
+      setProducts(data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <div className="p-10 max-w-6xl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -52,7 +47,7 @@ export default function AdminProductsPage() {
             Manage master products, prices, and commission fees.
           </p>
         </div>
-        <ProductModal />
+        <ProductModal onSuccess={fetchProducts} />
       </div>
 
       <div className="mb-6 max-w-md relative">
@@ -78,42 +73,51 @@ export default function AdminProductsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id} className="border-slate-100 hover:bg-slate-50/50">
-                <TableCell className="font-medium text-slate-600 py-4 pl-6">{product.id}</TableCell>
-                <TableCell className="font-semibold text-slate-900 py-4">{product.name}</TableCell>
-                <TableCell className="text-slate-600 py-4">{product.costPrice}</TableCell>
-                <TableCell className="text-slate-600 py-4">{product.price}</TableCell>
-                <TableCell className="py-4">
-                  <Badge variant="secondary" className="bg-indigo-100/70 text-indigo-700 hover:bg-indigo-100/70 shadow-none border-transparent font-semibold">
-                    {product.agentFee}
-                  </Badge>
-                </TableCell>
-                <TableCell className="py-4">
-                  <Badge variant="secondary" className="bg-indigo-100/70 text-indigo-700 hover:bg-indigo-100/70 shadow-none border-transparent font-semibold">
-                    {product.superAgentFee}
-                  </Badge>
-                </TableCell>
-                <TableCell className="py-4">
-                  <Badge
-                    variant="secondary"
-                    className={`shadow-none border-transparent font-semibold ${
-                      product.status === "ACTIVE"
-                        ? "bg-green-100 text-green-700 hover:bg-green-100"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-100"
-                    }`}
-                  >
-                    {product.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right pr-6 py-4">
-                  <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 font-semibold gap-1.5 px-3">
-                    <Pencil className="h-4 w-4" />
-                    Edit
-                  </Button>
-                </TableCell>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center py-10 text-slate-500">Loading data...</TableCell>
               </TableRow>
-            ))}
+            ) : products.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center py-10 text-slate-500">Tidak ada produk.</TableCell>
+              </TableRow>
+            ) : (
+              products.map((product) => (
+                <TableRow key={product.product_id} className="border-slate-100 hover:bg-slate-50/50">
+                  <TableCell className="font-medium text-slate-600 py-4 pl-6" title={product.product_id}>
+                    {product.product_id ? product.product_id.substring(0, 8) + '...' : '-'}
+                  </TableCell>
+                  <TableCell className="font-semibold text-slate-900 py-4">{product.product_name}</TableCell>
+                  <TableCell className="text-slate-600 py-4 font-medium">Rp {product.cost_price?.toLocaleString() || '-'}</TableCell>
+                  <TableCell className="text-slate-600 py-4 font-medium">Rp {product.selling_price?.toLocaleString() || '-'}</TableCell>
+                  <TableCell className="py-4">
+                    <Badge variant="secondary" className="bg-slate-100 text-slate-600 shadow-none border-transparent font-semibold">
+                      {product.agent_fee !== undefined ? `${product.agent_fee}%` : '-'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <Badge variant="secondary" className="bg-slate-100 text-slate-600 shadow-none border-transparent font-semibold">
+                      {product.super_agent_fee !== undefined ? `${product.super_agent_fee}%` : '-'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <Badge
+                      variant="secondary"
+                      className={`shadow-none border-transparent font-semibold ${
+                        product.product_status === "ACTIVE"
+                          ? "bg-green-100 text-green-700 hover:bg-green-100"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      {product.product_status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right pr-6 py-4">
+                    <EditProductModal product={product} onSuccess={fetchProducts} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
         
