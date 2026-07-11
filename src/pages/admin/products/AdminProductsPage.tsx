@@ -1,10 +1,6 @@
-<<<<<<< Updated upstream
-import { Search, Plus, Pencil } from "lucide-react";
-=======
 import { Plus, Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
 import { adminProductApi } from "@/lib/api/admin-product.api";
->>>>>>> Stashed changes
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
