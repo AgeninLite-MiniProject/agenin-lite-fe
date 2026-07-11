@@ -6,6 +6,7 @@ import AdminLayout from "@/components/layout/admin/AdminLayout";
 import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
+import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ function App() {
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="products" element={<AdminProductsPage />} />
           <Route path="users" element={<AdminUsersPage />} />
+          <Route path="audit" element={<AdminAuditPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
