@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MainLayout from "./components/layout/MainLayout";
 import DashboardPage from "@/pages/user/dashboard/DashboardPage";
 import AdminLayout from "@/components/layout/admin/AdminLayout";
@@ -8,10 +9,12 @@ import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
 import "./App.css";
 
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -28,6 +31,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
