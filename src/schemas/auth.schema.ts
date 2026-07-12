@@ -30,3 +30,10 @@ export const registerSchema = z
   });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export const loginSchema = z.object({
+  phone: z.string().min(1, { message: "Nomor Telepon Wajib Diisi!" }),
+  password: z.string().min(1, { message: "Password Wajib Diisi!" }),
+});
+
+export type LoginFormValues = z.infer<typeof loginSchema>;

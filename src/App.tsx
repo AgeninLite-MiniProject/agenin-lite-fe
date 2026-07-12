@@ -7,6 +7,7 @@ import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
 import RegisterPage from "@/pages/user/register/RegisterPage";
+import LoginPage from "@/pages/user/login/LoginPage";
 import "./App.css";
 
 
@@ -21,6 +22,7 @@ function App() {
         
         {/* Auth Routes */}
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
         
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
