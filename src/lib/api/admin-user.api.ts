@@ -1,4 +1,4 @@
-import axiosClient from "../axiosClient";
+import apiClient from "../axios";
 
 export interface UserSearchResponse {
   user_id: string;
@@ -22,12 +22,12 @@ export const adminUserApi = {
     if (status && status !== "ALL") params.status = status;
     if (isDeleted && isDeleted !== "ALL") params.isDeleted = isDeleted === "TRUE";
 
-    const response = await axiosClient.get("/api/admin/users", { params });
+    const response = await apiClient.get("/api/admin/users", { params });
     return response.data;
   },
 
   softDeleteUser: async (userId: string) => {
-    const response = await axiosClient.post(`/api/admin/users/${userId}/delete`);
+    const response = await apiClient.post(`/api/admin/users/${userId}/delete`);
     return response.data;
   }
 };
