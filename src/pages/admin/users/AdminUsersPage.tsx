@@ -37,8 +37,8 @@ export default function AdminUsersPage() {
   const [deleteError, setDeleteError] = useState("");
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-users', searchQuery, page, size],
-    queryFn: () => adminUserApi.searchUsers(searchQuery, page, size),
+    queryKey: ['admin-users', searchQuery, statusFilter, deletedFilter, page, size],
+    queryFn: () => adminUserApi.searchUsers(searchQuery, statusFilter, deletedFilter, page, size),
   });
 
   // Delete mutation
@@ -56,7 +56,17 @@ export default function AdminUsersPage() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setPage(0); // Reset ke page pertama tiap kali ngetik search
+    setPage(0);
+  };
+
+  const handleStatusFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatusFilter(e.target.value);
+    setPage(0);
+  };
+
+  const handleDeletedFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDeletedFilter(e.target.value);
+    setPage(0);
   };
 
   const confirmDelete = () => {
@@ -66,16 +76,7 @@ export default function AdminUsersPage() {
   };
 
   const users = data?.content || [];
-  
-  // Client-side filtering
-  let filteredUsers = users;
-  if (statusFilter !== "ALL") {
-    filteredUsers = filteredUsers.filter((u: any) => u.user_status === statusFilter);
-  }
-  if (deletedFilter !== "ALL") {
-    const isDeleted = deletedFilter === "TRUE";
-    filteredUsers = filteredUsers.filter((u: any) => u.is_deleted === isDeleted);
-  }
+  const filteredUsers = users;
 
   const totalElements = data?.totalElements || 0;
   const totalPages = data?.totalPages || 1;
@@ -102,7 +103,7 @@ export default function AdminUsersPage() {
         <div className="flex gap-4">
           <select 
             value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={handleStatusFilterChange}
             className="h-12 px-4 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm"
           >
             <option value="ALL">All Status</option>
@@ -112,7 +113,7 @@ export default function AdminUsersPage() {
 
           <select 
             value={deletedFilter} 
-            onChange={(e) => setDeletedFilter(e.target.value)}
+            onChange={handleDeletedFilterChange}
             className="h-12 px-4 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm"
           >
             <option value="ALL">All Accounts</option>
