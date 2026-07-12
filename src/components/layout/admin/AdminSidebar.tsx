@@ -1,6 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Package, Users, FileText, LogOut } from "lucide-react";
 import logoAgeninLite from "@/assets/ageninliteBlue.webp";
+import { useAuthStore } from "@/store/auth.store";
 
 const navItems = [
   {
@@ -27,6 +28,13 @@ const navItems = [
 
 export default function AdminSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="w-64 bg-indigo-50/40 border-r h-full flex flex-col">
@@ -57,7 +65,11 @@ export default function AdminSidebar() {
       <div className="p-4 border-t border-indigo-100">
         <div className="flex items-center justify-between px-2">
           <span className="text-sm font-semibold text-slate-700 truncate">Super Admin</span>
-          <button className="text-slate-500 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-slate-100">
+          <button 
+            onClick={handleLogout}
+            className="text-slate-500 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-slate-100"
+            title="Logout"
+          >
             <LogOut className="h-5 w-5" />
           </button>
         </div>

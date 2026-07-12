@@ -9,56 +9,63 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-
-const summaryCards = [
-  {
-    title: "TOTAL USERS",
-    value: "1,254",
-    description: "+12 new today",
-    descriptionColor: "text-blue-600",
-  },
-  {
-    title: "ACTIVE AGENTS",
-    value: "840",
-    description: "67% of total users",
-    descriptionColor: "text-slate-500",
-  },
-  {
-    title: "TOTAL TRANSACTIONS",
-    value: "8,432",
-    description: "Completed this month",
-    descriptionColor: "text-slate-500",
-  },
-  {
-    title: "TOTAL PRODUCTS",
-    value: "45",
-    description: "Active catalog",
-    descriptionColor: "text-slate-500",
-  },
-];
-
-const recentActivities = [
-  {
-    time: "10:30 AM",
-    user: "Budi Santoso (Agent)",
-    action: "Completed a transaction",
-    status: "SUCCESS",
-  },
-  {
-    time: "09:45 AM",
-    user: "System Admin",
-    action: "Added new product 'Paket Data 10GB'",
-    status: "SUCCESS",
-  },
-  {
-    time: "09:15 AM",
-    user: "Siti Aminah (Agent)",
-    action: "Updated profile information",
-    status: "SUCCESS",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { adminDashboardApi } from "@/lib/api/admin-dashboard.api";
 
 export default function AdminDashboardPage() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["adminDashboardOverview"],
+    queryFn: adminDashboardApi.getOverview,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="p-10 max-w-6xl flex justify-center items-center h-64">
+        <p className="text-slate-500 font-medium animate-pulse">Loading dashboard data...</p>
+      </div>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="p-10 max-w-6xl flex justify-center items-center h-64">
+        <p className="text-red-500 font-medium">Failed to load dashboard data. Please check your connection.</p>
+      </div>
+    );
+  }
+
+  // Calculate percentage of active agents from total users (if > 0)
+  const activeAgentPercentage = data.total_users > 0 
+    ? Math.round((data.active_agents / data.total_users) * 100) 
+    : 0;
+
+  const summaryCards = [
+    {
+      title: "TOTAL AGENTS",
+      value: data.total_users.toLocaleString(),
+      description: "Registered agents",
+      descriptionColor: "text-blue-600",
+    },
+    {
+      title: "ACTIVE AGENTS",
+      value: data.active_agents.toLocaleString(),
+      description: `${activeAgentPercentage}% of total agents`,
+      descriptionColor: "text-slate-500",
+    },
+    {
+      title: "TOTAL TRANSACTIONS",
+      value: data.total_transactions.toLocaleString(),
+      description: "Completed globally",
+      descriptionColor: "text-slate-500",
+    },
+    {
+      title: "TOTAL PRODUCTS",
+      value: data.total_products.toLocaleString(),
+      description: "Active catalog",
+      descriptionColor: "text-slate-500",
+    },
+  ];
+
   return (
     <div className="p-10 max-w-6xl">
       <div className="mb-8">
@@ -106,21 +113,29 @@ export default function AdminDashboardPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentActivities.map((activity, idx) => (
-              <TableRow key={idx} className="border-slate-100 hover:bg-slate-50/50">
-                <TableCell className="font-medium text-slate-600 py-4">{activity.time}</TableCell>
-                <TableCell className="text-slate-800 py-4">{activity.user}</TableCell>
-                <TableCell className="text-slate-600 py-4">{activity.action}</TableCell>
-                <TableCell className="text-right pr-6 py-4">
-                  <Badge
-                    variant="secondary"
-                    className="bg-green-100 text-green-700 hover:bg-green-100 border-transparent shadow-none"
-                  >
-                    {activity.status}
-                  </Badge>
+            {data.recent_activities.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-8 text-slate-500">
+                  No recent activities found
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              data.recent_activities.map((activity, idx) => (
+                <TableRow key={idx} className="border-slate-100 hover:bg-slate-50/50">
+                  <TableCell className="font-medium text-slate-600 py-4">{activity.time}</TableCell>
+                  <TableCell className="text-slate-800 py-4">{activity.user}</TableCell>
+                  <TableCell className="text-slate-600 py-4">{activity.action}</TableCell>
+                  <TableCell className="text-right pr-6 py-4">
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-700 hover:bg-green-100 border-transparent shadow-none"
+                    >
+                      {activity.status}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </Card>
