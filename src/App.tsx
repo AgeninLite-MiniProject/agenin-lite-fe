@@ -12,6 +12,7 @@ import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
+import { Toaster } from "react-hot-toast";
 import RegisterPage from "@/pages/user/register/RegisterPage";
 import LoginPage from "@/pages/user/login/LoginPage";
 import HistoryPage from "@/pages/user/history/HistoryPage";
@@ -24,6 +25,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster position="top-center" reverseOrder={false} />
       <BrowserRouter>
       <Routes>
         {/* Auth Routes */}

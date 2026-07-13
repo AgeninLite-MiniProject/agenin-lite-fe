@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProductSchema, type CreateProductFormValues } from "@/schemas/product.schema";
-import { adminProductApi } from "@/lib/api/admin-product.api";
+import { useCreateProductMutation } from "@/hooks/useAdminProducts";
 
 import {
   Dialog,
@@ -17,10 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 
-export function ProductModal({ onSuccess }: { onSuccess?: () => void }) {
+export function ProductModal() {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  
+  const { mutate: createProduct, isPending: isLoading } = useCreateProductMutation();
 
   const form = useForm<CreateProductFormValues>({
     resolver: zodResolver(createProductSchema) as any,
@@ -33,21 +33,13 @@ export function ProductModal({ onSuccess }: { onSuccess?: () => void }) {
     }
   });
 
-  const onSubmit: SubmitHandler<CreateProductFormValues> = async (data) => {
-    setIsLoading(true);
-    setServerError(null);
-    try {
-      await adminProductApi.createProduct(data);
-      form.reset();
-      setOpen(false);
-      if (onSuccess) onSuccess();
-    } catch (error: any) {
-      console.error(error);
-      const msg = error.response?.data?.message || "Gagal menambahkan produk. Pastikan token Anda valid.";
-      setServerError(msg);
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit: SubmitHandler<CreateProductFormValues> = (data) => {
+    createProduct(data, {
+      onSuccess: () => {
+        form.reset();
+        setOpen(false);
+      }
+    });
   };
 
   return (
@@ -62,11 +54,6 @@ export function ProductModal({ onSuccess }: { onSuccess?: () => void }) {
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-slate-900">Add New Product</DialogTitle>
         </DialogHeader>
-        {serverError && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm border border-red-100 mt-2 font-medium">
-            Error: {serverError}
-          </div>
-        )}
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="name" className="text-sm font-medium text-slate-700">Product Name</Label>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProductSchema, type UpdateProductFormValues } from "@/schemas/product.schema";
-import { adminProductApi } from "@/lib/api/admin-product.api";
+import { useUpdateProductMutation } from "@/hooks/useAdminProducts";
 
 import {
   Dialog,
@@ -17,10 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
 
-export function EditProductModal({ product, onSuccess }: { product: any, onSuccess?: () => void }) {
+export function EditProductModal({ product }: { product: any }) {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  
+  const { mutate: updateProduct, isPending: isLoading } = useUpdateProductMutation();
 
   const form = useForm<UpdateProductFormValues>({
     resolver: zodResolver(updateProductSchema) as any,
@@ -45,24 +45,15 @@ export function EditProductModal({ product, onSuccess }: { product: any, onSucce
         super_agent_fee: product.super_agent_fee || 0,
         product_status: product.product_status as any,
       });
-      setServerError(null);
     }
   }, [open, product, form]);
 
-  const onSubmit: SubmitHandler<UpdateProductFormValues> = async (data) => {
-    setIsLoading(true);
-    setServerError(null);
-    try {
-      await adminProductApi.updateProduct(product.product_id, data);
-      setOpen(false);
-      if (onSuccess) onSuccess();
-    } catch (error: any) {
-      console.error(error);
-      const msg = error.response?.data?.message || "Gagal mengubah produk. Pastikan token Anda valid.";
-      setServerError(msg);
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit: SubmitHandler<UpdateProductFormValues> = (data) => {
+    updateProduct({ productId: product.product_id, data }, {
+      onSuccess: () => {
+        setOpen(false);
+      }
+    });
   };
 
   return (
@@ -77,11 +68,6 @@ export function EditProductModal({ product, onSuccess }: { product: any, onSucce
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-slate-900">Edit Product</DialogTitle>
         </DialogHeader>
-        {serverError && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm border border-red-100 mt-2 font-medium">
-            Error: {serverError}
-          </div>
-        )}
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor={`name-${product.product_id}`} className="text-sm font-medium text-slate-700">Product Name</Label>
