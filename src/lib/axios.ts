@@ -81,8 +81,9 @@ apiClient.interceptors.response.use(
         const newAccessToken = response.data.access_token;
         const newRefreshToken = response.data.refresh_token;
         const newRole = response.data.role || useAuthStore.getState().role;
+        const currentName = response.data.name || useAuthStore.getState().name;
 
-        setAuth(newAccessToken, newRefreshToken, newRole);
+        setAuth(newAccessToken, newRefreshToken, newRole, currentName);
 
         // Beritahu semua request yang antre bahwa refresh sukses
         processQueue(null, newAccessToken);
