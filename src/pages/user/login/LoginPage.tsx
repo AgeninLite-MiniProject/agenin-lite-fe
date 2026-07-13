@@ -123,7 +123,7 @@ export default function LoginPage() {
                   <input
                     id="phone"
                     type="tel"
-                    placeholder="08xxxxxxxxxx"
+                    placeholder="+628xxxxxxxxxx"
                     {...register("phone_number")}
                     className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
                       errors.phone_number
