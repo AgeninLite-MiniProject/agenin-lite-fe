@@ -1,5 +1,5 @@
-import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Phone, Mail, Receipt, ShoppingCart } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Phone, Mail, Receipt } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -39,8 +39,6 @@ const mockTransactions = [
 ];
 
 export default function DownlineDetailPage() {
-  const { id } = useParams();
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",

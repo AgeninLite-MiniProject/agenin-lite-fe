@@ -9,14 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { adminDashboardApi } from "@/lib/api/admin-dashboard.api";
+import { useAdminDashboardQuery } from "@/hooks/useAdminDashboard";
 
 export default function AdminDashboardPage() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["adminDashboardOverview"],
-    queryFn: adminDashboardApi.getOverview,
-  });
+  const { data, isLoading, isError } = useAdminDashboardQuery();
 
   if (isLoading) {
     return (
