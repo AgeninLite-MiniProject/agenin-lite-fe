@@ -8,15 +8,18 @@ export const TransactionStatusSchema = z.enum([
 ]);
 export type TransactionStatus = z.infer<typeof TransactionStatusSchema>;
 
+// Money fields are serialized by Jackson as JSON numbers (BigDecimal),
+// not strings. Declaring them as z.number() matches the wire format.
+// formatRupiah already accepts string | number, so downstream code is fine.
 export const TransactionListItemSchema = z.object({
   id: z.string().uuid(),
   productId: z.string().uuid().nullable(),
   productName: z.string().nullable(),
   quantity: z.number().int().nullable(),
-  amount: z.string(),
-  profit: z.string(),
-  agentFeeAmount: z.string(),
-  superAgentFeeAmount: z.string(),
+  amount: z.number(),
+  profit: z.number(),
+  agentFeeAmount: z.number(),
+  superAgentFeeAmount: z.number(),
   status: TransactionStatusSchema,
   createdAt: z.string(),
   completedAt: z.string().nullable(),
@@ -25,7 +28,7 @@ export type TransactionListItem = z.infer<typeof TransactionListItemSchema>;
 
 export const TransactionListResponseSchema = z.object({
   transactions: z.array(TransactionListItemSchema),
-  totalCommission: z.string(),
+  totalCommission: z.number(),
   completedCount: z.number().int().min(0),
   page: z.number().int().min(0),
   size: z.number().int().min(1),

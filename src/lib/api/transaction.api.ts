@@ -1,3 +1,8 @@
+// lib/api/transaction.api.ts
+// One file that knows: (1) the API path, (2) the request shape, (3) the cache key.
+// Page and hook only import from here. Nothing else knows about /api/transactions.
+// The mock + USE_MOCK toggle that was here in stub phase is GONE — the BE is live.
+
 import apiClient from "../axios";
 import {
   TransactionListResponseSchema,
@@ -5,104 +10,32 @@ import {
   type TransactionListResponse,
 } from "@/schemas/transaction.schema";
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_API !== "false";
-
-const MOCK_TRANSACTION_LIST_RESPONSE: TransactionListResponse = {
-  transactions: [
-    {
-      id: "11111111-1111-1111-1111-111111111112",
-      productId: "22222222-2222-2222-2222-222222222201",
-      productName: "Teh Pucuk Harum 1 Karton",
-      quantity: 10,
-      amount: "500000.00",
-      profit: "50000.00",
-      agentFeeAmount: "50000.00",
-      superAgentFeeAmount: "0.00",
-      status: "COMPLETED",
-      createdAt: "2026-10-10T14:00:00",
-      completedAt: "2026-10-10T14:01:23",
-    },
-    {
-      id: "11111111-1111-1111-1111-111111111113",
-      productId: "22222222-2222-2222-2222-222222222202",
-      productName: "Kopi Kapal Api Mix 5 Renceng",
-      quantity: 5,
-      amount: "250000.00",
-      profit: "25000.00",
-      agentFeeAmount: "0.00",
-      superAgentFeeAmount: "0.00",
-      status: "PENDING",
-      createdAt: "2026-10-11T09:15:00",
-      completedAt: null,
-    },
-    {
-      id: "11111111-1111-1111-1111-111111111114",
-      productId: "22222222-2222-2222-2222-222222222203",
-      productName: "Indomie Goreng 1 Dus",
-      quantity: 2,
-      amount: "220000.00",
-      profit: "22000.00",
-      agentFeeAmount: "0.00",
-      superAgentFeeAmount: "0.00",
-      status: "FAILED",
-      createdAt: "2026-10-12T16:30:00",
-      completedAt: null,
-    },
-    {
-      id: "11111111-1111-1111-1111-111111111115",
-      productId: "22222222-2222-2222-2222-222222222204",
-      productName: "Bimoli Minyak Goreng 2L",
-      quantity: 20,
-      amount: "800000.00",
-      profit: "80000.00",
-      agentFeeAmount: "80000.00",
-      superAgentFeeAmount: "0.00",
-      status: "COMPLETED",
-      createdAt: "2026-10-13T10:00:00",
-      completedAt: "2026-10-13T10:02:11",
-    },
-  ],
-  totalCommission: "1250000.00",
-  completedCount: 45,
-  page: 0,
-  size: 20,
-  totalElements: 4,
-  totalPages: 1,
-};
-
+// ─── Query key ───────────────────────────────────────────────────────
+// Used by useQuery (the key is just a unique label for caching)
+// and by future invalidateQueries() calls from other pages.
 export const transactionListQueryKey = (filter: TransactionFilter) =>
   ["transaction-list", filter] as const;
 
+// ─── API surface ─────────────────────────────────────────────────────
+// Only this object is exported. Page and hook only ever see this.
 export const transactionApi = {
+  // Fetches one page of transactions. Honors status + page + size.
   list: async (filter: TransactionFilter): Promise<TransactionListResponse> => {
-    if (USE_MOCK) {
-      await new Promise((r) => setTimeout(r, 250));
-
-      const filtered =
-        filter.status === "ALL"
-          ? MOCK_TRANSACTION_LIST_RESPONSE.transactions
-          : MOCK_TRANSACTION_LIST_RESPONSE.transactions.filter(
-              (t) => t.status === filter.status,
-            );
-
-      return TransactionListResponseSchema.parse({
-        ...MOCK_TRANSACTION_LIST_RESPONSE,
-        transactions: filtered,
-        totalElements: filtered.length,
-        totalPages: 1,
-        page: 0,
-        size: filter.size,
-      });
-    }
-
+    // Build the query string. role=SELLER is hardcoded — this page is always the seller's own history.
     const params: Record<string, string | number> = {
       role: "SELLER",
       page: filter.page,
       size: filter.size,
     };
+    // Don't send ?status=ALL — BE treats missing as "all".
     if (filter.status !== "ALL") params.status = filter.status;
 
+    // Call the real BE. The auth header is added by apiClient's request interceptor.
     const response = await apiClient.get("/api/transactions", { params });
+
+    // BE wraps the payload in { success, message, data: {...} }.
+    // We unwrap it here and parse with zod to catch contract drift.
+    // If the BE ever renames a field, this parse() throws and the page shows the error state.
     return TransactionListResponseSchema.parse(response.data.data);
   },
 };
