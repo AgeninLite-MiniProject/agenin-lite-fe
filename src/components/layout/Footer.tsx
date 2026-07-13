@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -6,13 +6,11 @@ const Footer = () => {
       <div className="mx-auto flex flex-col md:flex-row min-h-14 max-w-7xl items-center justify-between px-6 py-4 md:py-0 gap-4 md:gap-0 text-[13px] font-medium text-slate-400">
         {/* LEFT — Brand Logo */}
         <div className="flex-1 w-full md:w-auto text-center md:text-left">
-          <Link to="/dashboard" className="inline-flex items-center">
-            <img
-              src="/src/assets/ageninliteBlue.webp"
-              alt="AgeninLite Logo"
-              className="h-5 opacity-80 hover:opacity-100 transition-opacity"
-            />
-          </Link>
+          <img
+            src="/src/assets/logoAgeninlite-A.webp"
+            alt="AgeninLite Logo"
+            className="h-8"
+          />
         </div>
 
         {/* CENTER — Names */}
@@ -26,7 +24,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
