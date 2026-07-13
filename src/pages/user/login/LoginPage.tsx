@@ -41,7 +41,15 @@ export default function LoginPage() {
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
-        const errorCode = error.response.data?.error_code;
+        const backendMessage = error.response.data?.message || "";
+        
+        let errorCode = error.response.data?.error_code || 
+                        error.response.data?.errorCode || 
+                        error.response.data?.code;
+
+        if (!errorCode && backendMessage.includes(':')) {
+          errorCode = backendMessage.split(':')[0].trim();
+        }
         
         switch (errorCode) {
           case 'AUTH_0010':
@@ -49,10 +57,14 @@ export default function LoginPage() {
             setError('password', { type: 'manual', message: 'Nomor telepon atau password salah!' });
             break;
           case 'AUTH_0011':
-            toast.error('Akun ini telah di-nonaktifkan oleh Admin.');
+            toast.error('Akun ini telah di-soft-delete oleh Admin.');
             break;
           default:
-            toast.error(error.response.data?.message || 'Terjadi kesalahan saat login. Silakan coba lagi.');
+            const cleanMessage = backendMessage.includes(':') 
+              ? backendMessage.split(':').slice(1).join(':').trim() 
+              : backendMessage;
+              
+            toast.error(cleanMessage || 'Terjadi kesalahan saat login. Silakan coba lagi.');
         }
       } else {
         toast.error('Gagal terhubung ke server.');
