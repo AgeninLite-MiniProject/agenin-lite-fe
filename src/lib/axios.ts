@@ -28,11 +28,13 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/register');
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true;
 
       try {
-        const { refreshToken, setAuth, logout } = useAuthStore.getState();
+        const { refreshToken, setAuth } = useAuthStore.getState();
 
         if (!refreshToken) {
           throw new Error('Refresh token tidak tersedia');
@@ -40,13 +42,14 @@ apiClient.interceptors.response.use(
 
         // Tembak API refresh token (Pastikan tidak pakai apiClient agar tidak terjadi loop)
         const response = await axios.post(`${BASE_URL}/api/auth/refresh`, {
-          refreshToken,
+          refresh_token: refreshToken,
         });
 
-        const newAccessToken = response.data.data.accessToken;
-        const newRefreshToken = response.data.data.refreshToken;
+        const newAccessToken = response.data.access_token;
+        const newRefreshToken = response.data.refresh_token;
+        const newRole = response.data.role || useAuthStore.getState().role;
 
-        setAuth(newAccessToken, newRefreshToken);
+        setAuth(newAccessToken, newRefreshToken, newRole);
 
         // Ulangi request yang gagal tadi dengan token yang baru
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
