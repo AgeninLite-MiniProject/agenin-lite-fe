@@ -27,10 +27,10 @@ export default function LoginPage() {
       const response = await apiClient.post('/api/auth/login', data);
       
       if(response.status === 200) {
-        const { access_token, refresh_token, role } = response.data;
+        const { access_token, refresh_token, role, name } = response.data;
         
         // Simpan token ke Zustand (otomatis masuk LocalStorage)
-        setAuth(access_token, refresh_token, role);
+        setAuth(access_token, refresh_token, role, name);
         
         toast.success("Login Berhasil!");
         // Beri sedikit jeda agar toast terlihat sebelum pindah halaman
