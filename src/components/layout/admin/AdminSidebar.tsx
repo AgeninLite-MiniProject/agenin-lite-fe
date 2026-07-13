@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Package, Users, FileText, LogOut } from "lucide-react";
 import logoAgeninLite from "@/assets/ageninliteBlue.webp";
 import { useAuthStore } from "@/store/auth.store";
+import apiClient from "@/lib/axios";
 
 const navItems = [
   {
@@ -30,10 +32,19 @@ export default function AdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
+  const refreshToken = useAuthStore((state) => state.refreshToken);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await apiClient.post('/api/auth/logout', { refresh_token: refreshToken });
+    } catch (error) {
+      console.warn("Logout API failed, but clearing local state anyway");
+    } finally {
+      logout();
+      navigate('/login', { replace: true });
+    }
   };
 
   return (
@@ -67,10 +78,18 @@ export default function AdminSidebar() {
           <span className="text-sm font-semibold text-slate-700 truncate">Super Admin</span>
           <button 
             onClick={handleLogout}
-            className="text-slate-500 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-slate-100"
+            disabled={isLoggingOut}
+            className="text-slate-500 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-slate-100 disabled:opacity-50"
             title="Logout"
           >
-            <LogOut className="h-5 w-5" />
+            {isLoggingOut ? (
+              <svg className="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <LogOut className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>

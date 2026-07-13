@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
@@ -21,6 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import apiClient from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
 
 const menuItems = [
   { label: "Home", path: "/dashboard" },
@@ -32,6 +35,21 @@ const menuItems = [
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout);
+  const refreshToken = useAuthStore((state) => state.refreshToken);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await apiClient.post('/api/auth/logout', { refresh_token: refreshToken });
+    } catch (error) {
+      console.warn("Logout API failed, but clearing local state anyway");
+    } finally {
+      logout();
+      navigate('/login', { replace: true });
+    }
+  };
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -90,9 +108,25 @@ const Navbar = () => {
                 Profile
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive focus:text-destructive">
-                <LogOut className="size-4" />
-                Logout
+              <DropdownMenuItem 
+                className="text-destructive focus:text-destructive cursor-pointer"
+                disabled={isLoggingOut}
+                onClick={handleLogout}
+              >
+                {isLoggingOut ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin size-4 text-destructive" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Keluar...
+                  </span>
+                ) : (
+                  <>
+                    <LogOut className="size-4" />
+                    Logout
+                  </>
+                )}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

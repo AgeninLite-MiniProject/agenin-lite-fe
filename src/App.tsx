@@ -15,6 +15,8 @@ import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
 import RegisterPage from "@/pages/user/register/RegisterPage";
 import LoginPage from "@/pages/user/login/LoginPage";
 import HistoryPage from "@/pages/user/history/HistoryPage";
+import AuthGuard from "@/components/guards/AuthGuard";
+import AdminGuard from "@/components/guards/AdminGuard";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -24,28 +26,36 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
       <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/transaksi" element={<TransactionPage />} />
-          <Route path="/downline" element={<DownlinePage />} />
-          <Route path="/riwayat" element={<HistoryPage />} />
-          <Route path="/downline/invite" element={<SendInvitationPage />} />
-          <Route path="/downline/incoming" element={<IncomingInvitationsPage />} />
-          <Route path="/downline/:id" element={<DownlineDetailPage />} />
-        </Route>
-        
         {/* Auth Routes */}
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="dashboard" element={<AdminDashboardPage />} />
-          <Route path="products" element={<AdminProductsPage />} />
-          <Route path="users" element={<AdminUsersPage />} />
-          <Route path="audit" element={<AdminAuditPage />} />
+
+        {/* Protected Routes */}
+        <Route element={<AuthGuard />}>
+          
+          {/* User Routes */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/transaksi" element={<TransactionPage />} />
+            <Route path="/downline" element={<DownlinePage />} />
+            <Route path="/riwayat" element={<HistoryPage />} />
+            <Route path="/downline/invite" element={<SendInvitationPage />} />
+            <Route path="/downline/incoming" element={<IncomingInvitationsPage />} />
+            <Route path="/downline/:id" element={<DownlineDetailPage />} />
+          </Route>
+          
+          {/* Admin Routes */}
+          <Route element={<AdminGuard />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="dashboard" element={<AdminDashboardPage />} />
+              <Route path="products" element={<AdminProductsPage />} />
+              <Route path="users" element={<AdminUsersPage />} />
+              <Route path="audit" element={<AdminAuditPage />} />
+            </Route>
+          </Route>
+
         </Route>
       </Routes>
     </BrowserRouter>
