@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MainLayout from "./components/layout/MainLayout";
 import DashboardPage from "@/pages/user/dashboard/DashboardPage";
+import DownlinePage from "@/pages/user/downline/DownlinePage";
+import DownlineDetailPage from "@/pages/user/downline/DownlineDetailPage";
+import SendInvitationPage from "@/pages/user/downline/SendInvitationPage";
+import IncomingInvitationsPage from "@/pages/user/downline/IncomingInvitationsPage";
 import AdminLayout from "@/components/layout/admin/AdminLayout";
 import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
@@ -20,6 +24,10 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/downline" element={<DownlinePage />} />
+          <Route path="/downline/invite" element={<SendInvitationPage />} />
+          <Route path="/downline/incoming" element={<IncomingInvitationsPage />} />
+          <Route path="/downline/:id" element={<DownlineDetailPage />} />
         </Route>
         
         {/* Auth Routes */}

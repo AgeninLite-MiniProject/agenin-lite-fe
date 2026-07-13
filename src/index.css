@@ -61,7 +61,7 @@
     --popover-foreground: #0F172A;
 
     /* Primary — Agentin blue (CTAs, links, active nav) */
-    --primary: #1A4FE0;
+    --primary: #1b56fd;
     --primary-foreground: #FFFFFF;
 
     /* Secondary — warm tan (page tint, secondary actions) */
@@ -96,18 +96,20 @@
     --brand-tan-500: #D4B97E;
 
     /* Semantic status (icons, text, solid fills) */
-    --success: #10B981;
-    --warning: #D97706;
+    --success: #16A34A;
+    --warning: #EA580C;
+    --warning-dark: #92400E;
     --info:    #3B82F6;
-    --danger:  #DC2626;
+    --danger:  #BA1A1A;
 
     /* Status badge — soft-tinted backgrounds + matching text */
-    --badge-pending-bg:    #FEF3C7;  --badge-pending-fg:    #B45309;
-    --badge-accepted-bg:   #D1FAE5;  --badge-accepted-fg:   #047857;
-    --badge-completed-bg:  #D1FAE5;  --badge-completed-fg:  #047857;
-    --badge-declined-bg:   #FEE2E2;  --badge-declined-fg:   #B91C1C;
+    --badge-pending-bg:    #FFF7ED;  --badge-pending-fg:    #EA580C;
+    --badge-accepted-bg:   #F0FDF4;  --badge-accepted-fg:   #16A34A;
+    --badge-completed-bg:  #F0FDF4;  --badge-completed-fg:  #16A34A;
+    --badge-declined-bg:   #FEF2F2;  --badge-declined-fg:   #BA1A1A;
+    --badge-failed-bg:     #FEF2F2;  --badge-failed-fg:     #BA1A1A;
     --badge-cancelled-bg:  #F1F5F9;  --badge-cancelled-fg:  #475569;
-    --badge-active-bg:     #D1FAE5;  --badge-active-fg:     #047857;
+    --badge-active-bg:     #F0FDF4;  --badge-active-fg:     #16A34A;
     --badge-downliner-bg:  #EDE9FE;  --badge-downliner-fg:  #6D28D9;
     --badge-info-bg:       #DBEAFE;  --badge-info-fg:       #1D4ED8;
 
