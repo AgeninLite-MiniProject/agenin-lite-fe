@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Package, Users, FileText, LogOut } from "lucide-react";
-import logoAgeninLite from "@/assets/ageninliteBlue.webp";
+import logoAgeninLite from "../../../assets/ageninliteBlue.webp";
 import { useAuthStore } from "@/store/auth.store";
 import apiClient from "@/lib/axios";
 
