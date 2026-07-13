@@ -27,7 +27,6 @@ const menuItems = [
   { label: "Downline", path: "/downline" },
   { label: "Transaksi", path: "/transaksi" },
   { label: "Riwayat", path: "/riwayat" },
-  { label: "Profil", path: "/profil" },
 ];
 
 const Navbar = () => {
@@ -41,7 +40,11 @@ const Navbar = () => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* LEFT — Logo */}
         <Link to="/dashboard" className="flex items-center gap-2">
-          <img src="/src/assets/ageninliteBlue.webp" alt="AgeninLite Logo" className="h-6" />
+          <img
+            src="/src/assets/ageninliteBlue.webp"
+            alt="AgeninLite Logo"
+            className="h-6"
+          />
         </Link>
 
         {/* CENTER — Menu */}
@@ -64,9 +67,6 @@ const Navbar = () => {
 
         {/* RIGHT — Bell + Avatar */}
         <div className="flex items-center gap-4">
-          <button className="text-muted-foreground hover:text-foreground">
-            <Bell className="size-5" />
-          </button>
           {/* Avatar + name dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 rounded-full px-2 py-1 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
