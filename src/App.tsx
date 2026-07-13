@@ -6,6 +6,7 @@ import DownlinePage from "@/pages/user/downline/DownlinePage";
 import DownlineDetailPage from "@/pages/user/downline/DownlineDetailPage";
 import SendInvitationPage from "@/pages/user/downline/SendInvitationPage";
 import IncomingInvitationsPage from "@/pages/user/downline/IncomingInvitationsPage";
+import TransactionPage from "@/pages/user/transaction/TransactionPage";
 import AdminLayout from "@/components/layout/admin/AdminLayout";
 import AdminDashboardPage from "@/pages/admin/dashboard/AdminDashboardPage";
 import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
@@ -24,6 +25,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/transaksi" element={<TransactionPage />} />
           <Route path="/downline" element={<DownlinePage />} />
           <Route path="/downline/invite" element={<SendInvitationPage />} />
           <Route path="/downline/incoming" element={<IncomingInvitationsPage />} />
