@@ -32,8 +32,16 @@ export default function Register() {
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
-        const errorCode = error.response.data?.error_code;
-        // const errorMessage = error.response.data?.message;
+        const backendMessage = error.response.data?.message || "";
+        
+        let errorCode = error.response.data?.error_code || 
+                        error.response.data?.errorCode || 
+                        error.response.data?.code;
+
+        if (!errorCode && backendMessage.includes(':')) {
+          errorCode = backendMessage.split(':')[0].trim();
+        }
+        
         switch (errorCode) {
           case 'AUTH_0001':
             setError('phone_number', { type: 'manual', message: 'Nomor telepon sudah terdaftar!' });
@@ -51,7 +59,11 @@ export default function Register() {
             setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah mencapai batas maksimum downliner.' });
             break;
           default:
-            toast.error(error.response.data?.message || 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
+            const cleanMessage = backendMessage.includes(':') 
+              ? backendMessage.split(':').slice(1).join(':').trim() 
+              : backendMessage;
+              
+            toast.error(cleanMessage || 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
         }
       } else {
         toast.error('Gagal terhubung ke server.');
