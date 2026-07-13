@@ -1,0 +1,255 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  ChevronDown,
+  Wallet,
+  CheckCircle2,
+  Hourglass,
+  XCircle,
+  Package,
+} from "lucide-react";
+import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
+import { formatRupiah, formatDateId } from "@/lib/utils/format";
+import { cn } from "@/lib/utils";
+import type { TransactionStatus } from "@/schemas/transaction.schema";
+
+const STATUS_CONFIG: Record<
+  TransactionStatus,
+  {
+    label: string;
+    badgeClass: string;
+    rowAmountClass: string;
+    showAmount: boolean;
+  }
+> = {
+  COMPLETED: {
+    label: "SELESAI",
+    badgeClass: "bg-green-50 text-green-700 border-green-200",
+    rowAmountClass: "text-green-600",
+    showAmount: true,
+  },
+  PENDING: {
+    label: "MENUNGGU",
+    badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
+    rowAmountClass: "text-slate-400",
+    showAmount: false,
+  },
+  FAILED: {
+    label: "GAGAL",
+    badgeClass: "bg-red-50 text-red-700 border-red-200",
+    rowAmountClass: "text-slate-400",
+    showAmount: false,
+  },
+  CANCELLED: {
+    label: "DIBATALKAN",
+    badgeClass: "bg-slate-100 text-slate-600 border-slate-200",
+    rowAmountClass: "text-slate-400",
+    showAmount: false,
+  },
+};
+
+const STATUS_TABS: Array<{ value: TransactionStatus | "ALL"; label: string }> = [
+  { value: "ALL", label: "All" },
+  { value: "COMPLETED", label: "Completed" },
+  { value: "PENDING", label: "Pending" },
+  { value: "FAILED", label: "Failed" },
+  { value: "CANCELLED", label: "Cancelled" },
+];
+
+function getStatusIcon(status: TransactionStatus) {
+  switch (status) {
+    case "COMPLETED":
+      return <CheckCircle2 className="h-5 w-5 text-green-600" strokeWidth={1.5} />;
+    case "PENDING":
+      return <Hourglass className="h-5 w-5 text-amber-600" strokeWidth={1.5} />;
+    case "FAILED":
+    case "CANCELLED":
+      return <XCircle className="h-5 w-5 text-red-500" strokeWidth={1.5} />;
+  }
+}
+
+const HistoryPage = () => {
+  const [status, setStatus] = useState<TransactionStatus | "ALL">("ALL");
+  const [page, setPage] = useState(0);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    isFetching,
+    isPlaceholderData,
+  } = useTransactionListQuery({ status, page, size: 20 });
+
+  const handleStatusChange = (next: TransactionStatus | "ALL") => {
+    setStatus(next);
+    setPage(0);
+  };
+
+  const handleLoadMore = () => setPage((p) => p + 1);
+
+  return (
+    <div className="flex-1 space-y-6 md:space-y-8 p-4 md:p-8 max-w-7xl mx-auto w-full">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
+          Riwayat Transaksi
+        </h1>
+        <p className="text-sm md:text-base text-muted-foreground mt-1">
+          Pantau dan kelola seluruh komisi dari jaringan Anda.
+        </p>
+      </div>
+
+      <Card className="rounded-2xl border-primary/10 shadow-sm">
+        <CardContent className="p-5 md:p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                <Wallet className="h-6 w-6 text-primary" strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                  Total Komisi Anda
+                </p>
+                <p className="text-2xl md:text-3xl font-bold text-primary mt-0.5">
+                  {data ? formatRupiah(data.totalCommission) : "—"}
+                </p>
+              </div>
+            </div>
+            <div className="md:border-l md:border-border md:pl-8">
+              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Total Transaksi Selesai
+              </p>
+              <p className="text-xl md:text-2xl font-bold text-foreground mt-0.5">
+                {data ? `${data.completedCount} Transaksi` : "—"}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="inline-flex items-center bg-slate-100 p-1 rounded-full">
+        {STATUS_TABS.map((tab) => {
+          const isActive = status === tab.value;
+          return (
+            <Button
+              key={tab.value}
+              variant="ghost"
+              size="sm"
+              onClick={() => handleStatusChange(tab.value)}
+              className={cn(
+                "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+                isActive
+                  ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                  : "text-slate-600 hover:text-slate-900",
+              )}
+            >
+              {tab.label}
+            </Button>
+          );
+        })}
+      </div>
+
+      <div className="space-y-3 md:space-y-4">
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i} className="rounded-2xl border-slate-100">
+              <CardContent className="p-5 md:p-6">
+                <div className="animate-pulse space-y-3">
+                  <div className="h-4 bg-slate-200 rounded w-1/3" />
+                  <div className="h-3 bg-slate-200 rounded w-1/2" />
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : isError ? (
+          <Card className="rounded-2xl border-red-100 bg-red-50/50">
+            <CardContent className="p-6 text-center text-sm text-red-700">
+              Gagal memuat riwayat transaksi. Silakan coba lagi.
+            </CardContent>
+          </Card>
+        ) : data && data.transactions.length === 0 ? (
+          <Card className="rounded-2xl border-slate-100">
+            <CardContent className="p-10 text-center">
+              <Package className="h-10 w-10 text-slate-300 mx-auto mb-3" strokeWidth={1.5} />
+              <p className="text-sm text-muted-foreground">
+                Belum ada transaksi pada filter ini.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          data?.transactions.map((trx) => {
+            const config = STATUS_CONFIG[trx.status];
+            return (
+              <Card
+                key={trx.id}
+                className={cn(
+                  "rounded-2xl border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all",
+                  isPlaceholderData && "opacity-60",
+                )}
+              >
+                <CardContent className="p-4 md:p-5">
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
+                      {getStatusIcon(trx.status)}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm md:text-[15px] text-foreground truncate">
+                        {trx.productName ?? "(Produk telah dihapus)"}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {trx.createdAt ? formatDateId(trx.createdAt) : ""}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {trx.quantity ?? 0} Unit • Total: {formatRupiah(trx.amount)}
+                      </p>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      {config.showAmount && (
+                        <p
+                          className={cn(
+                            "text-sm md:text-base font-semibold mb-1",
+                            config.rowAmountClass,
+                          )}
+                        >
+                          + {formatRupiah(trx.agentFeeAmount)}
+                        </p>
+                      )}
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          "text-[10px] font-semibold",
+                          config.badgeClass,
+                        )}
+                      >
+                        {config.label}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+
+      {data && page + 1 < data.totalPages && (
+        <div className="flex justify-center pt-2">
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isFetching}
+            className="rounded-full px-6 h-10 text-sm font-medium border-primary text-primary hover:bg-primary/5"
+          >
+            Muat Lebih Banyak
+            <ChevronDown className="ml-2 h-4 w-4" strokeWidth={2} />
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default HistoryPage;
