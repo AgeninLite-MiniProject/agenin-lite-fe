@@ -1,6 +1,6 @@
 import { Plus, Pencil } from "lucide-react";
-import { useState, useEffect } from "react";
-import { adminProductApi } from "@/lib/api/admin-product.api";
+import { useState, useMemo } from "react";
+import { useAdminProductsQuery } from "@/hooks/useAdminProducts";
 import { Button } from "@/components/ui/button";
 import { AdminSearch } from "@/components/admin/ui/AdminSearch";
 import { AdminPagination } from "@/components/admin/ui/AdminPagination";
@@ -17,23 +17,33 @@ import { ProductModal } from "@/components/admin/product/ProductModal";
 import { EditProductModal } from "@/components/admin/product/EditProductModal";
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: allProducts = [], isLoading } = useAdminProductsQuery();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
-  const fetchProducts = async () => {
-    try {
-      const data = await adminProductApi.getAllProducts();
-      setProducts(data);
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  // Search Logic
+  const filteredProducts = useMemo(() => {
+    return allProducts.filter((product: any) =>
+      product.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [allProducts, searchQuery]);
+
+  // Pagination Logic
+  const totalEntries = filteredProducts.length;
+  const totalPages = Math.ceil(totalEntries / pageSize) || 1;
+  const startEntry = totalEntries === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const endEntry = Math.min(currentPage * pageSize, totalEntries);
+
+  const paginatedProducts = useMemo(() => {
+    return filteredProducts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  }, [filteredProducts, currentPage, pageSize]);
+
+  // Reset page when search query changes
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   return (
     <div className="p-10 max-w-6xl">
@@ -44,12 +54,14 @@ export default function AdminProductsPage() {
             Manage master products, prices, and commission fees.
           </p>
         </div>
-        <ProductModal onSuccess={fetchProducts} />
+        <ProductModal />
       </div>
 
       <AdminSearch 
         placeholder="Search product name..." 
         className="mb-6 w-full"
+        value={searchQuery}
+        onChange={handleSearch}
       />
 
       <div className="rounded-3xl border border-slate-200 shadow-sm bg-white overflow-hidden">
@@ -71,12 +83,12 @@ export default function AdminProductsPage() {
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-10 text-slate-500">Loading data...</TableCell>
               </TableRow>
-            ) : products.length === 0 ? (
+            ) : paginatedProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-10 text-slate-500">Tidak ada produk.</TableCell>
+                <TableCell colSpan={8} className="text-center py-10 text-slate-500">Tidak ada produk ditemukan.</TableCell>
               </TableRow>
             ) : (
-              products.map((product) => (
+              paginatedProducts.map((product) => (
                 <TableRow key={product.product_id} className="border-slate-100 hover:bg-slate-50/50">
                   <TableCell className="font-medium text-slate-600 py-4 pl-6" title={product.product_id}>
                     {product.product_id ? product.product_id.substring(0, 8) + '...' : '-'}
@@ -107,7 +119,7 @@ export default function AdminProductsPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right pr-6 py-4">
-                    <EditProductModal product={product} onSuccess={fetchProducts} />
+                    <EditProductModal product={product} />
                   </TableCell>
                 </TableRow>
               ))
@@ -116,11 +128,12 @@ export default function AdminProductsPage() {
         </Table>
         
         <AdminPagination 
-          currentPage={1} 
-          totalPages={1} 
-          startEntry={1} 
-          endEntry={3} 
-          totalEntries={3} 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          startEntry={startEntry} 
+          endEntry={endEntry} 
+          totalEntries={totalEntries} 
+          onPageChange={setCurrentPage}
         />
       </div>
     </div>
