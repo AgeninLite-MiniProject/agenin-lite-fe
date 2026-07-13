@@ -13,6 +13,7 @@ import AdminProductsPage from "@/pages/admin/products/AdminProductsPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminAuditPage from "@/pages/admin/audit/AdminAuditPage";
 import RegisterPage from "@/pages/user/register/RegisterPage";
+import HistoryPage from "@/pages/user/history/HistoryPage";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/transaksi" element={<TransactionPage />} />
           <Route path="/downline" element={<DownlinePage />} />
+          <Route path="/riwayat" element={<HistoryPage />} />
           <Route path="/downline/invite" element={<SendInvitationPage />} />
           <Route path="/downline/incoming" element={<IncomingInvitationsPage />} />
           <Route path="/downline/:id" element={<DownlineDetailPage />} />
