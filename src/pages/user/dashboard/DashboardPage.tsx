@@ -3,15 +3,18 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calculator, Send } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "@/store/auth.store";
 
 const DashboardPage = () => {
+  const userName = "Agent"; // TODO: Fetch from dashboard API later
+
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 max-w-7xl mx-auto w-full">
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 md:gap-0">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">Selamat datang, Budi Santoso</h1>
+            <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">Selamat datang, {userName}</h1>
           </div>
           <p className="text-sm md:text-base text-muted-foreground mt-1">Here is a summary of your agent activity and performance.</p>
         </div>
@@ -59,11 +62,7 @@ const DashboardPage = () => {
               <span className="text-3xl font-bold">4</span>
               <span className="text-sm text-muted-foreground">/ 10</span>
             </div>
-            <p className="text-xs text-muted-foreground mb-4">Maksimal 10 agent langsung</p>
-            <div className="w-full bg-secondary h-2 rounded-full overflow-hidden mb-1.5">
-              <div className="bg-primary h-full rounded-full" style={{ width: '40%' }}></div>
-            </div>
-            <div className="text-right text-xs font-medium text-primary">40%</div>
+            <p className="text-xs text-muted-foreground mb-1">Maksimal 10 agent langsung</p>
           </CardContent>
         </Card>
 
@@ -79,11 +78,7 @@ const DashboardPage = () => {
               <span className="text-3xl font-bold">2</span>
               <span className="text-sm text-muted-foreground">/ 3</span>
             </div>
-            <p className="text-xs text-muted-foreground mb-4">Maksimal 3 undangan tertunda</p>
-            <div className="w-full bg-secondary h-2 rounded-full overflow-hidden mb-1.5">
-              <div className="bg-orange-500 h-full rounded-full" style={{ width: '66%' }}></div>
-            </div>
-            <div className="text-right text-xs font-medium text-orange-500">66%</div>
+            <p className="text-xs text-muted-foreground mb-1">Maksimal 3 undangan tertunda</p>
           </CardContent>
         </Card>
 
@@ -91,11 +86,11 @@ const DashboardPage = () => {
         <Card className="rounded-2xl shadow-sm relative overflow-hidden">
           <CardHeader className="pb-2 relative z-10">
             <CardTitle className="text-sm font-medium text-slate-500">
-              Estimasi Komisi Bulan Ini
+              Total Komisi
             </CardTitle>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="mb-6">
+            <div className="mb-3">
               <span className="text-3xl font-bold text-green-600">Rp 850.000</span>
             </div>
             <div className="space-y-1.5 pt-3 border-t border-border">

@@ -34,6 +34,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
   const refreshToken = useAuthStore((state) => state.refreshToken);
+  const userName = "Agent"; // TODO: Fetch from dashboard API later
+  const userInitials = userName.substring(0, 2).toUpperCase();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -87,13 +89,13 @@ const Navbar = () => {
             <DropdownMenuTrigger className="flex items-center gap-2 rounded-full px-2 py-1 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
               <Avatar className="size-8">
                 <AvatarImage
-                  src="https://i.pravatar.cc/150?img=12"
-                  alt="Budi Santoso"
+                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=0D8ABC&color=fff`}
+                  alt={userName}
                 />
-                <AvatarFallback>BS</AvatarFallback>
+                <AvatarFallback>{userInitials}</AvatarFallback>
               </Avatar>
               <span className="text-sm font-medium text-foreground">
-                Budi Santoso
+                {userName}
               </span>
             </DropdownMenuTrigger>
 
