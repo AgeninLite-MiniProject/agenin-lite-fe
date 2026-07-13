@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { useNavigate } from "react-router-dom";
 import apiClient from "@/lib/axios";
 import { AxiosError } from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -73,7 +73,6 @@ export default function Register() {
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex-1 flex text-gray-900 bg-gray-50">
         
         {/* Bagian Kiri: Hero Section */}

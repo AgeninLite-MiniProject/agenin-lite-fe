@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { useNavigate } from "react-router-dom";
 import apiClient from "@/lib/axios";
 import { AxiosError } from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
 
 export default function LoginPage() {
@@ -74,7 +74,6 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex-1 flex text-gray-900 bg-gray-50">
         
         {/* Bagian Kiri: Hero Section */}
