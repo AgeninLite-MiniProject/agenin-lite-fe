@@ -27,32 +27,32 @@ export default function LoginPage() {
       const response = await apiClient.post('/api/auth/login', data);
       
       if(response.status === 200) {
-        const { accessToken, refreshToken } = response.data.data;
+        const { access_token, refresh_token, role } = response.data;
         
         // Simpan token ke Zustand (otomatis masuk LocalStorage)
-        setAuth(accessToken, refreshToken);
+        setAuth(access_token, refresh_token, role);
         
         toast.success("Login Berhasil!");
         // Beri sedikit jeda agar toast terlihat sebelum pindah halaman
         setTimeout(() => {
-          navigate("/dashboard");
+          if (role === 'ADMIN') navigate("/admin");
+          else navigate("/dashboard");
         }, 1000);
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
-        const errorCode = error.response.data?.code || error.response.data?.errorCode;
-        const errorMessage = error.response.data?.message;
+        const errorCode = error.response.data?.error_code;
         
         switch (errorCode) {
           case 'AUTH_0010':
-            setError('phone', { type: 'manual', message: 'Nomor telepon atau password salah!' });
+            setError('phone_number', { type: 'manual', message: 'Nomor telepon atau password salah!' });
             setError('password', { type: 'manual', message: 'Nomor telepon atau password salah!' });
             break;
           case 'AUTH_0011':
-            toast.error('Akun ini telah dihapus atau diblokir.');
+            toast.error('Akun ini telah di-nonaktifkan oleh Admin.');
             break;
           default:
-            toast.error(errorMessage || 'Terjadi kesalahan saat login. Silakan coba lagi.');
+            toast.error(error.response.data?.message || 'Terjadi kesalahan saat login. Silakan coba lagi.');
         }
       } else {
         toast.error('Gagal terhubung ke server.');
@@ -124,15 +124,15 @@ export default function LoginPage() {
                     id="phone"
                     type="tel"
                     placeholder="08xxxxxxxxxx"
-                    {...register("phone")}
+                    {...register("phone_number")}
                     className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
-                      errors.phone
+                      errors.phone_number
                         ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
                         : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
                     }`}
                   />
-                  {errors.phone && (
-                    <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
+                  {errors.phone_number && (
+                    <p className="text-sm text-red-500 mt-1">{errors.phone_number.message}</p>
                   )}
                 </div>
 
@@ -140,7 +140,6 @@ export default function LoginPage() {
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                    <a href="#" className="text-sm font-medium text-blue-700 hover:text-blue-800 transition-colors">Lupa password?</a>
                   </div>
                   <div className="relative">
                     <input

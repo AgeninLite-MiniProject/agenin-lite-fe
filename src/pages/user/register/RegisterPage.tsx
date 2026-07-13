@@ -21,20 +21,22 @@ export default function Register() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     const { confirm_password, ...payload } = data;
+    if (!payload.email) delete payload.email; 
+    if (!payload.referral_code) delete payload.referral_code;
     
     try {
       const response = await apiClient.post('/api/auth/register', payload);
       if(response.status === 201) {
         toast.success("Registrasi Akun Berhasil! Silakan login.");
-        navigate("/login")
+        setTimeout(() => navigate("/login"), 1500);
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
-        const errorCode = error.response.data?.code || error.response.data?.errorCode;
-        const errorMessage = error.response.data?.message;
+        const errorCode = error.response.data?.error_code;
+        // const errorMessage = error.response.data?.message;
         switch (errorCode) {
           case 'AUTH_0001':
-            setError('phone', { type: 'manual', message: 'Nomor telepon sudah terdaftar!' });
+            setError('phone_number', { type: 'manual', message: 'Nomor telepon sudah terdaftar!' });
             break;
           case 'AUTH_0004':
             setError('email', { type: 'manual', message: 'Email ini sudah terdaftar!' });
@@ -42,15 +44,17 @@ export default function Register() {
           case 'AUTH_0006':
             setError('referral_code', { type: 'manual', message: 'Kode referral tidak valid atau tidak ditemukan.' });
             break;
+          case 'AUTH_0008':
+            setError('referral_code', { type: 'manual', message: 'Pemilik kode referral sudah dihapus oleh Admin.' });
+            break;
           case 'AUTH_0007':
             setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah mencapai batas maksimum downliner.' });
             break;
-          case 'AUTH_0008':
-            setError('referral_code', { type: 'manual', message: 'Pemilik kode referral ini sudah tidak aktif/dihapus.' });
-            break;
           default:
-            toast.error(errorMessage || 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
+            toast.error(error.response.data?.message || 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
         }
+      } else {
+        toast.error('Gagal terhubung ke server.');
       }
     }
   };
@@ -140,15 +144,15 @@ export default function Register() {
                     id="phone"
                     type="tel"
                     placeholder="08xxxxxxxxxx"
-                    {...register("phone")}
+                    {...register("phone_number")}
                     className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
-                      errors.phone
+                      errors.phone_number
                         ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
                         : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
                     }`}
                   />
-                  {errors.phone ? (
-                    <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
+                  {errors.phone_number ? (
+                    <p className="text-sm text-red-500 mt-1">{errors.phone_number.message}</p>
                   ) : (
                     <p className="text-xs text-gray-400 mt-1">Gunakan format angka, misal: 08123456789</p>
                   )}
