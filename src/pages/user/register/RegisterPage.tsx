@@ -143,7 +143,7 @@ export default function Register() {
                   <input
                     id="phone"
                     type="tel"
-                    placeholder="08xxxxxxxxxx"
+                    placeholder="+628xxxxxxxxxx"
                     {...register("phone_number")}
                     className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
                       errors.phone_number
@@ -154,7 +154,7 @@ export default function Register() {
                   {errors.phone_number ? (
                     <p className="text-sm text-red-500 mt-1">{errors.phone_number.message}</p>
                   ) : (
-                    <p className="text-xs text-gray-400 mt-1">Gunakan format angka, misal: 08123456789</p>
+                    <p className="text-xs text-gray-400 mt-1">Gunakan format internasional, misal: +628123456789</p>
                   )}
                 </div>
 
