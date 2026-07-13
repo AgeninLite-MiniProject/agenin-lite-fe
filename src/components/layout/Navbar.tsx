@@ -7,9 +7,6 @@ import {
   Clock,
   User,
   Bell,
-  ChevronDown,
-  Settings,
-  HelpCircle,
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";

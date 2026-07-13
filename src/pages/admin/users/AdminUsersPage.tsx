@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { adminUserApi } from "@/lib/api/admin-user.api";
+import { useState, useMemo } from "react";
+import { useAdminUsersQuery, useSoftDeleteUserMutation } from "@/hooks/useAdminUsers";
 import { AdminSearch } from "@/components/admin/ui/AdminSearch";
 import { AdminPagination } from "@/components/admin/ui/AdminPagination";
 import { Button } from "@/components/ui/button";
@@ -23,8 +22,6 @@ import {
 } from "@/components/ui/dialog";
 
 export default function AdminUsersPage() {
-  const queryClient = useQueryClient();
-  
   // State for search and pagination
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -34,25 +31,9 @@ export default function AdminUsersPage() {
   
   // State for delete modal
   const [userToDelete, setUserToDelete] = useState<{ id: string, name: string } | null>(null);
-  const [deleteError, setDeleteError] = useState("");
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['admin-users', searchQuery, statusFilter, deletedFilter, page, size],
-    queryFn: () => adminUserApi.searchUsers(searchQuery, statusFilter, deletedFilter, page, size),
-  });
-
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: adminUserApi.softDeleteUser,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-      setUserToDelete(null);
-      setDeleteError("");
-    },
-    onError: (error: any) => {
-      setDeleteError(error.response?.data?.message || "Failed to delete user. Please try again.");
-    }
-  });
+  const { data, isLoading } = useAdminUsersQuery(searchQuery, statusFilter, deletedFilter, page, size);
+  const { mutate: deleteUser, isPending: isDeleting } = useSoftDeleteUserMutation();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -71,12 +52,25 @@ export default function AdminUsersPage() {
 
   const confirmDelete = () => {
     if (userToDelete) {
-      deleteMutation.mutate(userToDelete.id);
+      deleteUser(userToDelete.id, {
+        onSuccess: () => {
+          setUserToDelete(null);
+        }
+      });
     }
   };
 
   const users = data?.content || [];
-  const filteredUsers = users;
+  
+  // Urutkan otomatis: yang is_deleted = true taruh di bawah
+  const sortedUsers = useMemo(() => {
+    return [...users].sort((a: any, b: any) => {
+      if (a.is_deleted === b.is_deleted) return 0;
+      return a.is_deleted ? 1 : -1;
+    });
+  }, [users]);
+
+  const filteredUsers = sortedUsers;
 
   const totalElements = data?.totalElements || 0;
   const totalPages = data?.totalPages || 1;
@@ -181,7 +175,7 @@ export default function AdminUsersPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right pr-6 py-4">
-                    {!user.is_deleted ? (
+                    {!user.is_deleted && user.role !== 'ADMIN' ? (
                       <Button 
                         variant="outline" 
                         size="sm" 
@@ -215,7 +209,6 @@ export default function AdminUsersPage() {
       <Dialog open={!!userToDelete} onOpenChange={(open) => {
         if (!open) {
           setUserToDelete(null);
-          setDeleteError("");
         }
       }}>
         <DialogContent>
@@ -227,18 +220,12 @@ export default function AdminUsersPage() {
             </DialogDescription>
           </DialogHeader>
           
-          {deleteError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-md text-sm mt-2 font-medium">
-              {deleteError}
-            </div>
-          )}
-
           <DialogFooter className="mt-4">
-            <Button variant="outline" onClick={() => setUserToDelete(null)} disabled={deleteMutation.isPending}>
+            <Button variant="outline" onClick={() => setUserToDelete(null)} disabled={isDeleting}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={confirmDelete} disabled={deleteMutation.isPending}>
-              {deleteMutation.isPending ? "Deleting..." : "Yes, Delete Account"}
+            <Button variant="destructive" onClick={confirmDelete} disabled={isDeleting}>
+              {isDeleting ? "Deleting..." : "Yes, Delete Account"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,5 +1,4 @@
-import { Calendar, Shield, ChevronDown, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Calendar, Shield, ChevronDown } from "lucide-react";
 import { AdminSearch } from "@/components/admin/ui/AdminSearch";
 import { AdminPagination } from "@/components/admin/ui/AdminPagination";
 import { Input } from "@/components/ui/input";

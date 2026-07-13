@@ -1,7 +1,5 @@
-import { Plus, Pencil } from "lucide-react";
 import { useState, useMemo } from "react";
 import { useAdminProductsQuery } from "@/hooks/useAdminProducts";
-import { Button } from "@/components/ui/button";
 import { AdminSearch } from "@/components/admin/ui/AdminSearch";
 import { AdminPagination } from "@/components/admin/ui/AdminPagination";
 import { Badge } from "@/components/ui/badge";
@@ -88,7 +86,7 @@ export default function AdminProductsPage() {
                 <TableCell colSpan={8} className="text-center py-10 text-slate-500">Tidak ada produk ditemukan.</TableCell>
               </TableRow>
             ) : (
-              paginatedProducts.map((product) => (
+              paginatedProducts.map((product: any) => (
                 <TableRow key={product.product_id} className="border-slate-100 hover:bg-slate-50/50">
                   <TableCell className="font-medium text-slate-600 py-4 pl-6" title={product.product_id}>
                     {product.product_id ? product.product_id.substring(0, 8) + '...' : '-'}
