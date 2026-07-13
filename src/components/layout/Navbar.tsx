@@ -23,10 +23,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const menuItems = [
-  { label: "Home", path: "/dashboard", icon: Home },
-  { label: "Downline", path: "/downline", icon: Users },
-  { label: "Transaksi", path: "/transaksi", icon: ArrowLeftRight },
-  { label: "Riwayat", path: "/riwayat", icon: Clock },
+  { label: "Home", path: "/dashboard" },
+  { label: "Downline", path: "/downline" },
+  { label: "Transaksi", path: "/transaksi" },
+  { label: "Riwayat", path: "/riwayat" },
+  { label: "Profil", path: "/profil" },
 ];
 
 const Navbar = () => {
@@ -38,12 +39,9 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        {/* LEFT — Logo (text only) */}
-        <Link
-          to="/dashboard"
-          className="font-heading text-lg font-bold text-primary"
-        >
-          AgeninLite
+        {/* LEFT — Logo */}
+        <Link to="/dashboard" className="flex items-center gap-2">
+          <img src="/src/assets/ageninliteBlue.webp" alt="AgeninLite Logo" className="h-6" />
         </Link>
 
         {/* CENTER — Menu */}
@@ -56,7 +54,7 @@ const Navbar = () => {
                 "inline-block font-heading text-sm font-medium transition-colors",
                 isActive(item.path)
                   ? "border-b-2 border-primary pb-1 text-primary"
-                  : "border-b-2 border-transparent pb-1 text-foreground hover:border-primary/30 hover:text-primary",
+                  : "border-b-2 border-transparent pb-1 text-muted-foreground hover:border-primary/30 hover:text-primary",
               )}
             >
               {item.label}
@@ -66,6 +64,9 @@ const Navbar = () => {
 
         {/* RIGHT — Bell + Avatar */}
         <div className="flex items-center gap-4">
+          <button className="text-muted-foreground hover:text-foreground">
+            <Bell className="size-5" />
+          </button>
           {/* Avatar + name dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 rounded-full px-2 py-1 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
@@ -79,13 +80,12 @@ const Navbar = () => {
               <span className="text-sm font-medium text-foreground">
                 Budi Santoso
               </span>
-              <ChevronDown className="size-4 text-muted-foreground" />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate("/profile")}>
+              <DropdownMenuItem onClick={() => navigate("/profil")}>
                 <User className="size-4" />
                 Profile
               </DropdownMenuItem>
