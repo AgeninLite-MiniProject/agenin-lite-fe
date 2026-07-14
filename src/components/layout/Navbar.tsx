@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
   Users,
-  ArrowLeftRight,
+  ShoppingCart,
   Clock,
   User,
   Bell,
@@ -22,11 +22,11 @@ import {
 import apiClient from "@/lib/axios";
 import { useAuthStore } from "@/store/auth.store";
 
-const menuItems = [
-  { label: "Home", path: "/dashboard" },
-  { label: "Downline", path: "/downline" },
-  { label: "Transaksi", path: "/transaksi" },
-  { label: "Riwayat", path: "/riwayat" },
+export const menuItems = [
+  { label: "Home", path: "/dashboard", icon: Home },
+  { label: "Downline", path: "/downline", icon: Users },
+  { label: "Transaksi", path: "/transaksi", icon: ShoppingCart },
+  { label: "Riwayat", path: "/riwayat", icon: Clock },
 ];
 
 const Navbar = () => {
@@ -64,8 +64,8 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* CENTER — Menu */}
-        <nav className="flex items-center gap-8">
+        {/* CENTER — Menu (DESKTOP) */}
+        <nav className="hidden md:flex items-center gap-8">
           {menuItems.map((item) => (
             <Link
               key={item.path}

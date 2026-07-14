@@ -20,18 +20,7 @@ const DotMap = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  const routes: { start: RoutePoint; end: RoutePoint; color: string }[] = [
-    // Top routes
-    { start: { x: 100, y: 150, delay: 0 }, end: { x: 200, y: 80, delay: 2 }, color: "#93c5fd" },
-    { start: { x: 200, y: 80, delay: 2 }, end: { x: 260, y: 120, delay: 4 }, color: "#93c5fd" },
-    { start: { x: 50, y: 50, delay: 1 }, end: { x: 150, y: 180, delay: 3 }, color: "#93c5fd" },
-    { start: { x: 280, y: 60, delay: 0.5 }, end: { x: 180, y: 180, delay: 2.5 }, color: "#93c5fd" },
-    // Bottom routes
-    { start: { x: 120, y: 450, delay: 1 }, end: { x: 220, y: 520, delay: 3 }, color: "#93c5fd" },
-    { start: { x: 220, y: 520, delay: 3 }, end: { x: 320, y: 460, delay: 5 }, color: "#93c5fd" },
-    { start: { x: 80, y: 550, delay: 1.5 }, end: { x: 180, y: 480, delay: 3.5 }, color: "#93c5fd" },
-    { start: { x: 250, y: 420, delay: 0.5 }, end: { x: 150, y: 500, delay: 2.5 }, color: "#93c5fd" },
-  ];
+
 
   const generateDots = (width: number, height: number) => {
     const dots = [];
@@ -82,8 +71,24 @@ const DotMap = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     if (!ctx) return;
+
+    const h = dimensions.height;
+    
+    // Rute dinamis berdasarkan proporsi tinggi (base height 600)
+    const routes: { start: RoutePoint; end: RoutePoint; color: string }[] = [
+      // Top routes (sekitar 10% - 30% dari atas)
+      { start: { x: 100, y: h * 0.25, delay: 0 }, end: { x: 200, y: h * 0.13, delay: 2 }, color: "#93c5fd" },
+      { start: { x: 200, y: h * 0.13, delay: 2 }, end: { x: 260, y: h * 0.20, delay: 4 }, color: "#93c5fd" },
+      { start: { x: 50, y: h * 0.08, delay: 1 }, end: { x: 150, y: h * 0.30, delay: 3 }, color: "#93c5fd" },
+      { start: { x: 280, y: h * 0.10, delay: 0.5 }, end: { x: 180, y: h * 0.30, delay: 2.5 }, color: "#93c5fd" },
+      // Bottom routes (sekitar 70% - 90% dari atas)
+      { start: { x: 120, y: h * 0.75, delay: 1 }, end: { x: 220, y: h * 0.87, delay: 3 }, color: "#93c5fd" },
+      { start: { x: 220, y: h * 0.87, delay: 3 }, end: { x: 320, y: h * 0.77, delay: 5 }, color: "#93c5fd" },
+      { start: { x: 80, y: h * 0.92, delay: 1.5 }, end: { x: 180, y: h * 0.80, delay: 3.5 }, color: "#93c5fd" },
+      { start: { x: 250, y: h * 0.70, delay: 0.5 }, end: { x: 150, y: h * 0.83, delay: 2.5 }, color: "#93c5fd" },
+    ];
 
     const dots = generateDots(dimensions.width, dimensions.height);
     let animationFrameId: number;
