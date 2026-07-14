@@ -11,6 +11,7 @@ export interface Downliner {
     user_id: string;
     user_name: string;
     phone_number: string;
+    user_status: "PASSIVE" | "ACTIVE";
 }
 
 export interface PendingInvitation {
@@ -35,6 +36,6 @@ export interface DashboardResponse {
     total_commission: number; 
     downliners: Downliner[];
     pending_invitations_sent: number;
-    pending_innvitations_received: PendingInvitation[];
+    pending_invitations_received: PendingInvitation[];
     recent_commissions: RecentCommission[];
 }
