@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +12,6 @@ export default function TransactionPage() {
   const { data: dynamicProducts, isLoading, isError } = useProducts();
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(2);
-  const [scenario, setScenario] = useState<"COMPLETED" | "FAILED" | "CANCELLED" | null>("COMPLETED");
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -40,9 +40,16 @@ export default function TransactionPage() {
 
         {/* LEFT COLUMN - PRODUCT CATALOG */}
         <div className="flex-1 w-full h-auto lg:h-full lg:overflow-y-auto pr-1 md:pr-4 lg:pb-24">
-          <div className="mb-6 md:mb-8">
-            <h1 className="text-3xl font-heading font-bold text-slate-900 mb-1">Katalog Produk</h1>
-            <p className="text-slate-500 text-[14px]">Produk dikelola oleh tim pusat — tidak bisa diubah</p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 className="text-3xl font-heading font-bold text-slate-900 mb-1">Katalog Produk</h1>
+              <p className="text-slate-500 text-[14px]">Produk dikelola oleh tim pusat — tidak bisa diubah</p>
+            </div>
+            <Link to="/transaksi/pending">
+              <Button variant="outline" className="rounded-full h-10 text-[#004cd1] border-[#004cd1]/30 hover:bg-[#004cd1]/5 font-semibold text-[13px] px-5 w-full sm:w-auto shadow-sm">
+                Lihat Daftar Transaksi Pending
+              </Button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
@@ -65,13 +72,12 @@ export default function TransactionPage() {
                 const isActive = product.product_status === "ACTIVE";
 
                 return (
-                  <Card 
-                    key={product.product_id} 
-                    className={`rounded-2xl transition-all relative overflow-hidden ${
-                      isSelected ? 'border-primary border-2 shadow-md bg-white' : 
-                      !isActive ? 'border-slate-100 shadow-sm bg-slate-50/50 opacity-70' : 
-                      'border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 bg-white'
-                    }`}
+                  <Card
+                    key={product.product_id}
+                    className={`rounded-2xl transition-all relative overflow-hidden ${isSelected ? 'border-primary border-2 shadow-md bg-white' :
+                      !isActive ? 'border-slate-100 shadow-sm bg-slate-50/50 opacity-70' :
+                        'border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 bg-white'
+                      }`}
                   >
                     {isSelected && (
                       <div className="absolute top-4 right-4 bg-white rounded-full">
@@ -108,16 +114,15 @@ export default function TransactionPage() {
                         </div>
                       </div>
 
-                      <Button 
+                      <Button
                         disabled={!isActive}
                         onClick={() => setSelectedProductId(product.product_id)}
-                        className={`w-full rounded-full h-11 font-semibold text-[14px] ${
-                          isSelected ? 'bg-primary hover:bg-primary text-white' : 
-                          !isActive ? 'bg-slate-100 text-slate-400 cursor-not-allowed hover:bg-slate-100' : 
-                          'bg-primary hover:bg-primary/90 text-white shadow-[0_4px_14px_0_rgba(27,86,253,0.39)]'
-                        }`}
+                        className={`w-full rounded-full h-11 font-semibold text-[14px] ${isSelected ? 'bg-[#004cd1] hover:bg-[#004cd1] text-white' :
+                          !isActive ? 'bg-slate-100 text-slate-400 cursor-not-allowed hover:bg-slate-100' :
+                            'bg-[#004cd1]/10 hover:bg-[#004cd1]/20 text-[#004cd1] shadow-none'
+                          }`}
                       >
-                        {!isActive ? 'Tidak tersedia saat ini' : 'Pilih Produk'}
+                        {isSelected ? <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Terpilih</div> : (!isActive ? 'Tidak tersedia saat ini' : 'Pilih Produk')}
                       </Button>
                     </CardContent>
                   </Card>
@@ -143,7 +148,7 @@ export default function TransactionPage() {
                       <p className="text-[12px] text-slate-500 mt-0.5">{formatCurrency(selectedProduct.selling_price)} / unit</p>
                     </div>
 
-                    {/* Quantity Control */}
+
                     <div className="flex items-center gap-2 border border-slate-200 rounded-full px-1 py-1 bg-white">
                       <button
                         onClick={handleDecrease}
@@ -161,54 +166,23 @@ export default function TransactionPage() {
                     </div>
                   </div>
 
-                  <div className="border-t border-slate-100 pt-4 mb-5">
-                    <p className="text-[12px] font-medium text-slate-400 mb-1">Total Harga Pembayaran</p>
-                    <p className="text-3xl font-bold text-slate-900 tracking-tight mb-1.5">
-                      {formatCurrency(totalHarga)}
-                    </p>
-                    <p className="text-[12px] font-semibold text-green-600">
-                      Total Estimasi Agent Fee: {formatCurrency(totalEstimasiFee)}
-                    </p>
-                  </div>
-
-                  <div className="border-t border-slate-100 pt-4 mb-5">
-                    <p className="text-[12px] font-medium text-slate-600 mb-3">Pilih Hasil Pembayaran (Mock Skenario):</p>
-                    <div className="grid grid-cols-2 gap-2 mb-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setScenario("COMPLETED")}
-                        className={`rounded-full h-9 text-[11px] font-bold tracking-wide ${scenario === "COMPLETED"
-                            ? 'bg-green-50 border-green-200 text-green-700 hover:bg-green-50'
-                            : 'border-slate-200 text-slate-500 hover:bg-slate-50'
-                          }`}
-                      >
-                        COMPLETED
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => setScenario("FAILED")}
-                        className={`rounded-full h-9 text-[11px] font-bold tracking-wide ${scenario === "FAILED"
-                            ? 'bg-red-50 border-red-200 text-red-600 hover:bg-red-50'
-                            : 'border-slate-200 text-slate-500 hover:bg-slate-50'
-                          }`}
-                      >
-                        FAILED
-                      </Button>
+                  <div className="border-t border-slate-100 pt-4 mb-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-[13px] font-medium text-slate-500">Total Harga Pembayaran</p>
+                      <p className="text-2xl font-bold text-slate-900 tracking-tight">
+                        {formatCurrency(totalHarga)}
+                      </p>
                     </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => setScenario("CANCELLED")}
-                      className={`w-full rounded-full h-9 text-[11px] font-bold tracking-wide ${scenario === "CANCELLED"
-                          ? 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-100'
-                          : 'border-slate-200 text-slate-500 hover:bg-slate-50'
-                        }`}
-                    >
-                      CANCELLED
-                    </Button>
+                    <div className="flex items-center justify-between bg-green-50/80 px-3 py-2 rounded-lg border border-green-100">
+                      <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-700">
+                        Total Estimasi Agent Fee
+                      </div>
+                      <span className="font-bold text-[13px] text-green-700">{formatCurrency(totalEstimasiFee)}</span>
+                    </div>
                   </div>
 
-                  <Button className="w-full rounded-full h-12 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px] shadow-[0_8px_20px_-8px_rgba(0,76,209,0.5)]">
-                    Eksekusi Transaksi
+                  <Button className="w-full rounded-full h-11 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px] shadow-[0_8px_20px_-8px_rgba(0,76,209,0.5)] flex items-center justify-center gap-2">
+                    Buat Transaksi <span className="text-lg leading-none">→</span>
                   </Button>
                 </>
               ) : (
@@ -259,31 +233,22 @@ export default function TransactionPage() {
               </div>
 
               {/* Total */}
-              <div className="mb-4">
-                <p className="text-[11px] font-medium text-slate-400 mb-0.5">Total Harga Pembayaran</p>
-                <p className="text-[24px] font-bold text-slate-900 tracking-tight leading-tight">{formatCurrency(totalHarga)}</p>
-                <p className="text-[11px] font-semibold text-green-600 mt-1">Estimasi Agent Fee: {formatCurrency(totalEstimasiFee)}</p>
-              </div>
-
-              {/* Scenario row */}
-              <div className="mb-4">
-                <p className="text-[11px] font-medium text-slate-500 mb-2">Mock Skenario:</p>
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => setScenario("COMPLETED")}
-                    className={`flex-1 rounded-full h-9 text-[10px] font-bold px-1 ${scenario === "COMPLETED" ? 'bg-green-50 border-green-200 text-green-700 hover:bg-green-50' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}
-                  >COMPLETED</Button>
-                  <Button variant="outline" onClick={() => setScenario("FAILED")}
-                    className={`flex-1 rounded-full h-9 text-[10px] font-bold px-1 ${scenario === "FAILED" ? 'bg-red-50 border-red-200 text-red-600 hover:bg-red-50' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}
-                  >FAILED</Button>
-                  <Button variant="outline" onClick={() => setScenario("CANCELLED")}
-                    className={`flex-1 rounded-full h-9 text-[10px] font-bold px-1 ${scenario === "CANCELLED" ? 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-100' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}
-                  >CANCELLED</Button>
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[12px] font-medium text-slate-500">Total Harga Pembayaran</p>
+                  <p className="text-2xl font-bold text-slate-900 tracking-tight leading-tight">{formatCurrency(totalHarga)}</p>
+                </div>
+                <div className="flex items-center justify-between bg-green-50/80 px-3 py-2 rounded-lg border border-green-100">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-green-700">
+                    Total Estimasi Agent Fee
+                  </div>
+                  <span className="font-bold text-[12px] text-green-700">{formatCurrency(totalEstimasiFee)}</span>
                 </div>
               </div>
 
               {/* CTA */}
-              <Button className="w-full rounded-full h-12 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px] shadow-[0_8px_20px_-8px_rgba(0,76,209,0.5)]">
-                Eksekusi Transaksi
+              <Button className="w-full rounded-full h-11 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px] shadow-[0_8px_20px_-8px_rgba(0,76,209,0.5)] flex items-center justify-center gap-2">
+                Buat Transaksi <span className="text-lg leading-none">→</span>
               </Button>
             </div>
           </div>
