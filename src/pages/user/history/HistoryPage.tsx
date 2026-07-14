@@ -11,7 +11,8 @@ import {
   Package,
 } from "lucide-react";
 import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
-import { formatRupiah, formatDateId } from "@/lib/utils/format";
+import { useTransactionDetailQuery } from "@/hooks/useTransactionDetailQuery";
+import { formatRupiah, formatDateId, formatTrxId } from "@/lib/utils/format";
 import { cn } from "@/lib/utils";
 import type { TransactionStatus } from "@/schemas/transaction.schema";
 
@@ -70,9 +71,61 @@ function getStatusIcon(status: TransactionStatus) {
   }
 }
 
+function ExpandedItems({ trxId }: { trxId: string }) {
+  const { data, isLoading, isError } = useTransactionDetailQuery(trxId);
+
+  if (isLoading) {
+    return (
+      <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-muted-foreground">
+        Memuat item…
+      </div>
+    );
+  }
+  if (isError || !data) {
+    return (
+      <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-red-600">
+        Gagal memuat detail transaksi.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 pt-4 border-t border-slate-100 space-y-2">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        Item dalam Transaksi ({data.items.length})
+      </p>
+      {data.items.map((item) => (
+        <div
+          key={item.itemId}
+          className="flex items-center justify-between gap-3 py-2 px-3 rounded-lg bg-slate-50"
+        >
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-foreground truncate">
+              {item.productName ?? "(Produk telah dihapus)"}
+            </p>
+            <p className="text-[11px] text-muted-foreground">
+              {item.quantity} unit • {formatRupiah(item.itemAmount)} • Profit {formatRupiah(item.profit)}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const HistoryPage = () => {
   const [status, setStatus] = useState<TransactionStatus | "ALL">("ALL");
   const [page, setPage] = useState(0);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  const toggleExpand = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const {
     data,
@@ -189,20 +242,25 @@ const HistoryPage = () => {
                 )}
               >
                 <CardContent className="p-4 md:p-5">
-                  <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => toggleExpand(trx.id)}
+                    className="w-full flex items-center gap-4 text-left"
+                    aria-expanded={expandedIds.has(trx.id)}
+                  >
                     <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0">
                       {getStatusIcon(trx.status)}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm md:text-[15px] text-foreground truncate">
-                        {trx.productName ?? "(Produk telah dihapus)"}
+                      <p className="font-mono font-semibold text-[12px] md:text-[13px] text-foreground truncate">
+                        {formatTrxId(trx.id)}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {trx.createdAt ? formatDateId(trx.createdAt) : ""}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {trx.quantity ?? 0} Unit • Total: {formatRupiah(trx.amount)}
+                        {trx.totalQuantity} Unit • Total: {formatRupiah(trx.amount)}
                       </p>
                     </div>
 
@@ -226,8 +284,17 @@ const HistoryPage = () => {
                       >
                         {config.label}
                       </Badge>
+                      <ChevronDown
+                        className={cn(
+                          "h-4 w-4 mx-auto mt-1 transition-transform",
+                          expandedIds.has(trx.id) && "rotate-180",
+                        )}
+                        strokeWidth={2}
+                      />
                     </div>
-                  </div>
+                  </button>
+
+                  {expandedIds.has(trx.id) && <ExpandedItems trxId={trx.id} />}
                 </CardContent>
               </Card>
             );
