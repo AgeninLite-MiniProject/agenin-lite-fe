@@ -34,7 +34,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
   const refreshToken = useAuthStore((state) => state.refreshToken);
-  const userName = "Agent"; // TODO: Fetch from dashboard API later
+  const userName = useAuthStore((state) => state.name) || "Agent";
   const userInitials = userName.substring(0, 2).toUpperCase();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
