@@ -8,7 +8,7 @@ import type { TransactionFilter } from "@/schemas/transaction.schema";
 export function useTransactionListQuery(filter: TransactionFilter) {
   return useQuery({
     queryKey: transactionListQueryKey(filter),
-    queryFn: () => transactionApi.list(filter),
+    queryFn: () => transactionApi.listV2(filter),
     placeholderData: keepPreviousData,
     staleTime: 30_000,
   });

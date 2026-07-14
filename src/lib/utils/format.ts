@@ -13,6 +13,8 @@ export function formatRupiah(amount: string | number): string {
     .trim();
 }
 
+export const formatTrxId = (uuid: string): string => uuid;
+
 export function formatDateId(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
