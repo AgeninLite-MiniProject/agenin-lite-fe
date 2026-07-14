@@ -306,7 +306,7 @@ export default function SendInvitationPage() {
             </Button>
             {isCapFull && (
               <p className="text-[11px] text-amber-600 px-1 -mt-3">
-                Sudah 3 undangan menunggu — batalkan salah satu untuk mengirim lagi.
+                Sudah 3 undangan menunggu, batalkan salah satu untuk mengirim lagi.
               </p>
             )}
           </form>
