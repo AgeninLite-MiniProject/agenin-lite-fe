@@ -1,3 +1,4 @@
+import React, { useRef, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormValues } from "@/schemas/auth.schema";
@@ -7,6 +8,165 @@ import apiClient from "@/lib/axios";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
+import { motion } from "framer-motion";
+
+// --- Animasi Peta Titik (Dot Map) disesuaikan dengan warna biru AgeninLite ---
+type RoutePoint = {
+  x: number;
+  y: number;
+  delay: number;
+};
+
+const DotMap = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  const routes: { start: RoutePoint; end: RoutePoint; color: string }[] = [
+    // Top routes
+    { start: { x: 100, y: 150, delay: 0 }, end: { x: 200, y: 80, delay: 2 }, color: "#93c5fd" },
+    { start: { x: 200, y: 80, delay: 2 }, end: { x: 260, y: 120, delay: 4 }, color: "#93c5fd" },
+    { start: { x: 50, y: 50, delay: 1 }, end: { x: 150, y: 180, delay: 3 }, color: "#93c5fd" },
+    { start: { x: 280, y: 60, delay: 0.5 }, end: { x: 180, y: 180, delay: 2.5 }, color: "#93c5fd" },
+    // Bottom routes
+    { start: { x: 120, y: 450, delay: 1 }, end: { x: 220, y: 520, delay: 3 }, color: "#93c5fd" },
+    { start: { x: 220, y: 520, delay: 3 }, end: { x: 320, y: 460, delay: 5 }, color: "#93c5fd" },
+    { start: { x: 80, y: 550, delay: 1.5 }, end: { x: 180, y: 480, delay: 3.5 }, color: "#93c5fd" },
+    { start: { x: 250, y: 420, delay: 0.5 }, end: { x: 150, y: 500, delay: 2.5 }, color: "#93c5fd" },
+  ];
+
+  const generateDots = (width: number, height: number) => {
+    const dots = [];
+    const gap = 12;
+    const dotRadius = 1;
+
+    for (let x = 0; x < width; x += gap) {
+      for (let y = 0; y < height; y += gap) {
+        const isInMapShape =
+          ((x < width * 0.25 && x > width * 0.05) && (y < height * 0.4 && y > height * 0.1)) ||
+          ((x < width * 0.25 && x > width * 0.15) && (y < height * 0.8 && y > height * 0.4)) ||
+          ((x < width * 0.45 && x > width * 0.3) && (y < height * 0.35 && y > height * 0.15)) ||
+          ((x < width * 0.5 && x > width * 0.35) && (y < height * 0.65 && y > height * 0.35)) ||
+          ((x < width * 0.7 && x > width * 0.45) && (y < height * 0.5 && y > height * 0.1)) ||
+          ((x < width * 0.8 && x > width * 0.65) && (y < height * 0.8 && y > height * 0.6));
+
+        if (isInMapShape && Math.random() > 0.3) {
+          dots.push({
+            x,
+            y,
+            radius: dotRadius,
+            opacity: Math.random() * 0.4 + 0.1, // Opasitas untuk background gelap
+          });
+        }
+      }
+    }
+    return dots;
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resizeObserver = new ResizeObserver(entries => {
+      const { width, height } = entries[0].contentRect;
+      setDimensions({ width, height });
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    resizeObserver.observe(canvas.parentElement as Element);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!dimensions.width || !dimensions.height) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dots = generateDots(dimensions.width, dimensions.height);
+    let animationFrameId: number;
+    let startTime = Date.now();
+
+    function drawDots() {
+      ctx.clearRect(0, 0, dimensions.width, dimensions.height);
+      dots.forEach(dot => {
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${dot.opacity})`; // Titik putih
+        ctx.fill();
+      });
+    }
+
+    function drawRoutes() {
+      const currentTime = (Date.now() - startTime) / 1000;
+      
+      routes.forEach(route => {
+        const elapsed = currentTime - route.start.delay;
+        if (elapsed <= 0) return;
+        
+        const duration = 3; 
+        const progress = Math.min(elapsed / duration, 1);
+        
+        const x = route.start.x + (route.end.x - route.start.x) * progress;
+        const y = route.start.y + (route.end.y - route.start.y) * progress;
+        
+        ctx.beginPath();
+        ctx.moveTo(route.start.x, route.start.y);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = route.color;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.arc(route.start.x, route.start.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = route.color;
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+        ctx.fill();
+        
+        if (progress === 1) {
+          ctx.beginPath();
+          ctx.arc(route.end.x, route.end.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = route.color;
+          ctx.fill();
+        }
+      });
+    }
+    
+    function animate() {
+      drawDots();
+      drawRoutes();
+      
+      const currentTime = (Date.now() - startTime) / 1000;
+      if (currentTime > 15) { 
+        startTime = Date.now();
+      }
+      
+      animationFrameId = requestAnimationFrame(animate);
+    }
+    
+    animate();
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [dimensions]);
+
+  return (
+    <div className="absolute inset-0 w-full h-full overflow-hidden opacity-90">
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+    </div>
+  );
+};
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -29,11 +189,9 @@ export default function LoginPage() {
       if(response.status === 200) {
         const { access_token, refresh_token, role, name } = response.data;
         
-        // Simpan token ke Zustand (otomatis masuk LocalStorage)
         setAuth(access_token, refresh_token, role, name);
         
         toast.success("Login Berhasil!");
-        // Beri sedikit jeda agar toast terlihat sebelum pindah halaman
         setTimeout(() => {
           if (role === 'ADMIN') navigate("/admin");
           else navigate("/dashboard");
@@ -73,57 +231,73 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen font-sans">
-      <div className="flex-1 flex text-gray-900 bg-gray-50">
-        
-        {/* Bagian Kiri: Hero Section */}
-        <div className="hidden lg:flex lg:w-[45%] relative flex-col justify-between p-12 bg-gradient-to-br from-blue-700 to-blue-900 overflow-hidden">
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <circle cx="20" cy="20" r="15" fill="white" className="animate-pulse"></circle>
-              <circle cx="80" cy="50" r="20" fill="white"></circle>
-              <circle cx="30" cy="80" r="18" fill="white"></circle>
-              <line x1="20" y1="20" x2="80" y2="50" stroke="white" strokeWidth="1"></line>
-              <line x1="80" y1="50" x2="30" y2="80" stroke="white" strokeWidth="1"></line>
-            </svg>
-          </div>
-
-          <div className="relative z-10 flex items-center space-x-3">
-            <span className="material-symbols-outlined text-white text-5xl">hub</span>
-            <span className="text-3xl font-bold text-white tracking-tight">AgeninLite</span>
-          </div>
-
-          <div className="relative z-10 space-y-6">
-            <h2 className="text-5xl font-bold text-white leading-tight">
-              Selamat datang kembali, Agent!
-            </h2>
-            <p className="text-blue-100 text-lg max-w-md">
-              Masuk untuk melihat performa penjualanmu dan kelola jaringan downline-mu.
-            </p>
-          </div>
-          <div className="relative z-10"></div>
-        </div>
-
-        {/* Bagian Kanan: Form Login */}
-        <div className="w-full lg:w-[55%] flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative">
-          
-          <div className="max-w-[440px] w-full">
-            {/* Mobile Logo */}
-            <div className="flex lg:hidden flex-col items-center justify-center space-y-4 mb-8">
-              <div className="flex items-center space-x-2">
-                <span className="material-symbols-outlined text-blue-700 text-4xl">hub</span>
-                <span className="text-2xl font-bold text-blue-700">AgeninLite</span>
-              </div>
+    <div className="flex flex-col min-h-screen font-sans bg-gray-50">
+      <div className="flex-1 flex w-full items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-5xl overflow-hidden rounded-2xl flex bg-white shadow-xl min-h-[600px] border border-gray-100"
+        >
+          {/* Left side - Map Animasi */}
+          <div className="hidden lg:flex w-1/2 relative overflow-hidden bg-gradient-to-br from-blue-700 to-blue-900">
+            <DotMap />
+            
+            {/* Logo dan Teks */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-12 z-10 bg-black/10">
+              <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="mb-6"
+              >
+                <img
+                  src="/src/assets/ageninlitewhite2.webp"
+                  alt="AgeninLite Logo"
+                  className="h-14 w-auto drop-shadow-md"
+                />
+              </motion.div>
+              <motion.h2 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                className="text-3xl font-bold text-center text-white tracking-wide drop-shadow-md"
+              >
+                Grow Together
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="text-sm text-center text-blue-100 max-w-xs mt-2 drop-shadow-sm leading-relaxed"
+              >
+                Masuk untuk kelola jaringan downline dan nikmati komisi penjualan tanpa batas.
+              </motion.p>
             </div>
+          </div>
+          
+          {/* Right side - Form Login (Tetap Mempertahankan Validasi Asli) */}
+          <div className="w-full lg:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-white relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="max-w-[440px] w-full mx-auto"
+            >
+              {/* Mobile Logo */}
+              <div className="flex lg:hidden flex-col items-center justify-center space-y-4 mb-8">
+                <img
+                  src="/src/assets/ageninliteBlue.webp"
+                  alt="AgeninLite Logo"
+                  className="h-8 w-auto"
+                />
+              </div>
 
-            {/* CARD WRAPPER */}
-            <div className="bg-white shadow-xl shadow-blue-900/5 rounded-2xl border border-gray-100 p-8 sm:p-10">
-              
               <div className="mb-8 text-center lg:text-left">
                 <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Masuk Akun</h1>
                 <p className="text-gray-500 mt-2">Silakan masukkan nomor telepon dan password kamu.</p>
               </div>
-
+              
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 
                 {/* Nomor Telepon */}
@@ -173,8 +347,12 @@ export default function LoginPage() {
                   )}
                 </div>
 
-                {/* Submit Button */}
-                <div className="pt-4">
+                {/* Submit Button (Animated) */}
+                <motion.div 
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="pt-4"
+                >
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -190,7 +368,7 @@ export default function LoginPage() {
                       </span>
                     ) : "Masuk"}
                   </button>
-                </div>
+                </motion.div>
               </form>
 
               <div className="mt-8 text-center">
@@ -199,12 +377,11 @@ export default function LoginPage() {
                 </p>
               </div>
 
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
       
-      {/* Footer Komponen Eksternal */}
       <Footer />
     </div>
   );
