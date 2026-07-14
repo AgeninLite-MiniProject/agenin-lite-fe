@@ -65,4 +65,24 @@ export const transactionApi = {
     const response = await apiClient.get(`/api/transactions/${id}`);
     return TransactionDetailResponseSchema.parse(response.data.data);
   },
+
+  create: async (payload: { items: { productId: string; quantity: number }[]; description?: string }) => {
+    const response = await apiClient.post("/api/transactions", payload);
+    return response.data;
+  },
+
+  complete: async (id: string) => {
+    const response = await apiClient.post(`/api/transactions/${id}/complete`);
+    return response.data;
+  },
+
+  cancel: async (id: string) => {
+    const response = await apiClient.post(`/api/transactions/${id}/cancel`);
+    return response.data;
+  },
+
+  fail: async (id: string) => {
+    const response = await apiClient.post(`/api/transactions/${id}/fail`);
+    return response.data;
+  },
 };
