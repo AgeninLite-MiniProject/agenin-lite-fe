@@ -190,7 +190,7 @@ const DashboardPage = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-bold">{dashboard.pending_invitations_sent}</span>
+              <span className="text-3xl font-bold">{dashboard.pending_invitations_sent || 0}</span>
               <span className="text-sm text-muted-foreground">/ 3</span>
             </div>
             <p className="text-xs text-muted-foreground mb-1">Maksimal 3 undangan tertunda</p>
