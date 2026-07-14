@@ -17,6 +17,7 @@ import { Toaster } from "react-hot-toast";
 import RegisterPage from "@/pages/user/register/RegisterPage";
 import LoginPage from "@/pages/user/login/LoginPage";
 import HistoryPage from "@/pages/user/history/HistoryPage";
+import ProfilePage from "@/pages/user/profile/ProfilePage";
 import AuthGuard from "@/components/guards/AuthGuard";
 import AdminGuard from "@/components/guards/AdminGuard";
 import "./App.css";
@@ -44,6 +45,7 @@ function App() {
             <Route path="/transaksi/pending" element={<PendingTransactionPage />} />
             <Route path="/downline" element={<DownlinePage />} />
             <Route path="/riwayat" element={<HistoryPage />} />
+            <Route path="/profil" element={<ProfilePage />} />
             <Route path="/downline/invite" element={<SendInvitationPage />} />
             <Route path="/downline/incoming" element={<IncomingInvitationsPage />} />
             <Route path="/downline/:id" element={<DownlineDetailPage />} />
