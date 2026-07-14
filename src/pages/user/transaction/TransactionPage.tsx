@@ -40,7 +40,7 @@ export default function TransactionPage() {
     });
   };
 
-  // Logic untuk mengubah jumlah (quantity) produk tertentu di keranjang
+
   const handleUpdateQuantity = (productId: string, delta: number) => {
     setCart(prev => {
       const currentQty = prev[productId] || 0;
@@ -50,14 +50,17 @@ export default function TransactionPage() {
     });
   };
 
-  // Kalkulasi Total
+
   let totalHarga = 0;
   let totalEstimasiFee = 0;
   const cartItems = Object.entries(cart).map(([productId, quantity]) => {
     const product = productsList.find(p => p.product_id === productId);
     if (product) {
+      const costPrice = product.cost_price || 0;
+      const profit = product.selling_price - costPrice;
+
       totalHarga += product.selling_price * quantity;
-      totalEstimasiFee += (product.selling_price * (product.agent_fee / 100)) * quantity;
+      totalEstimasiFee += (profit * (product.agent_fee / 100)) * quantity;
     }
     return { product, quantity };
   }).filter(item => item.product !== undefined);
@@ -259,8 +262,8 @@ export default function TransactionPage() {
                 )}
               </div>
 
-              <Button 
-                disabled={!hasItems || createTxMutation.isPending} 
+              <Button
+                disabled={!hasItems || createTxMutation.isPending}
                 onClick={handleCreateTransaction}
                 className="w-full rounded-full h-11 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px] shadow-[0_8px_20px_-8px_rgba(0,76,209,0.5)] disabled:shadow-none disabled:bg-slate-200 disabled:text-slate-400">
                 {createTxMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Transaksi Sekarang"}
@@ -329,8 +332,8 @@ export default function TransactionPage() {
                   </div>
                 </div>
 
-                <Button 
-                  disabled={!hasItems || createTxMutation.isPending} 
+                <Button
+                  disabled={!hasItems || createTxMutation.isPending}
                   onClick={handleCreateTransaction}
                   className="w-full rounded-full h-11 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px]">
                   {createTxMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Transaksi Sekarang"}

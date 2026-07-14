@@ -30,9 +30,9 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // Calculate percentage of active agents from total users (if > 0)
-  const activeAgentPercentage = data.total_users > 0 
-    ? Math.round((data.active_agents / data.total_users) * 100) 
+
+  const activeAgentPercentage = data.total_users > 0
+    ? Math.round((data.active_agents / data.total_users) * 100)
     : 0;
 
   const summaryCards = [
@@ -116,21 +116,31 @@ export default function AdminDashboardPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              data.recent_activities.map((activity, idx) => (
-                <TableRow key={idx} className="border-slate-100 hover:bg-slate-50/50">
-                  <TableCell className="font-medium text-slate-600 py-4">{activity.time}</TableCell>
-                  <TableCell className="text-slate-800 py-4">{activity.user}</TableCell>
-                  <TableCell className="text-slate-600 py-4">{activity.action}</TableCell>
-                  <TableCell className="text-right pr-6 py-4">
-                    <Badge
-                      variant="secondary"
-                      className="bg-green-100 text-green-700 hover:bg-green-100 border-transparent shadow-none"
-                    >
-                      {activity.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))
+              data.recent_activities.map((activity, idx) => {
+                const date = new Date(activity.time);
+                const formattedTime = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                let badgeColor = "bg-slate-100 text-slate-700";
+                if (activity.status === "COMPLETED") badgeColor = "bg-green-100 text-green-700";
+                else if (activity.status === "PENDING") badgeColor = "bg-amber-100 text-amber-700";
+                else if (activity.status === "FAILED" || activity.status === "CANCELLED") badgeColor = "bg-red-100 text-red-700";
+
+                return (
+                  <TableRow key={idx} className="border-slate-100 hover:bg-slate-50/50">
+                    <TableCell className="font-medium text-slate-600 py-4">{formattedTime}</TableCell>
+                    <TableCell className="text-slate-800 py-4">{activity.user}</TableCell>
+                    <TableCell className="text-slate-600 py-4">{activity.action}</TableCell>
+                    <TableCell className="text-right pr-6 py-4">
+                      <Badge
+                        variant="secondary"
+                        className={`${badgeColor} hover:${badgeColor} border-transparent shadow-none`}
+                      >
+                        {activity.status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
