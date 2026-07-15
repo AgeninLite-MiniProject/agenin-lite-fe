@@ -95,7 +95,7 @@ const DashboardPage = () => {
                 </TooltipTrigger>
                 <TooltipContent className="max-w-[250px] text-center">
                   {user.user_status === "PASSIVE" 
-                    ? <p>Selesaikan 1 transaksi untuk mulai bisa mengundang orang lain</p>
+                    ? <p>Selesaikan 1 transaksi untuk berubah menjadi ACTIVE</p>
                     : <p>Status Anda aktif! Bagikan kode referral untuk mendapatkan downline.</p>
                   }
                 </TooltipContent>
