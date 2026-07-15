@@ -1,14 +1,26 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Phone, Mail, Receipt, Loader2 } from "lucide-react";
+import { ArrowLeft, Phone, Mail, Receipt, Loader2, ChevronDown, CheckCircle2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useDownlineDetail } from "@/hooks/useDownlineDetail";
 
 export default function DownlineDetailPage() {
 
   const { id } = useParams<{ id: string }>();
   const { data: detailData, isLoading, isError } = useDownlineDetail(id || "");
+
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  const toggleExpand = (trxId: string) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(trxId)) next.delete(trxId);
+      else next.add(trxId);
+      return next;
+    });
+  };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -117,37 +129,71 @@ export default function DownlineDetailPage() {
           {!transactions || transactions.length === 0 ? (
             <div className="text-center py-10 text-muted-foreground">Belum ada riwayat transaksi.</div>
           ) : (
-            transactions.map((trx) => (
-              <Card key={trx.trx_id} className="rounded-[20px] border-slate-100 shadow-sm hover:shadow-md transition-all bg-white group">
-                <CardContent className="p-3 md:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-start sm:items-center gap-3">
-                    <div>
-                      <h3 className="font-bold text-[14px] text-slate-900 leading-snug">{trx.product_name}</h3>
-                      <p className="text-xs font-medium text-slate-500 mt-0.5">
-                        {trx.quantity} Unit • {formatCurrency(trx.amount)}
-                      </p>
-                      <p className="text-[11px] text-slate-400 mt-1">
-                        {formatDate(trx.completed_at)}
+            transactions.map((trx) => {
+              const id = trx.trxId || trx.trx_id || "";
+              const totalItemsCount = trx.items?.reduce((acc, curr) => acc + curr.quantity, 0) || 0;
+              const isExpanded = expandedIds.has(id);
+              
+              return (
+                <Card key={id} className="rounded-2xl border-slate-100 shadow-sm hover:shadow-md transition-all bg-white overflow-hidden">
+                  <div 
+                    className="p-4 md:p-5 flex items-start gap-4 cursor-pointer hover:bg-slate-50/50 transition-colors"
+                    onClick={() => toggleExpand(id)}
+                  >
+                    {/* Icon */}
+                    <div className="shrink-0 w-12 h-12 bg-[#F8F9FE] rounded-2xl flex items-center justify-center border border-slate-100/50">
+                      <CheckCircle2 className="w-5 h-5 text-green-500" strokeWidth={2.5} />
+                    </div>
+
+                    {/* Middle Info */}
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <h3 className="font-bold text-[14px] text-slate-800 font-mono tracking-tight">{id}</h3>
+                      <p className="text-[12px] text-slate-500 mt-1">{formatDate(trx.completed_at)}</p>
+                      <p className="text-[12px] text-slate-500 mt-0.5">
+                        {totalItemsCount} Unit &bull; Total: {formatCurrency(trx.amount)}
                       </p>
                     </div>
-                  </div>
-                  <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100">
-                    <Badge variant="secondary" className="bg-green-50 text-green-700 hover:bg-green-50 border-transparent text-[9px] font-bold px-2 py-0.5 uppercase tracking-wider rounded-md">
-                      {trx.status}
-                    </Badge>
-                    <div className="text-right flex flex-row sm:flex-col items-center sm:items-end gap-2 sm:gap-0">
-                      <div className="bg-slate-50 px-2.5 py-1 rounded-full sm:bg-transparent sm:p-0">
-                        <p className="text-[10px] text-slate-400 mb-0.5 font-medium hidden sm:block">Komisi Anda</p>
-                        <p className="font-bold text-[13px] text-green-600">
-                          <span className="sm:hidden text-slate-500 font-normal mr-1 text-[11px]">Komisi Anda:</span>
-                          + {formatCurrency(trx.commission_earned)}
-                        </p>
-                      </div>
+
+                    {/* Right Info */}
+                    <div className="flex flex-col items-end gap-1.5 shrink-0 pt-0.5">
+                      <p className="font-bold text-[14px] text-green-600">+ {formatCurrency(trx.total_commission_earned)}</p>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px] font-bold px-2 py-0 uppercase tracking-wider rounded-md">
+                        {trx.status === 'COMPLETED' ? 'SELESAI' : trx.status}
+                      </Badge>
+                      <ChevronDown className={`w-4 h-4 text-slate-400 mt-1 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))
+
+                  {/* Expanded Items */}
+                  <div 
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      {trx.items && trx.items.length > 0 && (
+                        <div className="px-4 md:px-5 pb-4 pt-3 border-t border-slate-100 bg-slate-50/50">
+                          <p className="text-[11px] font-semibold text-slate-500 mb-3 uppercase tracking-wider">Detail Produk</p>
+                          <div className="space-y-3">
+                            {trx.items.map((item, idx) => (
+                              <div key={idx} className="flex justify-between items-center text-[13px] bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                                <h3 className="font-bold text-slate-800">
+                                  {item.product_name} <span className="text-slate-500 font-medium text-[12px] ml-1">x{item.quantity}</span>
+                                </h3>
+                                <div className="text-right">
+                                  <p className="text-[10px] text-slate-400 mb-0.5 font-medium">Komisi Item</p>
+                                  <p className="text-green-600 font-semibold text-[13px]">+ {formatCurrency(item.commission_earned)}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })
           )}
         </div>
       </div>
