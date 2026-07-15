@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, Send, Copy, Check, Loader2 } from "lucide-react";
+import { Calculator, Send, Copy, Check, Loader2, Users, Clock, Wallet, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "@/store/auth.store";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useDashboardSummary } from "@/hooks/useDashboard";
+import { DotMap } from "@/components/ui/DotMap";
 
 const DashboardPage = () => {
   const { data: dashboard, isLoading, isError, error } = useDashboardSummary();
@@ -73,7 +73,7 @@ const DashboardPage = () => {
             <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
               Selamat datang, {user.user_name}
             </h1>
-            <TooltipProvider delayDuration={200}>
+            {/* <TooltipProvider delayDuration={200}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <motion.div 
@@ -100,17 +100,19 @@ const DashboardPage = () => {
                   }
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
+            </TooltipProvider> */}
           </div>
-          <p className="text-sm md:text-base text-muted-foreground mt-1">Here is a summary of your agent activity and performance.</p>
+          {/* <p className="text-sm md:text-base text-muted-foreground mt-1">Here is a summary of your agent activity and performance.</p> */}
         </div>
         <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto mt-2 md:mt-0">
-          <Button variant="outline" className="rounded-full flex-1 md:flex-none text-primary border-primary hover:text-primary/90">
-            <Calculator className="mr-2 h-4 w-4" strokeWidth={1.5} />
-            Simulasi Transaksi
-          </Button>
+          <Link to="/transaksi" className="flex-1 md:flex-none">
+            <Button variant="outline" className="rounded-full w-full text-primary border-primary hover:text-primary/90">
+              <Calculator className="mr-1 h-4 w-4" strokeWidth={1.5} />
+              Transaksi
+            </Button>
+          </Link>
           <Link to="/downline/invite" className="flex-1 md:flex-none">
-            <Button className="rounded-full w-full">
+            <Button className="rounded-full w-full bg-gradient-to-br from-blue-700 to-blue-900/85">
               <Send className="mr-2 h-4 w-4" strokeWidth={1.5} />
               Kirim Undangan
             </Button>
@@ -118,24 +120,48 @@ const DashboardPage = () => {
         </div>
       </div>
       {/* BANNER SECTION */}
-      <div className="bg-primary/5 rounded-2xl p-4 md:p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-0 border border-primary/10">
-        <div className="flex items-center gap-5">
-          <div>
-            <h3 className="text-base md:text-lg font-semibold text-primary mb-1">Ajak teman dan dapatkan Super Agent Fee</h3>
-            <p className="text-xs md:text-sm text-muted-foreground max-w-2xl">Bagikan kode referral Anda kepada rekan untuk bergabung sebagai downline dan nikmati tambahan komisi dari setiap transaksi mereka.</p>
-          </div>
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+        <DotMap />
+        
+        {/* Pattern / Logo Overlay */}
+        <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
+        <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
+          <img src="/src/assets/ageninlitewhite2.webp" alt="" className="w-64 h-auto" />
         </div>
-        <div className="bg-background rounded-full py-1.5 px-2 flex items-center justify-between w-full lg:w-auto gap-2 border shadow-sm mt-2 lg:mt-0">
-          <span className="font-medium text-sm px-3 tracking-wide">{user.referral_code}</span>
+
+        <div className="relative z-10 flex-1 w-full text-center md:text-left">
+          <motion.h3 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-wide drop-shadow-md"
+          >
+            Grow Together
+          </motion.h3>
+          <motion.p 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-sm md:text-base text-blue-100 max-w-2xl drop-shadow-sm leading-relaxed mx-auto md:mx-0"
+          >
+            Ajak teman dan dapatkan Super Agent Fee. Bagikan kode referral Anda kepada rekan untuk bergabung sebagai downline dan nikmati tambahan komisi.
+          </motion.p>
+        </div>
+        
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ delay: 0.2 }}
+           className="relative z-10 bg-white/10 backdrop-blur-md rounded-full py-2 px-3 flex items-center justify-between w-full md:w-auto gap-3 border border-white/20 shadow-xl"
+        >
+          <span className="font-semibold text-white px-3 tracking-widest text-lg">{user.referral_code}</span>
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <Button 
               size="sm" 
-              variant="outline" 
-              className={`rounded-full h-7 px-3 flex items-center gap-1.5 transition-colors ${
-                isCopied ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-50 hover:text-green-700" : ""
+              className={`rounded-full h-8 px-4 flex items-center gap-2 transition-colors ${
+                isCopied ? "bg-green-500 hover:bg-green-600 text-white border-transparent" : "bg-white text-blue-900 hover:bg-blue-50 border-transparent"
               }`}
               onClick={() => handleCopy(user.referral_code)}
             >
@@ -146,8 +172,8 @@ const DashboardPage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex items-center gap-1.5"
                 >
-                  <Check className="w-3.5 h-3.5" />
-                  <span>Tersalin</span>
+                  <Check className="w-4 h-4" />
+                  <span className="font-medium">Tersalin</span>
                 </motion.div>
               ) : (
                 <motion.div
@@ -156,65 +182,106 @@ const DashboardPage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex items-center gap-1.5"
                 >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Salin</span>
+                  <Copy className="w-4 h-4" />
+                  <span className="font-medium">Salin</span>
                 </motion.div>
               )}
             </Button>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
       {/* STATS CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1 */}
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">
+        <Card className="rounded-2xl shadow-sm border-blue-100/50 bg-white hover:shadow-md transition-shadow relative overflow-hidden group">
+          {/* Watermark Icon */}
+          <Users className="absolute -bottom-4 -right-4 w-24 h-24 text-blue-50 opacity-50 group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
+          
+          <CardHeader className="pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-slate-500 flex items-center gap-2">
+              <Users className="w-6 h-6 text-blue-600" />
               Agent Langsung
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative z-10">
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-bold">{dashboard.downliners.length}</span>
-              <span className="text-sm text-muted-foreground">/ 10</span>
+              <span className="text-3xl font-bold text-slate-800">{dashboard.downliners.length}</span>
+              <span className="text-sm font-medium text-slate-400">/ 10</span>
             </div>
-            <p className="text-xs text-muted-foreground mb-1">Maksimal 10 agent langsung</p>
+            
+            {/* Progress Bar */}
+            <div className="w-full bg-slate-100 rounded-full h-3.5 mt-4 mb-2 overflow-hidden">
+              <div 
+                className="bg-blue-600 h-3.5 rounded-full transition-all duration-1000 ease-out" 
+                style={{ width: `${(dashboard.downliners.length / 10) * 100}%` }}
+              ></div>
+            </div>
+            
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-[13px] font-medium text-slate-500">Sisa {10 - dashboard.downliners.length} slot</span>
+              <Link to="/downline" className="text-[14px] font-semibold text-blue-500 hover:text-blue-600 flex items-center gap-1.5 mt-10">
+                Kelola Jaringan <ChevronRight className="w-5 h-5" />
+              </Link>
+            </div>
           </CardContent>
         </Card>
+        
         {/* Card 2 */}
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">
+        <Card className="rounded-2xl shadow-sm border-orange-100/50 bg-white hover:shadow-md transition-shadow relative overflow-hidden group">
+          {/* Watermark Icon */}
+          <Clock className="absolute -bottom-4 -right-4 w-24 h-24 text-orange-50 opacity-50 group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
+          
+          <CardHeader className="pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-slate-500 flex items-center gap-2">
+              <Clock className="w-6 h-6 text-blue-600" />
               Menunggu Respon
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative z-10">
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-3xl font-bold">{dashboard.pending_invitations_sent || 0}</span>
-              <span className="text-sm text-muted-foreground">/ 3</span>
+              <span className="text-3xl font-bold text-slate-800">{dashboard.pending_invitations_sent || 0}</span>
+              <span className="text-sm font-medium text-slate-400">/ 3</span>
             </div>
-            <p className="text-xs text-muted-foreground mb-1">Maksimal 3 undangan tertunda</p>
+            
+            {/* Progress Bar */}
+            <div className="w-full bg-slate-100 rounded-full h-3.5 mt-4 mb-2 overflow-hidden">
+              <div 
+                className="bg-orange-400 h-3.5 rounded-full transition-all duration-1000 ease-out" 
+                style={{ width: `${((dashboard.pending_invitations_sent || 0) / 3) * 100}%` }}
+              ></div>
+            </div>
+            
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-[13px] font-medium text-slate-500">Sisa {3 - (dashboard.pending_invitations_sent || 0)} slot undangan</span>
+              <Link to="/downline/invite" className="text-[14px] font-semibold text-blue-500 hover:text-blue-600 flex items-center gap-1.5 mt-10">
+                Cek Status <ChevronRight className="w-5 h-5" />
+              </Link>
+            </div>
           </CardContent>
         </Card>
         {/* Card 3 */}
-        <Card className="rounded-2xl shadow-sm relative overflow-hidden">
+        <Card className="rounded-2xl shadow-md relative overflow-hidden bg-gradient-to-br from-blue-700 to-blue-900 border-blue-800 text-white hover:shadow-lg transition-shadow">
+          <DotMap />
+          <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
+          
           <CardHeader className="pb-2 relative z-10">
-            <CardTitle className="text-sm font-medium text-slate-500">
+            <CardTitle className="text-sm font-medium text-blue-100 flex items-center gap-2">
+              <Wallet className="w-4 h-4 text-blue-200" />
               Total Komisi
             </CardTitle>
           </CardHeader>
           <CardContent className="relative z-10">
             <div className="mb-3">
-              <span className="text-3xl font-bold text-green-600">{formatRupiah(dashboard.total_commission)}</span>
+              <span className="text-3xl font-bold text-white tracking-wide">{formatRupiah(dashboard.total_commission)}</span>
             </div>
-            <div className="space-y-1.5 pt-3 border-t border-border">
-              <div className="flex justify-between text-xs">
-                <span className="text-muted-foreground">Agent Fee</span>
-                <span className="font-medium">{formatRupiah(dashboard.total_agent_fee)}</span>
+            <div className="space-y-2 pt-3 border-t border-white/20">
+              <div className="flex justify-between items-center text-xs bg-white/5 rounded-md p-1.5 px-2">
+                <span className="text-blue-100 font-semibold tracking-wide uppercase text-[10px]">Agent Fee</span>
+                <span className="font-bold text-white text-sm">{formatRupiah(dashboard.total_agent_fee)}</span>
               </div>
-              <div className="flex justify-between text-xs">
-                <span className="text-primary font-medium">Super Agent Fee</span>
-                <span className="font-medium text-primary">{formatRupiah(dashboard.total_super_agent_fee)}</span>
+              <div className="flex justify-between items-center text-xs bg-blue-500/20 rounded-md p-1.5 px-2 border border-blue-400/30">
+                <span className="text-blue-50 font-bold tracking-wide uppercase text-[10px]">Super Agent Fee</span>
+                <span className="font-bold text-blue-100 text-sm">{formatRupiah(dashboard.total_super_agent_fee)}</span>
               </div>
             </div>
           </CardContent>
