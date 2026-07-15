@@ -13,9 +13,13 @@ const MainLayout = () => {
           <Navbar/>
         </div>
         
-        <main className="flex-1 overflow-y-auto pb-[76px] md:pb-0">
-            <Outlet/>
-            <Footer/>
+        <main className="flex-1 flex flex-col overflow-y-auto pb-[76px] md:pb-0">
+            <div className="flex-1 flex flex-col">
+              <Outlet/>
+            </div>
+            <div className="shrink-0 mt-auto">
+              <Footer/>
+            </div>
         </main>
 
         {/* MOBILE BOTTOM NAVIGATION */}

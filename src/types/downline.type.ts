@@ -9,14 +9,21 @@ export interface AgentDetail {
   status: "ACTIVE" | "PASSIVE";
 }
 
-export interface DownlineTransaction {
-  trx_id: string;
+export interface DownlineTransactionItem {
   product_name: string;
   quantity: number;
   amount: number;
+  commission_earned: number;
+}
+
+export interface DownlineTransaction {
+  trx_id?: string;
+  trxId?: string;
+  items: DownlineTransactionItem[];
+  amount: number;
   status: string;
   completed_at: string;
-  commission_earned: number;
+  total_commission_earned: number;
 }
 
 export interface DownlineDetailResponse {
