@@ -20,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ChevronDown } from "lucide-react";
 
 export default function AdminUsersPage() {
   // State for search and pagination
@@ -95,25 +96,31 @@ export default function AdminUsersPage() {
         />
 
         <div className="flex gap-4">
-          <select 
-            value={statusFilter} 
-            onChange={handleStatusFilterChange}
-            className="h-12 px-4 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm"
-          >
-            <option value="ALL">All Status</option>
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="PASSIVE">PASSIVE</option>
-          </select>
+          <div className="relative">
+            <select 
+              value={statusFilter} 
+              onChange={handleStatusFilterChange}
+              className="appearance-none h-12 pl-4 pr-12 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm w-36"
+            >
+              <option value="ALL">All Status</option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="PASSIVE">PASSIVE</option>
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          </div>
 
-          <select 
-            value={deletedFilter} 
-            onChange={handleDeletedFilterChange}
-            className="h-12 px-4 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm"
-          >
-            <option value="ALL">All Accounts</option>
-            <option value="FALSE">Not Deleted</option>
-            <option value="TRUE">Deleted</option>
-          </select>
+          <div className="relative">
+            <select 
+              value={deletedFilter} 
+              onChange={handleDeletedFilterChange}
+              className="appearance-none h-12 pl-4 pr-12 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm w-36"
+            >
+              <option value="ALL">All Accounts</option>
+              <option value="FALSE">Not Deleted</option>
+              <option value="TRUE">Deleted</option>
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          </div>
         </div>
       </div>
 

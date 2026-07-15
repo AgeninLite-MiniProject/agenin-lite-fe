@@ -121,7 +121,7 @@ export default function AdminDashboardPage() {
                 const formattedTime = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
                 let badgeColor = "bg-slate-100 text-slate-700";
-                if (activity.status === "COMPLETED") badgeColor = "bg-green-100 text-green-700";
+                if (activity.status === "COMPLETED" || activity.status === "SUCCESS") badgeColor = "bg-green-100 text-green-700";
                 else if (activity.status === "PENDING") badgeColor = "bg-amber-100 text-amber-700";
                 else if (activity.status === "FAILED" || activity.status === "CANCELLED") badgeColor = "bg-red-100 text-red-700";
 

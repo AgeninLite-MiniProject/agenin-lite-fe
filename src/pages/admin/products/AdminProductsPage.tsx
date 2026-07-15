@@ -13,19 +13,23 @@ import {
 } from "@/components/ui/table";
 import { ProductModal } from "@/components/admin/product/ProductModal";
 import { EditProductModal } from "@/components/admin/product/EditProductModal";
+import { ChevronDown } from "lucide-react";
 
 export default function AdminProductsPage() {
   const { data: allProducts = [], isLoading } = useAdminProductsQuery();
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
   // Search Logic
   const filteredProducts = useMemo(() => {
-    return allProducts.filter((product: any) =>
-      product.product_name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [allProducts, searchQuery]);
+    return allProducts.filter((product: any) => {
+      const matchSearch = product.product_name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchStatus = statusFilter === "ALL" ? true : product.product_status === statusFilter;
+      return matchSearch && matchStatus;
+    });
+  }, [allProducts, searchQuery, statusFilter]);
 
   // Pagination Logic
   const totalEntries = filteredProducts.length;
@@ -55,12 +59,26 @@ export default function AdminProductsPage() {
         <ProductModal />
       </div>
 
-      <AdminSearch 
-        placeholder="Search product name..." 
-        className="mb-6 w-full"
-        value={searchQuery}
-        onChange={handleSearch}
-      />
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <AdminSearch 
+          placeholder="Search product name..." 
+          className="w-full md:w-[400px]"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+        <div className="relative">
+          <select 
+            value={statusFilter} 
+            onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+            className="appearance-none h-12 pl-4 pr-12 rounded-2xl border-slate-200 bg-white text-slate-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border cursor-pointer font-medium text-sm w-36"
+          >
+            <option value="ALL">All Status</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+          </select>
+          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        </div>
+      </div>
 
       <div className="rounded-3xl border border-slate-200 shadow-sm bg-white overflow-hidden">
         <Table>

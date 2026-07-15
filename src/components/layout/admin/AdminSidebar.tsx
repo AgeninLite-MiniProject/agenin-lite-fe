@@ -51,7 +51,7 @@ export default function AdminSidebar() {
     <div className="w-64 bg-indigo-50/40 border-r h-full flex flex-col">
       <div className="p-6 pb-2 flex flex-col items-start gap-1">
         <img src={logoAgeninLite} alt="AgeninLite Logo" className="h-7 object-contain" />
-        <span className="text-[11px] font-extrabold text-blue-600 uppercase tracking-widest pl-1">Admin</span>
+
       </div>
 
       <nav className="flex-1 px-4 space-y-2 mt-4">
@@ -62,8 +62,8 @@ export default function AdminSidebar() {
               key={item.href}
               to={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
-                  ? "bg-blue-600 text-white font-medium"
-                  : "text-slate-600 hover:bg-indigo-100/50 hover:text-slate-900"
+                ? "bg-blue-600 text-white font-medium"
+                : "text-slate-600 hover:bg-indigo-100/50 hover:text-slate-900"
                 }`}
             >
               <item.icon className={`h-5 w-5 ${isActive ? "text-white" : "text-slate-500"}`} />
@@ -76,7 +76,7 @@ export default function AdminSidebar() {
       <div className="p-4 border-t border-indigo-100">
         <div className="flex items-center justify-between px-2">
           <span className="text-sm font-semibold text-slate-700 truncate">Super Admin</span>
-          <button 
+          <button
             onClick={handleLogout}
             disabled={isLoggingOut}
             className="text-slate-500 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-slate-100 disabled:opacity-50"
