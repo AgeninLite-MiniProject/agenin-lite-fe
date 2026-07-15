@@ -3,6 +3,7 @@ export interface DashboardUser {
     user_status: "PASSIVE" | "ACTIVE";
     user_name: string;
     phone_number: string;
+    email: string | null;
     referral_code: string;
     referred_by: string | null;
 }
@@ -24,7 +25,7 @@ export interface RecentCommission {
     commission_id: string;
     commission_type: "AGENT_FEE" | "SUPER_AGENT_FEE";
     product_name: string;
-    commission_amount: number;
+    commission_amount: number; // Terdapat typo dari response backend
     user_name:string;
     created_at: string;
 }
