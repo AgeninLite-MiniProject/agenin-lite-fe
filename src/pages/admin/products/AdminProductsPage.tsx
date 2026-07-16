@@ -17,15 +17,18 @@ import { EditProductModal } from "@/components/admin/product/EditProductModal";
 export default function AdminProductsPage() {
   const { data: allProducts = [], isLoading } = useAdminProductsQuery();
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
   // Search Logic
   const filteredProducts = useMemo(() => {
-    return allProducts.filter((product: any) =>
-      product.product_name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [allProducts, searchQuery]);
+    return allProducts.filter((product: any) => {
+      const matchesSearch = product.product_name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === "ALL" || product.product_status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [allProducts, searchQuery, statusFilter]);
 
   // Pagination Logic
   const totalEntries = filteredProducts.length;
@@ -55,12 +58,26 @@ export default function AdminProductsPage() {
         <ProductModal />
       </div>
 
-      <AdminSearch 
-        placeholder="Search product name..." 
-        className="mb-6 w-full"
-        value={searchQuery}
-        onChange={handleSearch}
-      />
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <AdminSearch 
+          placeholder="Search product name..." 
+          value={searchQuery}
+          onChange={handleSearch}
+          className="w-full md:w-[400px]"
+        />
+        <select
+          className="h-12 w-full sm:w-48 rounded-2xl border border-slate-200 bg-white px-4 pr-10 text-slate-600 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23475569%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[position:calc(100%-12px)_center] bg-no-repeat cursor-pointer"
+          value={statusFilter}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="ALL">All Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+      </div>
 
       <div className="rounded-3xl border border-slate-200 shadow-sm bg-white overflow-hidden">
         <Table>

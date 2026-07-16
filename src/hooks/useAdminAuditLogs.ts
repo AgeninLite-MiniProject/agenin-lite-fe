@@ -17,6 +17,20 @@ export function useAdminAuditLogs(params: AuditLogParams, debounceDelay = 500) {
     let isMounted = true;
 
     const fetchLogs = async () => {
+      if (debouncedActorId) {
+        const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/i;
+        if (!uuidRegex.test(debouncedActorId)) {
+          if (isMounted) {
+            setLogs([]);
+            setTotalElements(0);
+            setTotalPages(1);
+            setError("Format Actor ID tidak valid. Harap masukkan UUID yang benar.");
+            setLoading(false);
+          }
+          return;
+        }
+      }
+
       setLoading(true);
       setError(null);
       try {

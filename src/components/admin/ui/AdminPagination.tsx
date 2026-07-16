@@ -52,8 +52,8 @@ export function AdminPagination({
           key={page}
           variant={isActive ? "default" : "outline"}
           size="sm"
-          className={`h-9 w-9 p-0 rounded-lg font-medium ${isActive
-              ? "bg-blue-600 text-white hover:bg-blue-700 border-transparent shadow-sm"
+          className={`h-9 w-9 p-0 rounded-lg font-medium transition-all ${isActive
+              ? "bg-gradient-to-br from-blue-700 to-blue-900 text-white hover:from-blue-800 hover:to-blue-950 border-transparent shadow-md shadow-blue-900/20"
               : "border-slate-200 text-slate-600 hover:bg-slate-50"
             }`}
           onClick={() => typeof page === 'number' && onPageChange?.(page)}

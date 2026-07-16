@@ -61,9 +61,9 @@ export default function AdminSidebar() {
             <Link
               key={item.href}
               to={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
-                  ? "bg-blue-600 text-white font-medium"
-                  : "text-slate-600 hover:bg-indigo-100/50 hover:text-slate-900"
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive
+                  ? "bg-gradient-to-br from-blue-700 to-blue-900 text-white font-medium shadow-md shadow-blue-900/20 translate-x-1"
+                  : "text-slate-600 hover:bg-indigo-100/50 hover:text-slate-900 hover:translate-x-1"
                 }`}
             >
               <item.icon className={`h-5 w-5 ${isActive ? "text-white" : "text-slate-500"}`} />
