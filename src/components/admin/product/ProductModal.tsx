@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProductSchema, type CreateProductFormValues } from "@/schemas/product.schema";
@@ -19,7 +19,7 @@ import { Plus } from "lucide-react";
 
 export function ProductModal() {
   const [open, setOpen] = useState(false);
-  
+
   const { mutate: createProduct, isPending: isLoading } = useCreateProductMutation();
 
   const form = useForm<CreateProductFormValues>({
@@ -82,13 +82,7 @@ export function ProductModal() {
               {form.formState.errors.super_agent_fee && <p className="text-red-500 text-xs">{form.formState.errors.super_agent_fee.message}</p>}
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="status" className="text-sm font-medium text-slate-700">Status</Label>
-            <select id="status" className="flex h-11 w-full rounded-lg border border-slate-200 bg-white px-3 pr-10 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 text-slate-700">
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-            </select>
-          </div>
+
           <DialogFooter className="flex sm:justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-xl px-6 h-11 text-slate-600 border-slate-200 hover:bg-slate-50 font-semibold">
               Cancel
