@@ -81,8 +81,8 @@ const DownlinePage = () => {
         
         <div className="inline-flex items-center bg-slate-100 p-1 rounded-full shrink-0">
           <Button onClick={() => setFilterStatus("ALL")} variant="ghost" size="sm" className={`rounded-full shadow-sm hover:bg-white h-7 px-5 text-xs font-medium ${filterStatus === "ALL" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Semua</Button>
-          <Button onClick={() => setFilterStatus("ACTIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "ACTIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Aktif</Button>
-          <Button onClick={() => setFilterStatus("PASSIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "PASSIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Pasif</Button>
+          <Button onClick={() => setFilterStatus("ACTIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "ACTIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>ACTIVE</Button>
+          <Button onClick={() => setFilterStatus("PASSIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "PASSIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>PASSIVE</Button>
         </div>
       </div>
       {/* GRID */}
@@ -105,11 +105,11 @@ const DownlinePage = () => {
                       </div>
                     </div>
                     {agent.user_status === "ACTIVE" ? (
-                      <Badge variant="secondary" className="bg-green-50 hover:bg-green-100 text-green-700 border-transparent px-2.5 py-0.5 text-[10px] font-medium rounded-md">
+                      <Badge variant="outline" className="border-green-500 text-green-600 px-2.5 py-0.5 text-[10px] font-medium rounded-md">
                         ACTIVE
                       </Badge>
                     ) : (
-                      <Badge variant="secondary" className="bg-slate-100 hover:bg-slate-200 text-slate-600 border-transparent px-2.5 py-0.5 text-[10px] font-medium rounded-md">
+                      <Badge variant="outline" className="border-slate-500 text-slate-600 px-2.5 py-0.5 text-[10px] font-medium rounded-md">
                         PASSIVE
                       </Badge>
                     )}
