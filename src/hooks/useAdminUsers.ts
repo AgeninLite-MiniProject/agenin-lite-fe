@@ -18,7 +18,7 @@ export function useSoftDeleteUserMutation() {
   return useMutation({
     mutationFn: (userId: string) => adminUserApi.softDeleteUser(userId),
     onSuccess: () => {
-      toast.success("Akun agen berhasil dihapus (soft delete)!");
+      toast.success("Akun agen berhasil dinonaktifkan!");
       queryClient.invalidateQueries({ queryKey: adminUsersQueryKey });
     },
     onError: (error: any) => {
