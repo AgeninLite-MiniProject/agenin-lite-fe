@@ -312,7 +312,7 @@ const DashboardPage = () => {
                  Belum ada aktivitas komisi baru.
                </div>
             ) : (
-              dashboard.recent_commissions.map((comm) => (
+              dashboard.recent_commissions.slice(0, 10).map((comm) => (
                 <div key={comm.commission_id} className="flex flex-col sm:flex-row sm:items-center justify-between py-4 px-5 gap-3 sm:gap-0 hover:bg-slate-50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white border border-blue-700 flex items-center justify-center">
