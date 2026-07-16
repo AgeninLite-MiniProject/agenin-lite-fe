@@ -183,7 +183,7 @@ const HistoryPage = () => {
         </CardContent>
       </Card>
 
-      <div className="inline-flex items-center bg-slate-100 p-1 rounded-full">
+      <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full">
         {STATUS_TABS.map((tab) => {
           const isActive = status === tab.value;
           return (

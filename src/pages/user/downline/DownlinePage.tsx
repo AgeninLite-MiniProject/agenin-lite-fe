@@ -10,6 +10,7 @@ import { useReceivedPendingInvitationsQuery } from "@/hooks/useReceivedInvitatio
 import { ErrorState } from "@/components/ui/ErrorState";
 import Image500 from "@/assets/500-error.webp";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const DownlinePage = () => {
   const { data: dashboard, isLoading, isError } = useDashboardSummary();
@@ -62,14 +63,10 @@ const DownlinePage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Link to="/downline/incoming">
-<<<<<<< HEAD
             <Button
               variant="outline"
-              className="rounded-full px-6 font-medium text-primary border-primary hover:bg-primary/5 hover:text-primary relative"
+              className="rounded-full px-4 font-medium text-primary border-primary hover:bg-primary/5 hover:text-primary relative"
             >
-=======
-            <Button variant="outline" className="rounded-full px-4 font-medium text-primary border-primary hover:bg-primary/5 hover:text-primary relative">
->>>>>>> 90f7f9c (feat(design): implement reusable ErrorState component and NotFound page, replacing generic errors across all pages)
               <Inbox className="mr-2 h-4 w-4" strokeWidth={1.5} />
               Permintaan Masuk
               {pendingCount > 0 && (
@@ -103,37 +100,46 @@ const DownlinePage = () => {
           />
         </div>
 
-        <div className="inline-flex items-center bg-slate-100 p-1 rounded-full shrink-0">
-<<<<<<< HEAD
+        <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full shrink-0">
           <Button
             onClick={() => setFilterStatus("ALL")}
             variant="ghost"
             size="sm"
-            className={`rounded-full shadow-sm hover:bg-white h-7 px-5 text-xs font-medium ${filterStatus === "ALL" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}
+            className={cn(
+              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+              filterStatus === "ALL"
+                ? "bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+            )}
           >
-            Semua
+            All
           </Button>
           <Button
             onClick={() => setFilterStatus("ACTIVE")}
             variant="ghost"
             size="sm"
-            className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "ACTIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}
+            className={cn(
+              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+              filterStatus === "ACTIVE"
+                ? "bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+            )}
           >
-            ACTIVE
+            Active
           </Button>
           <Button
             onClick={() => setFilterStatus("PASSIVE")}
             variant="ghost"
             size="sm"
-            className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "PASSIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}
+            className={cn(
+              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+              filterStatus === "PASSIVE"
+                ? "bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+            )}
           >
-            PASSIVE
+            Passive
           </Button>
-=======
-          <Button onClick={() => setFilterStatus("ALL")} variant="ghost" size="sm" className={`rounded-full shadow-sm hover:bg-white h-7 px-5 text-xs font-medium ${filterStatus === "ALL" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>All</Button>
-          <Button onClick={() => setFilterStatus("ACTIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "ACTIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Active</Button>
-          <Button onClick={() => setFilterStatus("PASSIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "PASSIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Passive</Button>
->>>>>>> 90f7f9c (feat(design): implement reusable ErrorState component and NotFound page, replacing generic errors across all pages)
         </div>
       </div>
       {/* GRID */}
@@ -153,8 +159,8 @@ const DownlinePage = () => {
                 <CardContent className="p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-9 w-9 border border-slate-100 bg-slate-50">
-                        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                      <Avatar className="h-9 w-9 border-0 shadow-sm">
+                        <AvatarFallback className="bg-gradient-to-br from-blue-700 to-blue-900 text-white font-semibold">
                           {agent.user_name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
