@@ -7,6 +7,8 @@ import { ArrowLeft, Phone, Clock } from "lucide-react";
 import { useReceivedPendingInvitationsQuery } from "@/hooks/useReceivedInvitations";
 import { useAcceptInvitationMutation } from "@/hooks/useAcceptInvitation";
 import { useDeclineInvitationMutation } from "@/hooks/useDeclineInvitation";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 
 export default function IncomingInvitationsPage() {
   // The live PENDING inbox from the BE.
@@ -91,12 +93,11 @@ export default function IncomingInvitationsPage() {
 
         {/* 2. ERROR */}
         {!isLoading && isError && (
-          <div className="p-6 text-sm text-slate-500">
-            <p className="font-medium text-slate-700">Gagal memuat daftar undangan.</p>
-            <p className="text-xs text-slate-500 mt-1">
-              Coba muat ulang halaman.
-            </p>
-          </div>
+          <ErrorState 
+            title="Gagal memuat daftar undangan"
+            message="Terjadi kesalahan sistem saat menghubungi server."
+            imageSrc={Image500}
+          />
         )}
 
         {/* 3. EMPTY */}

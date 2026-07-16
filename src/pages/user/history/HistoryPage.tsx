@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
 import { useTransactionDetailQuery } from "@/hooks/useTransactionDetailQuery";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 import { formatRupiah, formatDateId, formatTrxId } from "@/lib/utils/format";
 import { cn } from "@/lib/utils";
 import type { TransactionStatus } from "@/schemas/transaction.schema";
@@ -216,11 +218,11 @@ const HistoryPage = () => {
             </Card>
           ))
         ) : isError ? (
-          <Card className="rounded-2xl border-red-100 bg-red-50/50">
-            <CardContent className="p-6 text-center text-sm text-red-700">
-              Gagal memuat riwayat transaksi. Silakan coba lagi.
-            </CardContent>
-          </Card>
+          <ErrorState 
+            title="Gagal memuat riwayat"
+            message="Terjadi kesalahan sistem saat mengambil data riwayat transaksi dari server."
+            imageSrc={Image500}
+          />
         ) : data && data.transactions.length === 0 ? (
           <Card className="rounded-2xl border-slate-100">
             <CardContent className="p-10 text-center">

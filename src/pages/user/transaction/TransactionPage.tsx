@@ -9,6 +9,8 @@ import { useProducts } from "@/hooks/useProducts";
 import { useCreateTransaction } from "@/hooks/useCreateTransaction";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 
 export default function TransactionPage() {
   const { data: dynamicProducts, isLoading, isError } = useProducts();
@@ -114,8 +116,12 @@ export default function TransactionPage() {
                 <p>Memuat katalog produk...</p>
               </div>
             ) : isError ? (
-              <div className="col-span-full flex flex-col items-center justify-center h-48 text-red-500">
-                <p>Gagal memuat produk. Silakan coba lagi.</p>
+              <div className="col-span-full">
+                <ErrorState 
+                  title="Gagal memuat produk"
+                  message="Terjadi kesalahan sistem saat mengambil katalog produk dari server."
+                  imageSrc={Image500}
+                />
               </div>
             ) : productsList.length === 0 ? (
               <div className="col-span-full flex flex-col items-center justify-center h-48 text-slate-400">

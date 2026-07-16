@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 import { usePhoneSearchQuery } from "@/hooks/usePhoneSearch";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -329,12 +331,11 @@ export default function SendInvitationPage() {
           )}
 
           {isPendingListError && !isPendingListLoading && (
-            <div className="p-4 text-sm text-slate-500">
-              <p className="font-medium text-slate-700">Gagal memuat daftar undangan.</p>
-              <p className="text-xs text-slate-500 mt-1">
-                Coba muat ulang halaman.
-              </p>
-            </div>
+            <ErrorState 
+              title="Gagal memuat daftar undangan"
+              message="Terjadi kesalahan sistem saat menghubungi server."
+              imageSrc={Image500}
+            />
           )}
 
           {!isPendingListLoading && !isPendingListError &&

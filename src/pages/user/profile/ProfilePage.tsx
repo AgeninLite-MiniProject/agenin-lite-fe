@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Copy, Mail, Phone, Link as LinkIcon, User, Loader2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDashboardSummary } from "@/hooks/useDashboard";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 
 export default function ProfilePage() {
   const { data: dashboard, isLoading, isError } = useDashboardSummary();
@@ -17,9 +19,11 @@ export default function ProfilePage() {
 
   if (isError || !dashboard) {
     return (
-      <div className="flex-1 p-4 md:p-8 w-full max-w-5xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
-        <p className="text-destructive font-semibold text-lg mb-2">Gagal memuat profil</p>
-      </div>
+      <ErrorState 
+        title="Gagal memuat profil"
+        message="Terjadi kesalahan saat mengambil data profil dari server."
+        imageSrc={Image500}
+      />
     );
   }
 

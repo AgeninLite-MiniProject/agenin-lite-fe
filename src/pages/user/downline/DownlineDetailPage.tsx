@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useDownlineDetail } from "@/hooks/useDownlineDetail";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 
 export default function DownlineDetailPage() {
 
@@ -50,10 +52,11 @@ export default function DownlineDetailPage() {
 
   if (isError || !detailData) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
-        <p className="text-destructive font-semibold text-lg mb-2">Gagal memuat detail downline</p>
-        <Link to="/downline" className="text-primary hover:underline mt-2">Kembali ke Daftar Downline</Link>
-      </div>
+      <ErrorState 
+        title="Gagal memuat detail downline"
+        message="Terjadi kesalahan saat mengambil informasi detail agen dari server."
+        imageSrc={Image500}
+      />
     );
   }
 
