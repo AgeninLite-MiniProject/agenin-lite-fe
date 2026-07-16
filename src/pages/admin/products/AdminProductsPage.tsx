@@ -95,22 +95,22 @@ export default function AdminProductsPage() {
                   <TableCell className="text-slate-600 py-4 font-medium">Rp {product.cost_price?.toLocaleString() || '-'}</TableCell>
                   <TableCell className="text-slate-600 py-4 font-medium">Rp {product.selling_price?.toLocaleString() || '-'}</TableCell>
                   <TableCell className="py-4">
-                    <Badge variant="secondary" className="bg-slate-100 text-slate-600 shadow-none border-transparent font-semibold">
+                    <Badge variant="outline" className="border-slate-500 text-slate-600 font-semibold">
                       {product.agent_fee !== undefined ? `${product.agent_fee}%` : '-'}
                     </Badge>
                   </TableCell>
                   <TableCell className="py-4">
-                    <Badge variant="secondary" className="bg-slate-100 text-slate-600 shadow-none border-transparent font-semibold">
+                    <Badge variant="outline" className="border-slate-500 text-slate-600 font-semibold">
                       {product.super_agent_fee !== undefined ? `${product.super_agent_fee}%` : '-'}
                     </Badge>
                   </TableCell>
                   <TableCell className="py-4">
                     <Badge
-                      variant="secondary"
-                      className={`shadow-none border-transparent font-semibold ${
+                      variant="outline"
+                      className={`font-semibold ${
                         product.product_status === "ACTIVE"
-                          ? "bg-green-100 text-green-700 hover:bg-green-100"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-100"
+                          ? "border-green-500 text-green-600"
+                          : "border-slate-500 text-slate-600"
                       }`}
                     >
                       {product.product_status}

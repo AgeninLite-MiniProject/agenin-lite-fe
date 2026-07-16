@@ -78,10 +78,10 @@ export default function DownlineDetailPage() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="text-2xl font-bold text-slate-900">{agentDetail.user_name}</h1>
-                  <Badge variant="secondary" className={
+                  <Badge variant="outline" className={
                     agentDetail.status === "ACTIVE" 
-                      ? "bg-green-100/70 text-green-700 hover:bg-green-100/70 border-transparent text-[10px] px-2.5 py-0.5 rounded-md font-medium"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-100 border-transparent text-[10px] px-2.5 py-0.5 rounded-md font-medium"
+                      ? "border-green-500 text-green-600 text-[10px] px-2.5 py-0.5 rounded-md font-medium"
+                      : "border-slate-500 text-slate-600 text-[10px] px-2.5 py-0.5 rounded-md font-medium"
                   }>
                     {agentDetail.status}
                   </Badge>
@@ -157,8 +157,12 @@ export default function DownlineDetailPage() {
                     {/* Right Info */}
                     <div className="flex flex-col items-end gap-1.5 shrink-0 pt-0.5">
                       <p className="font-bold text-[14px] text-green-600">+ {formatCurrency(trx.total_commission_earned)}</p>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px] font-bold px-2 py-0 uppercase tracking-wider rounded-md">
-                        {trx.status === 'COMPLETED' ? 'SELESAI' : trx.status}
+                      <Badge variant="outline" className={`text-[10px] font-bold px-2 py-0 uppercase tracking-wider rounded-md ${
+                        trx.status === "COMPLETED" ? "border-green-500 text-green-600" :
+                        trx.status === "PENDING" ? "border-amber-500 text-amber-600" :
+                        "border-slate-500 text-slate-600"
+                      }`}>
+                        {trx.status}
                       </Badge>
                       <ChevronDown className={`w-4 h-4 text-slate-400 mt-1 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                     </div>

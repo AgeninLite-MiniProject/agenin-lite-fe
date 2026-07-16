@@ -179,7 +179,7 @@ export default function AdminAuditPage() {
                     </TableCell>
                     <TableCell className="py-4">
                       <div className="flex flex-col gap-1.5 items-start">
-                        <Badge variant="outline" className="bg-indigo-50/50 text-indigo-700 border-indigo-200">
+                        <Badge variant="outline" className="border-indigo-500 text-indigo-600">
                           {audit.action}
                         </Badge>
                         <span className="text-xs text-slate-500 font-medium px-1">
@@ -194,13 +194,13 @@ export default function AdminAuditPage() {
                     <TableCell className="py-4">
                       <div className="flex flex-col gap-1.5 items-start">
                         {audit.auditStatus === "SUCCESS" ? (
-                          <div className="flex items-center gap-1 text-emerald-600 text-xs font-bold tracking-wide">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> SUCCESS
-                          </div>
+                          <Badge variant="outline" className="border-green-500 text-green-600">
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> SUCCESS
+                          </Badge>
                         ) : (
-                          <div className="flex items-center gap-1 text-red-600 text-xs font-bold tracking-wide">
-                            <XCircle className="w-3.5 h-3.5" /> FAILURE
-                          </div>
+                          <Badge variant="outline" className="border-red-500 text-red-600">
+                            <XCircle className="w-3.5 h-3.5 mr-1" /> FAILURE
+                          </Badge>
                         )}
                         <span className="text-xs text-slate-500 font-mono">
                           {audit.ipAddress}

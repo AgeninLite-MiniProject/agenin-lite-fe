@@ -26,26 +26,26 @@ const STATUS_CONFIG: Record<
   }
 > = {
   COMPLETED: {
-    label: "SELESAI",
-    badgeClass: "bg-green-50 text-green-700 border-green-200",
+    label: "COMPLETED",
+    badgeClass: "border-green-500 text-green-600",
     rowAmountClass: "text-green-600",
     showAmount: true,
   },
   PENDING: {
-    label: "MENUNGGU",
-    badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
+    label: "PENDING",
+    badgeClass: "border-amber-500 text-amber-600",
     rowAmountClass: "text-slate-400",
     showAmount: false,
   },
   FAILED: {
-    label: "GAGAL",
-    badgeClass: "bg-red-50 text-red-700 border-red-200",
+    label: "FAILED",
+    badgeClass: "border-red-500 text-red-600",
     rowAmountClass: "text-slate-400",
     showAmount: false,
   },
   CANCELLED: {
-    label: "DIBATALKAN",
-    badgeClass: "bg-slate-100 text-slate-600 border-slate-200",
+    label: "CANCELLED",
+    badgeClass: "border-slate-500 text-slate-600",
     rowAmountClass: "text-slate-400",
     showAmount: false,
   },

@@ -247,11 +247,11 @@ export default function SendInvitationPage() {
                               <Check className="h-4 w-4 text-primary shrink-0" />
                             ) : (
                               <Badge
-                                variant="secondary"
-                                className={`text-[10px] font-bold px-2 py-0.5 border-transparent ${
+                                variant="outline"
+                                className={`text-[10px] font-bold px-2 py-0.5 ${
                                   u.status === "ACTIVE"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-slate-200 text-slate-700"
+                                    ? "border-green-500 text-green-600"
+                                    : "border-slate-500 text-slate-600"
                                 }`}
                               >
                                 {u.status}
@@ -365,8 +365,8 @@ export default function SendInvitationPage() {
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     <Badge
-                      variant="secondary"
-                      className="bg-[#E8E2CD]/60 text-[#5A5030] hover:bg-[#E8E2CD]/60 border-transparent text-[10px] font-bold px-3 py-1"
+                      variant="outline"
+                      className="border-amber-500 text-amber-600 text-[10px] font-bold px-3 py-1"
                     >
                       PENDING
                     </Badge>

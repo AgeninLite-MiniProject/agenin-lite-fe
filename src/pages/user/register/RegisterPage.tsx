@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormValues } from "@/schemas/auth.schema";
-import Footer from "@/components/layout/Footer";
 import { useNavigate } from "react-router-dom";
 import apiClient from "@/lib/axios";
 import { AxiosError } from "axios";
@@ -476,8 +475,6 @@ export default function RegisterPage() {
           </div>
         </motion.div>
       </div>
-      
-      <Footer />
     </div>
   );
 }

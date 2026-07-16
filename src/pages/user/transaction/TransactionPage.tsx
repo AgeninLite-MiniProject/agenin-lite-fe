@@ -143,7 +143,7 @@ export default function TransactionPage() {
                     <CardContent className="p-5 md:p-6 flex flex-col h-full">
                       <div className="flex justify-end items-start mb-4 min-h-[24px]">
                         {!isSelected && (
-                          <Badge variant="secondary" className={`${isActive ? 'bg-green-100/70 text-green-700' : 'bg-slate-200 text-slate-500'} hover:bg-opacity-80 border-transparent text-[10px] font-bold px-2.5 py-0.5 rounded-md`}>
+                          <Badge variant="outline" className={`${isActive ? 'border-green-500 text-green-600' : 'border-slate-500 text-slate-600'} text-[10px] font-bold px-2.5 py-0.5 rounded-md`}>
                             {product.product_status}
                           </Badge>
                         )}

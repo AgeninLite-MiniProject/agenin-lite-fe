@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, Send, Copy, Check, Loader2, Users, Clock, Wallet, ChevronRight } from "lucide-react";
+import { Calculator, Send, Copy, Check, Loader2, Users, Clock, Wallet, ChevronRight, ScrollText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -70,8 +70,11 @@ const DashboardPage = () => {
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 md:gap-0">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
-              Selamat datang, {user.user_name}
+            <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground leading-tight">
+              Selamat datang,{" "}
+              <span className="bg-gradient-to-br from-blue-700 to-blue-900/80 text-white px-3.5 py-1 rounded-2xl inline-block">
+                {user.user_name}
+              </span>
             </h1>
             {/* <TooltipProvider delayDuration={200}>
               <Tooltip>
@@ -85,8 +88,8 @@ const DashboardPage = () => {
                       variant="outline" 
                       className={`cursor-help ${
                         user.user_status === "PASSIVE" 
-                          ? "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                          : "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                          ? "border-slate-500 text-slate-600"
+                          : "border-green-500 text-green-600"
                       }`}
                     >
                       {user.user_status}
@@ -266,7 +269,7 @@ const DashboardPage = () => {
           
           <CardHeader className="pb-2 relative z-10">
             <CardTitle className="text-sm font-medium text-blue-100 flex items-center gap-2">
-              <Wallet className="w-4 h-4 text-blue-200" />
+              <Wallet className="w-6 h-6 text-blue-200" />
               Total Komisi
             </CardTitle>
           </CardHeader>
@@ -289,9 +292,14 @@ const DashboardPage = () => {
       </div>
       {/* RECENT ACTIVITY */}
       <Card className="rounded-2xl shadow-sm">
-        <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-border/50">
-          <CardTitle className="text-lg font-semibold">Aktivitas Terakhir</CardTitle>
-          <Button variant="link" className="text-primary h-auto p-0 font-medium text-sm">Lihat Semua</Button>
+        <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-border/50 px-5 pt-4">
+          <CardTitle className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <ScrollText className="w-6 h-6 text-primary text-slate-700" />
+            Aktivitas Terakhir
+          </CardTitle>
+          <Link to="/riwayat">
+            <Button variant="link" className="text-primary h-auto p-0 font-medium text-[13px]">Lihat Semua</Button>
+          </Link>
         </CardHeader>
         <CardContent className="p-0">
           <div className="divide-y divide-border/50">
@@ -302,17 +310,26 @@ const DashboardPage = () => {
                </div>
             ) : (
               dashboard.recent_commissions.map((comm) => (
-                <div key={comm.commission_id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 md:p-6 gap-2 sm:gap-0 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center gap-4">
+                <div key={comm.commission_id} className="flex flex-col sm:flex-row sm:items-center justify-between py-4 px-5 gap-3 sm:gap-0 hover:bg-slate-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white border border-blue-700 flex items-center justify-center">
+                      <Wallet className="w-4 h-4 text-blue-700" />
+                    </div>
                     <div>
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <p className="font-medium text-sm">Transaksi {comm.product_name} oleh {comm.user_name}</p>
-                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px] px-1.5 py-0">COMPLETED</Badge>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <p className="font-medium text-sm text-slate-800 line-clamp-1">
+                          Transaksi {comm.product_name} oleh <span className="font-semibold text-blue-700">{comm.user_name}</span>
+                        </p>
                       </div>
-                      <p className="text-xs font-medium text-green-600">+ {formatRupiah(comm.commission_amount)} {comm.commission_type === 'AGENT_FEE' ? 'Agent Fee' : 'Super Agent Fee'}</p>
+                      <p className="text-xs font-semibold text-green-600">
+                        + {formatRupiah(comm.commission_amount)} <span className="text-slate-400 font-normal ml-1">({comm.commission_type === 'AGENT_FEE' ? 'Agent Fee' : 'Super Agent Fee'})</span>
+                      </p>
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground self-start sm:self-auto">{formatDate(comm.created_at)}</p>
+                  <div className="flex flex-col items-start sm:items-end gap-1.5 ml-11 sm:ml-0">
+                    <Badge variant="outline" className="border-green-500 text-green-600 text-[9px] px-1.5 py-1 pt-1.5 h-4">COMPLETED</Badge>
+                    <p className="text-[11px] text-slate-400">{formatDate(comm.created_at)}</p>
+                  </div>
                 </div>
               ))
             )}

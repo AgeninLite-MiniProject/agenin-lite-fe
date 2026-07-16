@@ -152,11 +152,11 @@ export default function AdminUsersPage() {
                   </TableCell>
                   <TableCell className="py-4">
                     <Badge
-                      variant="secondary"
-                      className={`shadow-none border-transparent font-semibold ${
+                      variant="outline"
+                      className={`font-semibold ${
                         user.user_status === "ACTIVE"
-                          ? "bg-green-100 text-green-700 hover:bg-green-100"
-                          : "bg-amber-100 text-amber-700 hover:bg-amber-100"
+                          ? "border-green-500 text-green-600"
+                          : "border-slate-500 text-slate-600"
                       }`}
                     >
                       {user.user_status}
@@ -164,11 +164,11 @@ export default function AdminUsersPage() {
                   </TableCell>
                   <TableCell className="py-4">
                     <Badge
-                      variant="secondary"
-                      className={`shadow-none border-transparent font-semibold ${
+                      variant="outline"
+                      className={`font-semibold ${
                         user.is_deleted
-                          ? "bg-red-100 text-red-700 hover:bg-red-100"
-                          : "bg-indigo-50 text-indigo-700 hover:bg-indigo-50"
+                          ? "border-red-500 text-red-600"
+                          : "border-green-500 text-green-600"
                       }`}
                     >
                       {user.is_deleted ? "TRUE" : "FALSE"}
