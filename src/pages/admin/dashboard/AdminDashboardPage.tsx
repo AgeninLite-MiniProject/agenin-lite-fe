@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { useAdminDashboardQuery } from "@/hooks/useAdminDashboard";
+import { DotMap } from "@/components/ui/DotMap";
 
 export default function AdminDashboardPage() {
   const { data, isLoading, isError } = useAdminDashboardQuery();
@@ -80,6 +81,7 @@ export default function AdminDashboardPage() {
             }`}>
               {isPrimary && (
                 <>
+                  <DotMap />
                   <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
                   <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none z-0"></div>
                 </>
