@@ -7,6 +7,8 @@ import { Search, Inbox, Send, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDashboardSummary } from "@/hooks/useDashboard";
 import { useReceivedPendingInvitationsQuery } from "@/hooks/useReceivedInvitations";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 import { useState } from "react";
 
 const DownlinePage = () => {
@@ -27,11 +29,11 @@ const DownlinePage = () => {
 
   if (isError || !dashboard) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-[50vh] text-center p-4">
-        <p className="text-destructive font-semibold">
-          Gagal memuat daftar Downline.
-        </p>
-      </div>
+      <ErrorState 
+        title="Gagal memuat data Downline"
+        message="Terjadi kesalahan saat mengambil daftar downline dari server."
+        imageSrc={Image500}
+      />
     );
   }
 
@@ -60,10 +62,14 @@ const DownlinePage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Link to="/downline/incoming">
+<<<<<<< HEAD
             <Button
               variant="outline"
               className="rounded-full px-6 font-medium text-primary border-primary hover:bg-primary/5 hover:text-primary relative"
             >
+=======
+            <Button variant="outline" className="rounded-full px-4 font-medium text-primary border-primary hover:bg-primary/5 hover:text-primary relative">
+>>>>>>> 90f7f9c (feat(design): implement reusable ErrorState component and NotFound page, replacing generic errors across all pages)
               <Inbox className="mr-2 h-4 w-4" strokeWidth={1.5} />
               Permintaan Masuk
               {pendingCount > 0 && (
@@ -74,7 +80,7 @@ const DownlinePage = () => {
             </Button>
           </Link>
           <Link to="/downline/invite">
-            <Button className="rounded-full px-6 font-medium">
+            <Button className="rounded-full w-full bg-gradient-to-br from-blue-700 to-blue-900/85">
               <Send className="mr-2 h-4 w-4" strokeWidth={1.5} />
               Kirim Undangan
             </Button>
@@ -98,6 +104,7 @@ const DownlinePage = () => {
         </div>
 
         <div className="inline-flex items-center bg-slate-100 p-1 rounded-full shrink-0">
+<<<<<<< HEAD
           <Button
             onClick={() => setFilterStatus("ALL")}
             variant="ghost"
@@ -122,6 +129,11 @@ const DownlinePage = () => {
           >
             PASSIVE
           </Button>
+=======
+          <Button onClick={() => setFilterStatus("ALL")} variant="ghost" size="sm" className={`rounded-full shadow-sm hover:bg-white h-7 px-5 text-xs font-medium ${filterStatus === "ALL" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>All</Button>
+          <Button onClick={() => setFilterStatus("ACTIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "ACTIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Active</Button>
+          <Button onClick={() => setFilterStatus("PASSIVE")} variant="ghost" size="sm" className={`rounded-full hover:bg-white shadow-sm h-7 px-5 text-xs font-medium ${filterStatus === "PASSIVE" ? "bg-white text-primary hover:text-primary" : "text-slate-500"}`}>Passive</Button>
+>>>>>>> 90f7f9c (feat(design): implement reusable ErrorState component and NotFound page, replacing generic errors across all pages)
         </div>
       </div>
       {/* GRID */}

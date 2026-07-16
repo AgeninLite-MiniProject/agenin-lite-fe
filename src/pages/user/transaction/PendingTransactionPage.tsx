@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 import { ArrowLeft, CheckCircle2, ChevronDown, XCircle, Ban, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -101,9 +103,11 @@ export default function PendingTransactionPage() {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : isError ? (
-          <div className="text-center p-8 text-red-500">
-            <p>Gagal memuat transaksi.</p>
-          </div>
+          <ErrorState 
+            title="Gagal memuat transaksi"
+            message="Terjadi kesalahan sistem saat mengambil daftar transaksi pending dari server."
+            imageSrc={Image500}
+          />
         ) : pendingTransactions.length === 0 ? (
           <div className="text-center p-8 text-slate-500 bg-white rounded-2xl border border-slate-200">
             <p>Tidak ada transaksi PENDING saat ini.</p>

@@ -8,6 +8,8 @@ import { motion } from "motion/react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useDashboardSummary } from "@/hooks/useDashboard";
 import { DotMap } from "@/components/ui/DotMap";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 
 const DashboardPage = () => {
   const { data: dashboard, isLoading, isError, error } = useDashboardSummary();
@@ -34,10 +36,11 @@ const DashboardPage = () => {
 
   if (isError || !dashboard) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
-        <p className="text-destructive font-semibold text-lg mb-2">Gagal memuat data Dashboard</p>
-        <p className="text-muted-foreground">{error?.message || "Terjadi kesalahan pada server"}</p>
-      </div>
+      <ErrorState 
+        title="Gagal memuat data Dashboard"
+        message={error?.message || "Terjadi kesalahan pada server saat mengambil data."}
+        imageSrc={Image500}
+      />
     );
   }
 

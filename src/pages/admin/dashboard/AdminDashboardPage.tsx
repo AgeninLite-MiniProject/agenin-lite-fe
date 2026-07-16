@@ -1,5 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { formatRupiah } from "@/lib/utils/format";
+import { ErrorState } from "@/components/ui/ErrorState";
+import Image500 from "@/assets/500-error.webp";
 import {
   Table,
   TableBody,
@@ -25,9 +28,11 @@ export default function AdminDashboardPage() {
 
   if (isError || !data) {
     return (
-      <div className="p-10 max-w-6xl flex justify-center items-center h-64">
-        <p className="text-red-500 font-medium">Failed to load dashboard data. Please check your connection.</p>
-      </div>
+      <ErrorState 
+        title="Gagal Memuat Dashboard"
+        message="Tidak dapat memuat data admin dashboard. Silakan periksa koneksi atau coba lagi nanti."
+        imageSrc={Image500}
+      />
     );
   }
 

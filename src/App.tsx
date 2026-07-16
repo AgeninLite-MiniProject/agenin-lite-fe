@@ -20,6 +20,7 @@ import HistoryPage from "@/pages/user/history/HistoryPage";
 import ProfilePage from "@/pages/user/profile/ProfilePage";
 import AuthGuard from "@/components/guards/AuthGuard";
 import AdminGuard from "@/components/guards/AdminGuard";
+import NotFoundPage from "@/pages/error/NotFoundPage";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,9 @@ function App() {
           </Route>
 
         </Route>
+
+        {/* Error Routes */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
     </QueryClientProvider>
