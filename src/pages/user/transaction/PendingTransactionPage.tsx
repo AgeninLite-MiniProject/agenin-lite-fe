@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
 import { useUpdateTransactionStatus } from "@/hooks/useUpdateTransactionStatus";
+import { useProducts } from "@/hooks/useProducts";
 import toast from "react-hot-toast";
 
 export default function PendingTransactionPage() {
   const { data: responseData, isLoading, isError } = useTransactionListQuery({ status: "PENDING", page: 0, size: 50 });
   const updateStatusMutation = useUpdateTransactionStatus();
-  
+  const { data: productsList } = useProducts();
+
   // State untuk toggle rincian produk
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
@@ -30,6 +32,20 @@ export default function PendingTransactionPage() {
   };
 
   const pendingTransactions = responseData?.transactions || [];
+
+  const calculateEstimatedFee = (trx: any) => {
+    if (trx.agentFeeAmount > 0) return trx.agentFeeAmount;
+    let estimatedFee = 0;
+    if (trx.items && productsList) {
+      trx.items.forEach((item: any) => {
+        const product = productsList.find((p: any) => p.product_id === item.productId);
+        if (product) {
+          estimatedFee += (item.profit * (product.agent_fee / 100));
+        }
+      });
+    }
+    return estimatedFee;
+  };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -131,7 +147,12 @@ export default function PendingTransactionPage() {
                         <p className="text-[11px] font-medium text-slate-500 mb-0.5">Total Tagihan</p>
                         <p className="font-bold text-[14px] text-slate-900">{formatCurrency(trx.amount)}</p>
                       </div>
-                      {/* Note: Estimasi Fee dihapus karena di Backend nilai komisi PENDING selalu 0 */}
+                      <div>
+                        <p className="text-[11px] font-medium text-slate-500 mb-0.5">Total Fee</p>
+                        <p className="font-bold text-[14px] text-green-600">
+                          {formatCurrency(calculateEstimatedFee(trx))}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
