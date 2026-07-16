@@ -45,7 +45,7 @@ export function ProductModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-sm px-6 h-11 self-start md:self-auto">
+        <Button className="bg-gradient-to-br from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950 text-white rounded-xl shadow-md shadow-blue-900/20 px-6 h-11 self-start md:self-auto transition-all">
           <Plus className="mr-2 h-5 w-5" />
           Add Product
         </Button>
@@ -84,7 +84,7 @@ export function ProductModal() {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="status" className="text-sm font-medium text-slate-700">Status</Label>
-            <select id="status" className="flex h-11 w-full rounded-lg border border-slate-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 text-slate-700">
+            <select id="status" className="flex h-11 w-full rounded-lg border border-slate-200 bg-white px-3 pr-10 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 text-slate-700">
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Inactive</option>
             </select>
@@ -93,7 +93,7 @@ export function ProductModal() {
             <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-xl px-6 h-11 text-slate-600 border-slate-200 hover:bg-slate-50 font-semibold">
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading} className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 h-11 font-semibold">
+            <Button type="submit" disabled={isLoading} className="bg-gradient-to-br from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950 text-white rounded-xl shadow-md shadow-blue-900/20 px-6 h-11 font-semibold transition-all">
               {isLoading ? "Saving..." : "Save Product"}
             </Button>
           </DialogFooter>

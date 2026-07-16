@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { useAdminDashboardQuery } from "@/hooks/useAdminDashboard";
+import { DotMap } from "@/components/ui/DotMap";
 
 export default function AdminDashboardPage() {
   const { data, isLoading, isError } = useAdminDashboardQuery();
@@ -72,21 +73,33 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        {summaryCards.map((card, index) => (
-          <Card key={index} className="rounded-3xl border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <p className="text-xs font-bold text-slate-500 tracking-wider mb-4 uppercase">
-                {card.title}
-              </p>
-              <h3 className="text-4xl font-semibold text-slate-900 mb-2">
-                {card.value}
-              </h3>
-              <p className={`text-sm font-medium ${card.descriptionColor}`}>
-                {card.description}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+        {summaryCards.map((card, index) => {
+          const isPrimary = index === 0;
+          return (
+            <Card key={index} className={`rounded-3xl shadow-sm hover:shadow-md transition-shadow ${
+              isPrimary ? "bg-gradient-to-br from-blue-700 to-blue-900 border-blue-800 text-white overflow-hidden relative" : "border-slate-200 bg-white"
+            }`}>
+              {isPrimary && (
+                <>
+                  <DotMap />
+                  <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none z-0"></div>
+                </>
+              )}
+              <CardContent className="p-6 relative z-10">
+                <p className={`text-xs font-bold tracking-wider mb-4 uppercase ${isPrimary ? "text-blue-100" : "text-slate-500"}`}>
+                  {card.title}
+                </p>
+                <h3 className={`text-4xl font-semibold mb-2 ${isPrimary ? "text-white" : "text-slate-900"}`}>
+                  {card.value}
+                </h3>
+                <p className={`text-sm font-medium ${isPrimary ? "text-blue-200" : card.descriptionColor}`}>
+                  {card.description}
+                </p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       <Card className="rounded-3xl border-slate-200 shadow-sm overflow-hidden">
@@ -121,7 +134,7 @@ export default function AdminDashboardPage() {
                 const formattedTime = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
                 let badgeColor = "border-slate-500 text-slate-600";
-                if (activity.status === "COMPLETED") badgeColor = "border-green-500 text-green-600";
+                if (activity.status === "SUCCESS" || activity.status === "COMPLETED") badgeColor = "border-green-500 text-green-600";
                 else if (activity.status === "PENDING") badgeColor = "border-amber-500 text-amber-600";
                 else if (activity.status === "FAILED" || activity.status === "CANCELLED") badgeColor = "border-red-500 text-red-600";
 

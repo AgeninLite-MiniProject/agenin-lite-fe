@@ -158,16 +158,6 @@ export default function TransactionPage() {
                         </p>
                       </div>
 
-                      <div className="space-y-1.5 mb-6 text-[13px]">
-                        <div className="flex justify-between items-center text-slate-500">
-                          <span>Agent Fee:</span>
-                          <span className={`font-bold ${isActive ? 'text-slate-700' : 'text-slate-400'}`}>{product.agent_fee}%</span>
-                        </div>
-                        <div className="flex justify-between items-center text-slate-500">
-                          <span>Super Agent Fee:</span>
-                          <span className={`font-bold ${isActive ? 'text-slate-700' : 'text-slate-400'}`}>{product.super_agent_fee}%</span>
-                        </div>
-                      </div>
 
                       <Button
                         disabled={!isActive}
@@ -255,7 +245,7 @@ export default function TransactionPage() {
                 {hasItems && (
                   <div className="flex items-center justify-between bg-green-50/80 px-3 py-2 rounded-lg border border-green-100">
                     <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-700">
-                      Total Estimasi Fee Anda
+                      Total Fee
                     </div>
                     <span className="font-bold text-[13px] text-green-700">{formatCurrency(totalEstimasiFee)}</span>
                   </div>
@@ -327,7 +317,7 @@ export default function TransactionPage() {
                     <p className="text-xl font-bold text-slate-900">{formatCurrency(totalHarga)}</p>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-[11px] font-medium text-green-600">Estimasi Fee Anda</p>
+                    <p className="text-[11px] font-medium text-green-600">Total Fee</p>
                     <p className="text-[12px] font-bold text-green-700">{formatCurrency(totalEstimasiFee)}</p>
                   </div>
                 </div>
