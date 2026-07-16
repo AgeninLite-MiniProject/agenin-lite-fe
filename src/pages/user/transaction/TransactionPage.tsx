@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Minus, Plus, X, ShoppingCart } from "lucide-react";
+import { CheckCircle2, Minus, Plus, X, ShoppingCart, Package } from "lucide-react";
 
 import { useProducts } from "@/hooks/useProducts";
 import { useCreateTransaction } from "@/hooks/useCreateTransaction";
@@ -92,7 +92,7 @@ export default function TransactionPage() {
   };
 
   return (
-    <div className="flex-1 max-w-[1400px] mx-auto w-full min-h-[calc(100vh-121px)] bg-[#fbfbfb]">
+    <div className="flex-1 max-w-[1400px] mx-auto w-full min-h-[calc(100vh-121px)]">
       <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start lg:h-full p-4 md:p-8">
 
         {/* LEFT COLUMN - PRODUCT CATALOG */}
@@ -135,46 +135,87 @@ export default function TransactionPage() {
                 return (
                   <Card
                     key={product.product_id}
-                    className={`rounded-2xl transition-all relative overflow-hidden ${isSelected ? 'border-primary border-2 shadow-md bg-white' :
-                      !isActive ? 'border-slate-100 shadow-sm bg-slate-50/50 opacity-70' :
-                        'border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 bg-white'
-                      }`}
+                    className={`group rounded-2xl transition-all duration-200 relative overflow-hidden ${
+                      isSelected
+                        ? 'border-primary shadow-md ring-1 ring-primary/40 -translate-y-0.5 bg-white'
+                        : !isActive
+                          ? 'border-slate-100 shadow-sm bg-slate-50/60 opacity-70'
+                          : 'border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-200 bg-white'
+                    }`}
                   >
-                    {isSelected && (
-                      <div className="absolute top-4 right-4 bg-white rounded-full">
-                        <CheckCircle2 className="h-6 w-6 text-primary fill-primary text-white" />
-                      </div>
-                    )}
+                    <CardContent className="p-5 md:p-6 flex flex-col h-full gap-5">
+                      {/* Top row: soft icon square + status badge + selected check */}
+                      <div className="flex items-start justify-between">
+                        <div className={`w-11 h-11 rounded-xl border-2 flex items-center justify-center transition-colors ${
+                          isActive
+                            ? 'border-primary/50 bg-white hover:bg-primary/5'
+                            : 'border-slate-200 bg-white opacity-70'
+                        }`}>
+                          <Package className={`w-5 h-5 ${
+                            isActive ? 'text-primary' : 'text-slate-400'
+                          }`} strokeWidth={1.75} />
+                        </div>
 
-                    <CardContent className="p-5 md:p-6 flex flex-col h-full">
-                      <div className="flex justify-end items-start mb-4 min-h-[24px]">
-                        {!isSelected && (
-                          <Badge variant="outline" className={`${isActive ? 'border-green-500 text-green-600' : 'border-slate-500 text-slate-600'} text-[10px] font-bold px-2.5 py-0.5 rounded-md`}>
+                        <div className="flex items-center gap-2">
+                          <Badge className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
+                            isActive
+                              ? 'bg-transparent text-emerald-700 border border-emerald-300 hover:bg-transparent'
+                              : 'bg-slate-100 text-slate-500 border-0 hover:bg-slate-100'
+                          }`}>
                             {product.product_status}
                           </Badge>
-                        )}
+                          {isSelected && (
+                            <div className="bg-white rounded-full shadow-sm">
+                              <CheckCircle2 className="h-5 w-5 text-primary fill-primary text-white" />
+                            </div>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="mb-6 flex-1">
-                        <h3 className={`font-bold text-[15px] leading-tight mb-2 ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
+                      {/* Name + price — the only "loud" content on the card */}
+                      <div>
+                        <h3 className={`font-bold text-[15px] leading-snug mb-1.5 ${
+                          isActive ? 'text-slate-900' : 'text-slate-500'
+                        }`}>
                           {product.product_name}
                         </h3>
-                        <p className={`text-xl font-bold tracking-tight ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
-                          {formatCurrency(product.selling_price)}
-                        </p>
+                        <div className="flex items-baseline gap-1.5">
+                          <p className={`text-xl md:text-2xl font-extrabold tracking-tight ${
+                            isActive ? 'text-slate-900' : 'text-slate-500'
+                          }`}>
+                            {formatCurrency(product.selling_price)}
+                          </p>
+                          <span className="text-[11px] font-medium text-slate-400">/ unit</span>
+                        </div>
                       </div>
 
-
-                      <Button
-                        disabled={!isActive}
-                        onClick={() => handleToggleProduct(product.product_id)}
-                        className={`w-full rounded-full h-11 font-semibold text-[14px] ${isSelected ? 'bg-red-50 hover:bg-red-100 text-red-600 shadow-none' :
-                          !isActive ? 'bg-slate-100 text-slate-400 cursor-not-allowed hover:bg-slate-100' :
-                            'bg-[#004cd1]/10 hover:bg-[#004cd1]/20 text-[#004cd1] shadow-none'
-                          }`}
-                      >
-                        {isSelected ? 'Batal Pilih' : (!isActive ? 'Tidak tersedia' : 'Tambah ke Transaksi')}
-                      </Button>
+                      {(() => {
+                        if (isSelected) {
+                          return (
+                            <Button
+                              variant="outline"
+                              disabled={!isActive}
+                              onClick={() => handleToggleProduct(product.product_id)}
+                              className="w-full rounded-full px-5 h-12 text-[14px] font-semibold text-red-600 border-red-300 bg-white hover:bg-red-50 hover:text-red-600"
+                            >
+                              Batal Pilih
+                            </Button>
+                          );
+                        }
+                        return (
+                          <Button
+                            disabled={!isActive}
+                            onClick={() => handleToggleProduct(product.product_id)}
+                            className={`w-full rounded-full h-12 text-[14px] font-semibold transition-all ${
+                              isActive
+                                ? 'bg-primary hover:bg-primary/90'
+                                : 'bg-slate-200 text-slate-400 cursor-not-allowed hover:bg-slate-200'
+                            }`}
+                          >
+                            {isActive ? 'Tambah ke Transaksi' : 'Tidak tersedia'}
+                          </Button>
+                        );
+                      })()}
                     </CardContent>
                   </Card>
                 );
@@ -261,7 +302,7 @@ export default function TransactionPage() {
               <Button
                 disabled={!hasItems || createTxMutation.isPending}
                 onClick={handleCreateTransaction}
-                className="w-full rounded-full h-11 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px] shadow-[0_8px_20px_-8px_rgba(0,76,209,0.5)] disabled:shadow-none disabled:bg-slate-200 disabled:text-slate-400">
+                className="w-full rounded-full h-12 mt-4 text-[14px] font-semibold bg-primary hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400">
                 {createTxMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Transaksi Sekarang"}
               </Button>
             </div>
@@ -331,7 +372,7 @@ export default function TransactionPage() {
                 <Button
                   disabled={!hasItems || createTxMutation.isPending}
                   onClick={handleCreateTransaction}
-                  className="w-full rounded-full h-11 bg-[#004cd1] hover:bg-[#004cd1]/90 text-white font-semibold text-[14px]">
+                  className="w-full rounded-full h-12 text-[14px] font-semibold bg-primary hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400">
                   {createTxMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Transaksi Sekarang"}
                 </Button>
               </div>
