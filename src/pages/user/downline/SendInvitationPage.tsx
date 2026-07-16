@@ -55,11 +55,13 @@ export default function SendInvitationPage() {
   }, [phoneQuery]);
 
   const {
-    data: hits = [],
+    data,
     isFetching,
     isError,
     error,
   } = usePhoneSearchQuery(debouncedPhone);
+
+  const hits = useMemo(() => data ?? [], [data]);
 
   const {
     data: pendingList,
