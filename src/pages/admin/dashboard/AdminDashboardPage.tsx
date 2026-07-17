@@ -134,7 +134,7 @@ export default function AdminDashboardPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              data.recent_activities.map((activity, idx) => {
+              data.recent_activities.slice(0, 10).map((activity, idx) => {
                 const date = new Date(activity.time);
                 const formattedTime = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 

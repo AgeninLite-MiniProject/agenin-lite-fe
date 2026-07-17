@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Minus, Plus, X, ShoppingCart, Package } from "lucide-react";
+import { CheckCircle2, Minus, Plus, X, ShoppingBasket, Package } from "lucide-react";
 
 import { useProducts } from "@/hooks/useProducts";
 import { useCreateTransaction } from "@/hooks/useCreateTransaction";
@@ -93,23 +93,23 @@ export default function TransactionPage() {
 
   return (
     <div className="flex-1 max-w-[1400px] mx-auto w-full min-h-[calc(100vh-121px)]">
-      <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start lg:h-full p-4 md:p-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 md:gap-8 items-start p-4 md:p-8">
 
         {/* LEFT COLUMN - PRODUCT CATALOG */}
-        <div className="flex-1 w-full lg:pb-24">
+        <div className="w-full lg:pb-24">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
             <div>
               <h1 className="text-3xl font-heading font-bold text-slate-900 mb-1">Katalog Produk</h1>
-              <p className="text-slate-500 text-[14px]">Pilih beberapa produk untuk ditambahkan ke transaksi</p>
+              <p className="text-slate-500 text-[14px] mb-4">Pilih beberapa produk untuk ditambahkan ke transaksi</p>
+              <Link to="/transaksi/pending" className="inline-block">
+                <Button variant="outline" className="rounded-full h-10 mt-4 text-primary border-blue-700/90 hover:bg-white/50 hover:text-primary font-semibold text-[13px] px-5 w-full sm:w-auto shadow-sm">
+                  Daftar Transaksi
+                </Button>
+              </Link>
             </div>
-            <Link to="/transaksi/pending">
-              <Button variant="outline" className="rounded-full h-10 text-[#004cd1] border-[#004cd1]/30 hover:bg-[#004cd1]/5 font-semibold text-[13px] px-5 w-full sm:w-auto shadow-sm">
-                Lihat Daftar Transaksi Pending
-              </Button>
-            </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 auto-rows-fr">
             {isLoading ? (
               <div className="col-span-full flex flex-col items-center justify-center h-48 text-slate-400">
                 <Loader2 className="w-8 h-8 animate-spin mb-4 text-primary" />
@@ -135,12 +135,12 @@ export default function TransactionPage() {
                 return (
                   <Card
                     key={product.product_id}
-                    className={`group rounded-2xl transition-all duration-200 relative overflow-hidden ${
+                    className={`group rounded-2xl transition-all duration-200 relative overflow-hidden border-t-4 flex flex-col ${
                       isSelected
-                        ? 'border-primary shadow-md ring-1 ring-primary/40 -translate-y-0.5 bg-white'
+                        ? 'border-t-primary border-primary/20 shadow-md ring-1 ring-primary/40 -translate-y-0.5 bg-white'
                         : !isActive
-                          ? 'border-slate-100 shadow-sm bg-slate-50/60 opacity-70'
-                          : 'border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-200 bg-white'
+                          ? 'border-t-slate-200 border-slate-100 shadow-sm bg-slate-50/60 opacity-70'
+                          : 'border-t-primary/80 border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-200 bg-white'
                     }`}
                   >
                     <CardContent className="p-5 md:p-6 flex flex-col h-full gap-5">
@@ -148,8 +148,8 @@ export default function TransactionPage() {
                       <div className="flex items-start justify-between">
                         <div className={`w-11 h-11 rounded-xl border-2 flex items-center justify-center transition-colors ${
                           isActive
-                            ? 'border-primary/50 bg-white hover:bg-primary/5'
-                            : 'border-slate-200 bg-white opacity-70'
+                            ? 'border-primary/65 bg-white hover:bg-primary/5'
+                            : 'border-slate-200 bg-white opacity-100'
                         }`}>
                           <Package className={`w-5 h-5 ${
                             isActive ? 'text-primary' : 'text-slate-400'
@@ -196,7 +196,7 @@ export default function TransactionPage() {
                               variant="outline"
                               disabled={!isActive}
                               onClick={() => handleToggleProduct(product.product_id)}
-                              className="w-full rounded-full px-5 h-12 text-[14px] font-semibold text-red-600 border-red-300 bg-white hover:bg-red-50 hover:text-red-600"
+                              className="w-full rounded-full px-5 h-10 text-[14px] font-semibold text-red-600 border-red-300 bg-white hover:bg-red-50/50 hover:text-red-600"
                             >
                               Batal Pilih
                             </Button>
@@ -206,9 +206,9 @@ export default function TransactionPage() {
                           <Button
                             disabled={!isActive}
                             onClick={() => handleToggleProduct(product.product_id)}
-                            className={`w-full rounded-full h-12 text-[14px] font-semibold transition-all ${
+                            className={`w-full rounded-full h-10 text-[14px] font-semibold transition-all ${
                               isActive
-                                ? 'bg-primary hover:bg-primary/90'
+                                ? 'bg-gradient-to-br from-blue-700 to-blue-900/85 hover:bg-primary/90'
                                 : 'bg-slate-200 text-slate-400 cursor-not-allowed hover:bg-slate-200'
                             }`}
                           >
@@ -225,12 +225,14 @@ export default function TransactionPage() {
         </div>
 
         {/* DESKTOP RIGHT COLUMN - CART DETAIL */}
-        <div className="hidden lg:flex lg:flex-col w-[400px] shrink-0">
-          <Card className="rounded-[20px] border-slate-100 shadow-lg bg-white overflow-hidden flex flex-col h-auto">
+        <div className="hidden lg:flex lg:flex-col sticky top-6 z-10">
+          <Card className="rounded-[20px] border-slate-100 shadow-lg bg-white overflow-hidden flex flex-col h-auto max-h-[calc(100vh-140px)]">
 
-            <div className="p-5 border-b border-slate-100 shrink-0">
-              <h2 className="text-[17px] font-bold text-slate-900 flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5 text-[#004cd1]" />
+            <div className="p-5 border-b border-slate-100 shrink-0 flex flex-col items-center justify-center gap-2.5">
+              <div className="flex-shrink-0 w-14 h-14 rounded-full bg-white border-2 border-blue-700 shadow-sm flex items-center justify-center">
+                <ShoppingBasket className="w-6 h-6 text-[#004cd1]" />
+              </div>
+              <h2 className="text-[16px] font-bold text-slate-900 text-center">
                 Detail Transaksi
               </h2>
             </div>
@@ -264,9 +266,9 @@ export default function TransactionPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-16 px-5 flex flex-col items-center">
-                  <ShoppingCart className="w-12 h-12 text-slate-200 mb-4" />
-                  <p className="text-slate-500 text-[13px]">Belum ada produk yang dipilih. Silakan pilih produk dari katalog.</p>
+                <div className="text-center py-10 px-5 flex flex-col items-center">
+                  <ShoppingBasket className="w-12 h-12 text-slate-200 mb-3" />
+                  <p className="text-slate-500 text-[13px]">Belum ada produk yang dipilih.</p>
                 </div>
               )}
             </CardContent>
@@ -302,7 +304,7 @@ export default function TransactionPage() {
               <Button
                 disabled={!hasItems || createTxMutation.isPending}
                 onClick={handleCreateTransaction}
-                className="w-full rounded-full h-12 mt-4 text-[14px] font-semibold bg-primary hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400">
+                className="w-full rounded-full h-11 mt-4 text-[14px] font-semibold bg-gradient-to-br from-blue-700 to-blue-900/85 hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400">
                 {createTxMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Transaksi Sekarang"}
               </Button>
             </div>

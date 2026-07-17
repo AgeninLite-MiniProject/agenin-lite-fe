@@ -108,7 +108,7 @@ const DownlinePage = () => {
             className={cn(
               "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
               filterStatus === "ALL"
-                ? "bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
             )}
           >
@@ -121,7 +121,7 @@ const DownlinePage = () => {
             className={cn(
               "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
               filterStatus === "ACTIVE"
-                ? "bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
             )}
           >
@@ -134,7 +134,7 @@ const DownlinePage = () => {
             className={cn(
               "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
               filterStatus === "PASSIVE"
-                ? "bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
             )}
           >
