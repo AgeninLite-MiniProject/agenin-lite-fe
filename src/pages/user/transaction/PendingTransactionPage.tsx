@@ -82,7 +82,7 @@ export default function PendingTransactionPage() {
   };
 
   return (
-    <div className="flex-1 max-w-4xl mx-auto w-full p-4 md:p-8 bg-[#fbfbfb] min-h-screen">
+    <div className="flex-1 max-w-4xl mx-auto w-full p-4 md:p-8 bg-root min-h-screen">
 
       {/* Tombol Kembali */}
       <Link to="/transaksi" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors mb-6">
@@ -129,21 +129,42 @@ export default function PendingTransactionPage() {
                     <div className="mb-4">
                       <button 
                         onClick={() => toggleExpand(trx.id)}
-                        className="flex items-center gap-2 text-[13px] font-medium text-[#004cd1] hover:text-[#004cd1]/80 transition-colors"
+                        className="flex items-center gap-2 text-[13px] font-medium text-primary transition-colors"
                       >
                         {trx.items && trx.items.length > 0 ? `Lihat ${trx.items.length} Produk` : "Tidak ada produk"}
                         <ChevronDown className={`w-4 h-4 transition-transform ${expandedIds.has(trx.id) ? "rotate-180" : ""}`} />
                       </button>
                       
-                      {expandedIds.has(trx.id) && trx.items && trx.items.length > 0 && (
-                        <div className="mt-3 space-y-2 pl-3 border-l-2 border-slate-100">
-                          {trx.items.map(item => (
-                            <h3 key={item.itemId} className="font-bold text-[14px] text-slate-800 truncate">
-                              {item.productName} <span className="text-slate-500 font-medium text-[12px]">x{item.quantity}</span>
-                            </h3>
-                          ))}
+                      <div 
+                        className={`grid transition-all duration-300 ease-in-out ${
+                          expandedIds.has(trx.id) ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+                        }`}
+                      >
+                        <div className="overflow-hidden">
+                          {trx.items && trx.items.length > 0 && (
+                            <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/80">
+                              <p className="text-[11px] font-semibold text-slate-500 mb-3 uppercase tracking-wider">Detail Produk</p>
+                              <div className="space-y-3">
+                                {trx.items.map((item: any) => {
+                                  const product = productsList?.find((p: any) => p.product_id === item.productId);
+                                  const itemFee = product ? (item.profit * (product.agent_fee / 100)) : 0;
+                                  return (
+                                    <div key={item.itemId} className="flex justify-between items-center text-[13px] bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                                      <h3 className="font-bold text-slate-800 truncate pr-2">
+                                        {item.productName} <span className="text-slate-500 font-medium text-[12px] ml-1">x{item.quantity}</span>
+                                      </h3>
+                                      <div className="text-right shrink-0">
+                                        <p className="text-[10px] text-slate-400 mb-0.5 font-medium">Estimasi Fee</p>
+                                        <p className="text-green-600 font-semibold text-[13px]">+ {formatCurrency(itemFee)}</p>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-6 gap-y-3">
@@ -163,7 +184,7 @@ export default function PendingTransactionPage() {
                   {/* Status & Action */}
                   <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-4 mt-2 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-slate-100">
                     <div className="flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 mb-0 sm:mb-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      {/* <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> */}
                       <span className="text-[10px] font-bold text-amber-700 tracking-wider">PENDING</span>
                     </div>
 
@@ -172,8 +193,8 @@ export default function PendingTransactionPage() {
                         <Button 
                           disabled={updateStatusMutation.isPending}
                           variant="outline" 
-                          className="rounded-full h-9 text-[#004cd1] border-[#004cd1] hover:bg-[#004cd1]/5 font-semibold text-[13px] px-4 w-full sm:w-auto">
-                          Update Status <ChevronDown className="w-4 h-4 ml-2 opacity-70" />
+                          className="rounded-full h-9 text-primary border-blue-700 hover:bg-white hover:text-primary font-semibold text-[13px] px-4 w-full sm:w-auto">
+                          Update Status <ChevronDown className="w-4 h-4 ml-1.5 opacity-90" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-lg border-slate-100 p-1">
@@ -187,7 +208,7 @@ export default function PendingTransactionPage() {
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleUpdateStatus(trx.id, "cancel")} className="flex items-center gap-2 cursor-pointer font-medium text-[13px] p-2 hover:bg-slate-100 focus:bg-slate-100 text-slate-700 focus:text-slate-900 rounded-lg mt-1">
                           <Ban className="w-4 h-4 text-slate-500" />
-                          Batalkan (Canceled)
+                          Batalkan (Cancelled)
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
