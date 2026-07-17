@@ -14,6 +14,7 @@ import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
 import { useTransactionDetailQuery } from "@/hooks/useTransactionDetailQuery";
 import { ErrorState } from "@/components/ui/ErrorState";
 import Image500 from "@/assets/500-error.webp";
+import { DotMap } from "@/components/ui/DotMap";
 import { formatRupiah, formatDateId, formatTrxId } from "@/lib/utils/format";
 import { cn } from "@/lib/utils";
 import type { TransactionStatus } from "@/schemas/transaction.schema";
@@ -78,8 +79,8 @@ function ExpandedItems({ trxId }: { trxId: string }) {
 
   if (isLoading) {
     return (
-      <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-muted-foreground">
-        Memuat item…
+      <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-muted-foreground flex items-center justify-center py-4">
+        <span className="animate-pulse">Memuat detail produk...</span>
       </div>
     );
   }
@@ -92,25 +93,31 @@ function ExpandedItems({ trxId }: { trxId: string }) {
   }
 
   return (
-    <div className="mt-4 pt-4 border-t border-slate-100 space-y-2">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-        Item dalam Transaksi ({data.items.length})
-      </p>
-      {data.items.map((item) => (
-        <div
-          key={item.itemId}
-          className="flex items-center justify-between gap-3 py-2 px-3 rounded-lg bg-slate-50"
-        >
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">
-              {item.productName ?? "(Produk telah dihapus)"}
-            </p>
-            <p className="text-[11px] text-muted-foreground">
-              {item.quantity} unit • {formatRupiah(item.itemAmount)} • Profit {formatRupiah(item.profit)}
-            </p>
-          </div>
+    <div className="mt-3 pt-4 border-t border-slate-100">
+      <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/80">
+        <p className="text-[11px] font-semibold text-slate-500 mb-3 uppercase tracking-wider">
+          Detail Produk ({data.items.length})
+        </p>
+        <div className="space-y-3">
+          {data.items.map((item) => (
+            <div
+              key={item.itemId}
+              className="flex justify-between items-center text-[13px] bg-white p-3 rounded-xl border border-slate-100 shadow-sm"
+            >
+              <div className="min-w-0 pr-3">
+                <h3 className="font-bold text-slate-800 truncate">
+                  {item.productName ?? "(Produk telah dihapus)"} <span className="text-slate-500 font-medium text-[12px] ml-1">x{item.quantity}</span>
+                </h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">Total Harga: {formatRupiah(item.itemAmount)}</p>
+              </div>
+              <div className="text-right shrink-0">
+                <p className="text-[10px] text-slate-400 mb-0.5 font-medium">Komisi Item</p>
+                <p className="text-green-600 font-semibold text-[13px]">+ {formatRupiah(item.profit)}</p>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
@@ -155,33 +162,40 @@ const HistoryPage = () => {
         </p>
       </div>
 
-      <Card className="rounded-2xl border-primary/10 shadow-sm">
-        <CardContent className="p-5 md:p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                <Wallet className="h-6 w-6 text-primary" strokeWidth={1.5} />
-              </div>
-              <div>
-                <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Total Komisi Anda
-                </p>
-                <p className="text-2xl md:text-3xl font-bold text-primary mt-0.5">
-                  {data ? formatRupiah(data.totalCommission) : "—"}
-                </p>
-              </div>
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+        <DotMap />
+        
+        {/* Pattern / Logo Overlay */}
+        <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
+        <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
+          <img src="/src/assets/ageninlitewhite2.webp" alt="" className="w-64 h-auto" />
+        </div>
+
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between w-full gap-6 md:gap-0">
+          <div className="flex items-center gap-4">
+            <div className="h-14 w-14 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 shadow-inner">
+              <Wallet className="h-7 w-7 text-white" strokeWidth={1.5} />
             </div>
-            <div className="md:border-l md:border-border md:pl-8">
-              <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                Total Transaksi Selesai
+            <div>
+              <p className="text-xs md:text-sm font-medium text-blue-200 uppercase tracking-widest mb-1">
+                Total Komisi Anda
               </p>
-              <p className="text-xl md:text-2xl font-bold text-foreground mt-0.5">
-                {data ? `${data.completedCount} Transaksi` : "—"}
+              <p className="text-2xl md:text-4xl font-extrabold text-white tracking-tight drop-shadow-sm">
+                {data ? formatRupiah(data.totalCommission) : "—"}
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+          
+          <div className="md:border-l border-white/20 md:pl-8 pt-4 md:pt-0 border-t md:border-t-0 flex flex-col md:items-end md:text-right">
+            <p className="text-xs md:text-sm font-medium text-blue-200 uppercase tracking-widest mb-1">
+              Total Transaksi Selesai
+            </p>
+            <p className="text-xl md:text-2xl font-bold text-white drop-shadow-sm">
+              {data ? `${data.completedCount} Transaksi` : "—"}
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full">
         {STATUS_TABS.map((tab) => {
@@ -195,7 +209,7 @@ const HistoryPage = () => {
               className={cn(
                 "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
                 isActive
-                  ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
+                  ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/75 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                   : "text-slate-600 hover:text-slate-900",
               )}
             >
