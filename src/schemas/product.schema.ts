@@ -41,11 +41,11 @@ export type CreateProductFormValues = z.infer<typeof createProductSchema>;
 
 // Update Product
 export const updateProductSchema = z.object({
-  product_name: z.string().optional(),
-  cost_price: requiredNumber("Cost price is required").optional(),
-  selling_price: requiredNumber("Selling price is required").optional(),
-  agent_fee: requiredNumber("Agent fee is required").optional(),
-  super_agent_fee: requiredNumber("Super agent fee is required").optional(),
+  product_name: z.string().min(1, { message: "Product name is required" }),
+  cost_price: requiredNumber("Cost price is required"),
+  selling_price: requiredNumber("Selling price is required"),
+  agent_fee: requiredNumber("Agent fee is required"),
+  super_agent_fee: requiredNumber("Super agent fee is required"),
   product_status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
 }).superRefine((data, ctx) => {
   if (typeof data.cost_price === 'number' && typeof data.selling_price === 'number') {
