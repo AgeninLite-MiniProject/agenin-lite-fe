@@ -43,8 +43,9 @@ export const loginSchema = z.object({
     }),
   password: z
     .string()
-    .min(8, { message: "Password Minimal 8 Karakter!" })
-    .max(15, { message: "Password Maksimal 15 Karakter!" }),
+    .min(1, { message: "Password Wajib Diisi!" })
+    .refine((val) => val.length === 0 || val.length >= 8, { message: "Password Minimal 8 Karakter!" })
+    .refine((val) => val.length <= 15, { message: "Password Maksimal 15 Karakter!" }),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;

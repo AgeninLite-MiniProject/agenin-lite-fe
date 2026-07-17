@@ -77,25 +77,25 @@ export function EditProductModal({ product }: { product: any }) {
           
           <div className="flex flex-col gap-2">
             <Label htmlFor={`costPrice-${product.product_id}`} className="text-sm font-medium text-slate-700">Cost Price (Rp)</Label>
-            <Input id={`costPrice-${product.product_id}`} {...form.register("cost_price")} placeholder="40000" type="number" className="rounded-lg h-11" />
+            <Input id={`costPrice-${product.product_id}`} {...form.register("cost_price")} placeholder="40000" type="number" step="any" className="rounded-lg h-11" />
             {form.formState.errors.cost_price && <p className="text-red-500 text-xs">{form.formState.errors.cost_price.message}</p>}
           </div>
           
           <div className="flex flex-col gap-2">
             <Label htmlFor={`sellingPrice-${product.product_id}`} className="text-sm font-medium text-slate-700">Selling Price (Rp)</Label>
-            <Input id={`sellingPrice-${product.product_id}`} {...form.register("selling_price")} placeholder="50000" type="number" className="rounded-lg h-11" />
+            <Input id={`sellingPrice-${product.product_id}`} {...form.register("selling_price")} placeholder="50000" type="number" step="any" className="rounded-lg h-11" />
             {form.formState.errors.selling_price && <p className="text-red-500 text-xs">{form.formState.errors.selling_price.message}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor={`agentFee-${product.product_id}`} className="text-sm font-medium text-slate-700">Agent Fee (%)</Label>
-              <Input id={`agentFee-${product.product_id}`} {...form.register("agent_fee")} placeholder="10" type="number" className="rounded-lg h-11" />
+              <Input id={`agentFee-${product.product_id}`} {...form.register("agent_fee")} placeholder="10" type="number" step="any" className="rounded-lg h-11" />
               {form.formState.errors.agent_fee && <p className="text-red-500 text-xs">{form.formState.errors.agent_fee.message}</p>}
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor={`superAgentFee-${product.product_id}`} className="text-sm font-medium text-slate-700">Super Agent Fee (%)</Label>
-              <Input id={`superAgentFee-${product.product_id}`} {...form.register("super_agent_fee")} placeholder="5" type="number" className="rounded-lg h-11" />
+              <Input id={`superAgentFee-${product.product_id}`} {...form.register("super_agent_fee")} placeholder="5" type="number" step="any" className="rounded-lg h-11" />
               {form.formState.errors.super_agent_fee && <p className="text-red-500 text-xs">{form.formState.errors.super_agent_fee.message}</p>}
             </div>
           </div>

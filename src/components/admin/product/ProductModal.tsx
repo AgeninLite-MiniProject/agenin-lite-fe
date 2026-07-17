@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProductSchema, type CreateProductFormValues } from "@/schemas/product.schema";
@@ -19,7 +19,7 @@ import { Plus } from "lucide-react";
 
 export function ProductModal() {
   const [open, setOpen] = useState(false);
-  
+
   const { mutate: createProduct, isPending: isLoading } = useCreateProductMutation();
 
   const form = useForm<CreateProductFormValues>({
@@ -62,33 +62,27 @@ export function ProductModal() {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="costPrice" className="text-sm font-medium text-slate-700">Cost Price (Rp)</Label>
-            <Input id="costPrice" {...form.register("cost_price")} placeholder="40000" type="number" className="rounded-lg h-11" />
+            <Input id="costPrice" {...form.register("cost_price")} placeholder="40000" type="number" step="any" className="rounded-lg h-11" />
             {form.formState.errors.cost_price && <p className="text-red-500 text-xs">{form.formState.errors.cost_price.message}</p>}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="sellingPrice" className="text-sm font-medium text-slate-700">Selling Price (Rp)</Label>
-            <Input id="sellingPrice" {...form.register("selling_price")} placeholder="50000" type="number" className="rounded-lg h-11" />
+            <Input id="sellingPrice" {...form.register("selling_price")} placeholder="50000" type="number" step="any" className="rounded-lg h-11" />
             {form.formState.errors.selling_price && <p className="text-red-500 text-xs">{form.formState.errors.selling_price.message}</p>}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="agentFee" className="text-sm font-medium text-slate-700">Agent Fee (%)</Label>
-              <Input id="agentFee" {...form.register("agent_fee")} placeholder="10" type="number" className="rounded-lg h-11" />
+              <Input id="agentFee" {...form.register("agent_fee")} placeholder="10" type="number" step="any" className="rounded-lg h-11" />
               {form.formState.errors.agent_fee && <p className="text-red-500 text-xs">{form.formState.errors.agent_fee.message}</p>}
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="superAgentFee" className="text-sm font-medium text-slate-700">Super Agent Fee (%)</Label>
-              <Input id="superAgentFee" {...form.register("super_agent_fee")} placeholder="5" type="number" className="rounded-lg h-11" />
+              <Input id="superAgentFee" {...form.register("super_agent_fee")} placeholder="5" type="number" step="any" className="rounded-lg h-11" />
               {form.formState.errors.super_agent_fee && <p className="text-red-500 text-xs">{form.formState.errors.super_agent_fee.message}</p>}
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="status" className="text-sm font-medium text-slate-700">Status</Label>
-            <select id="status" className="flex h-11 w-full rounded-lg border border-slate-200 bg-white px-3 pr-10 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 text-slate-700">
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-            </select>
-          </div>
+
           <DialogFooter className="flex sm:justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-xl px-6 h-11 text-slate-600 border-slate-200 hover:bg-slate-50 font-semibold">
               Cancel
