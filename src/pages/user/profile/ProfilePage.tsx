@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Copy, Mail, Phone, Link as LinkIcon, User, Loader2, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useDashboardSummary } from "@/hooks/useDashboard";
 import { ErrorState } from "@/components/ui/ErrorState";
 import Image500 from "@/assets/500-error.webp";
+import { DotMap } from "@/components/ui/DotMap";
 
 export default function ProfilePage() {
   const { data: dashboard, isLoading, isError } = useDashboardSummary();
@@ -39,10 +40,16 @@ export default function ProfilePage() {
     <div className="flex-1 p-4 md:p-8 w-full max-w-5xl mx-auto flex items-center justify-center min-h-[calc(100vh-80px)]">
       <div className="w-full max-w-2xl bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
         {/* Header Background */}
-        <div className="h-32 bg-blue-100/70 w-full relative"></div>
+        <div className="h-56 bg-gradient-to-br from-blue-700 to-blue-900 w-full relative overflow-hidden">
+          <DotMap />
+          <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
+          <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
+            <img src="/src/assets/ageninlitewhite2.webp" alt="" className="w-64 h-auto" />
+          </div>
+        </div>
 
         {/* Profile Content */}
-        <div className="px-8 pb-10 flex flex-col items-center">
+        <div className="px-8 pb-4 flex flex-col items-center">
           
           {/* Avatar Section */}
           <div className="relative -mt-16 flex flex-col items-center">
@@ -55,15 +62,22 @@ export default function ProfilePage() {
             </div>
             
             {/* Status Badge */}
-            <div className="absolute -bottom-3 bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest flex items-center gap-1.5 border-2 border-white shadow-sm">
-              {user.user_status === "ACTIVE" && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>}
+            <Badge 
+              variant="outline" 
+              className={`absolute -bottom-3 px-3 py-1 text-[11px] font-bold tracking-widest flex items-center gap-1.5 border-2 shadow-sm ${
+                user.user_status === "ACTIVE" 
+                  ? "bg-white text-green-600 border-green-500 border-2 font-bold" 
+                  : "bg-white text-slate-600 border-slate-200"
+              }`}
+            >
+              {user.user_status === "ACTIVE"}
               {user.user_status}
-            </div>
+            </Badge>
           </div>
 
           {/* Name & Contact */}
           <div className="mt-8 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 font-serif tracking-tight">
+            <h2 className="text-2xl font-bold text-gray-900 font-heading tracking-tight">
               {user.user_name}
             </h2>
             <div className="flex items-center justify-center gap-4 mt-3 text-sm text-gray-500 font-medium">
@@ -90,7 +104,7 @@ export default function ProfilePage() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* Referral Code Card */}
-            <div className="bg-slate-50/80 rounded-3xl p-6 flex flex-col items-center justify-center text-center border border-slate-100">
+            <div className="bg-slate-100/50 shadow-sm rounded-3xl p-6 flex flex-col items-center justify-center text-center border border-slate-100">
               <p className="text-[10px] font-bold text-gray-400 tracking-wider mb-3">
                 YOUR REFERRAL CODE
               </p>
@@ -110,23 +124,25 @@ export default function ProfilePage() {
             </div>
 
             {/* Referred By Card */}
-            <div className="bg-slate-50/80 rounded-3xl p-6 flex flex-col items-center justify-center text-center border border-slate-100">
+            <div className="bg-slate-100/50 rounded-3xl p-6 flex flex-col items-center justify-center text-center border border-slate-100 shadow-sm">
               <p className="text-[10px] font-bold text-gray-400 tracking-wider mb-4">
                 REFERRED BY
               </p>
               
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-200">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-700 to-blue-900/85 flex items-center justify-center text-white shadow-sm shadow-blue-200">
                   <User className="w-6 h-6" />
                 </div>
                 <div className="text-left">
-                  <h4 className="text-sm font-bold text-gray-900">
-                    {user.referred_by || "Pusat (HQ)"}
-                  </h4>
-                  <a href="#" className="flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:text-blue-700 mt-0.5">
-                    <LinkIcon className="w-3 h-3" />
-                    View Profile
-                  </a>
+                  {user.referred_by ? (
+                    <h4 className="text-sm font-bold text-gray-900">
+                      {user.referred_by}
+                    </h4>
+                  ) : (
+                    <h4 className="text-sm font-medium text-gray-400 italic">
+                      Tidak ada upline
+                    </h4>
+                  )}
                 </div>
               </div>
             </div>
