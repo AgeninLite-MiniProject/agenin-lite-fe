@@ -82,7 +82,7 @@ export default function AdminUsersPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">User Management</h1>
         <p className="text-slate-500 mt-2 text-lg">
-          Monitor registered agents and manage account suspensions.
+          Monitor registered agents and manage account bans.
         </p>
       </div>
 
@@ -182,7 +182,7 @@ export default function AdminUsersPage() {
                         onClick={() => setUserToDelete({ id: user.user_id, name: user.name })}
                         className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 hover:border-red-300 font-semibold rounded-full px-4"
                       >
-                        Deactivate
+                        Ban
                       </Button>
                     ) : (
                       <span className="text-sm text-slate-400 font-medium">No action</span>
@@ -213,9 +213,9 @@ export default function AdminUsersPage() {
       }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Deactivate User Account</DialogTitle>
+            <DialogTitle>Ban User Account</DialogTitle>
             <DialogDescription>
-              Are you sure you want to deactivate the account for <strong className="text-slate-800">{userToDelete?.name}</strong>? 
+              Are you sure you want to ban the account for <strong className="text-slate-800">{userToDelete?.name}</strong>? 
               This action will mark the user as deleted and prevent them from logging in.
             </DialogDescription>
           </DialogHeader>
@@ -225,7 +225,7 @@ export default function AdminUsersPage() {
               Cancel
             </Button>
             <Button variant="destructive" onClick={confirmDelete} disabled={isDeleting}>
-              {isDeleting ? "Deactivating..." : "Yes, Deactivate Account"}
+              {isDeleting ? "Banning..." : "Yes, Ban Account"}
             </Button>
           </DialogFooter>
         </DialogContent>
