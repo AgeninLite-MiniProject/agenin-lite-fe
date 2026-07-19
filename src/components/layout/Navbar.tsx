@@ -6,7 +6,6 @@ import {
   ShoppingCart,
   Clock,
   User,
-  Bell,
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";

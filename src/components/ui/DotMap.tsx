@@ -1,27 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 
-type RoutePoint = {
-  x: number;
-  y: number;
-  delay: number;
-};
-
 export const DotMap = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  const routes: { start: RoutePoint; end: RoutePoint; color: string }[] = [
-    // Top routes
-    { start: { x: 100, y: 150, delay: 0 }, end: { x: 200, y: 80, delay: 2 }, color: "#93c5fd" },
-    { start: { x: 200, y: 80, delay: 2 }, end: { x: 260, y: 120, delay: 4 }, color: "#93c5fd" },
-    { start: { x: 50, y: 50, delay: 1 }, end: { x: 150, y: 180, delay: 3 }, color: "#93c5fd" },
-    { start: { x: 280, y: 60, delay: 0.5 }, end: { x: 180, y: 180, delay: 2.5 }, color: "#93c5fd" },
-    // Bottom routes
-    { start: { x: 120, y: 450, delay: 1 }, end: { x: 220, y: 520, delay: 3 }, color: "#93c5fd" },
-    { start: { x: 220, y: 520, delay: 3 }, end: { x: 320, y: 460, delay: 5 }, color: "#93c5fd" },
-    { start: { x: 80, y: 550, delay: 1.5 }, end: { x: 180, y: 480, delay: 3.5 }, color: "#93c5fd" },
-    { start: { x: 250, y: 420, delay: 0.5 }, end: { x: 150, y: 500, delay: 2.5 }, color: "#93c5fd" },
-  ];
 
   const generateDots = (width: number, height: number) => {
     const dots = [];

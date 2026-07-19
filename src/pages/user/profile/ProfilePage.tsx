@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Copy, Mail, Phone, Link as LinkIcon, User, Loader2, Check } from "lucide-react";
+import { useState } from "react";
+import { Copy, Mail, Phone, User, Loader2, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDashboardSummary } from "@/hooks/useDashboard";
 import { ErrorState } from "@/components/ui/ErrorState";
