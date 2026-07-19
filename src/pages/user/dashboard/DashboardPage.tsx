@@ -5,7 +5,6 @@ import { Calculator, Send, Copy, Check, Loader2, Users, Clock, Wallet, ChevronRi
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useDashboardSummary } from "@/hooks/useDashboard";
 import { DotMap } from "@/components/ui/DotMap";
 import { ErrorState } from "@/components/ui/ErrorState";

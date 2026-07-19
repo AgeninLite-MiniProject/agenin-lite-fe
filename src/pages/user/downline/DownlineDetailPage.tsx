@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Phone, Mail, Receipt, Loader2, ChevronDown, CheckCircle2, HistoryIcon } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, Phone, Mail, Loader2, ChevronDown, CheckCircle2, HistoryIcon } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useDownlineDetail } from "@/hooks/useDownlineDetail";
