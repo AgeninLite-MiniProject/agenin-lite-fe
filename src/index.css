@@ -2,11 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
+    --font-heading: 'Plus Jakarta Sans Variable', sans-serif;
     --font-sans: 'Inter Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -49,38 +50,88 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    /* Page background — soft cream, not white */
+    --background: #F1F5F9;
+    --foreground: #0F172A;
+
+    /* Cards, popovers — pure white surface */
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    --popover: #FFFFFF;
+    --popover-foreground: #0F172A;
+
+    /* Primary — Agentin blue (CTAs, links, active nav) */
+    --primary: #1b56fd;
+    --primary-foreground: #FFFFFF;
+
+    /* Secondary — warm tan (page tint, secondary actions) */
+    --secondary: #D4B97E;
+    --secondary-foreground: #0F172A;
+
+    /* Muted (subtle backgrounds, disabled) */
+    --muted: #F1F5F9;
+    --muted-foreground: #64748B;
+
+    /* Accent (hover, subtle highlights) */
+    --accent: #E5EDFF;
+    --accent-foreground: #1640C2;
+
+    /* Destructive (Tolak, errors, delete) */
+    --destructive: #DC2626;
+
+    /* Borders & inputs */
+    --border: #E2E8F0;
+    --input: #E2E8F0;
+    --ring: #1A4FE0;
+
+    /* Brand palette — extended scale */
+    --brand-blue-50:  #F2F6FF;
+    --brand-blue-100: #E5EDFF;
+    --brand-blue-500: #1A4FE0;
+    --brand-blue-600: #1640C2;
+    --brand-blue-700: #0F2E99;
+
+    --brand-tan-50:  #FBF7F0;
+    --brand-tan-100: #F4ECD8;
+    --brand-tan-500: #D4B97E;
+
+    /* Semantic status (icons, text, solid fills) */
+    --success: #16A34A;
+    --warning: #EA580C;
+    --warning-dark: #92400E;
+    --info:    #3B82F6;
+    --danger:  #BA1A1A;
+
+    /* Status badge — soft-tinted backgrounds + matching text */
+    --badge-pending-bg:    #FFF7ED;  --badge-pending-fg:    #EA580C;
+    --badge-accepted-bg:   #F0FDF4;  --badge-accepted-fg:   #16A34A;
+    --badge-completed-bg:  #F0FDF4;  --badge-completed-fg:  #16A34A;
+    --badge-declined-bg:   #FEF2F2;  --badge-declined-fg:   #BA1A1A;
+    --badge-failed-bg:     #FEF2F2;  --badge-failed-fg:     #BA1A1A;
+    --badge-cancelled-bg:  #F1F5F9;  --badge-cancelled-fg:  #475569;
+    --badge-active-bg:     #F0FDF4;  --badge-active-fg:     #16A34A;
+    --badge-downliner-bg:  #EDE9FE;  --badge-downliner-fg:  #6D28D9;
+    --badge-info-bg:       #DBEAFE;  --badge-info-fg:       #1D4ED8;
+
+    /* Chart palette */
+    --chart-1: #1A4FE0;
+    --chart-2: #10B981;
+    --chart-3: #D97706;
+    --chart-4: #6D28D9;
+    --chart-5: #DC2626;
+
+    /* Shape */
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+
+    /* Sidebar (kept neutral, not used yet) */
+    --sidebar: #FFFFFF;
+    --sidebar-foreground: #0F172A;
+    --sidebar-primary: #1A4FE0;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: #E5EDFF;
+    --sidebar-accent-foreground: #1640C2;
+    --sidebar-border: #E2E8F0;
+    --sidebar-ring: #1A4FE0;
 }
 
 .dark {
