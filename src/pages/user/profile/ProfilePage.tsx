@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { useDashboardSummary } from "@/hooks/useDashboard";
 import { ErrorState } from "@/components/ui/ErrorState";
 import Image500 from "@/assets/500-error.webp";
+import logoWhite from "@/assets/ageninlitewhite2.webp";
 import { DotMap } from "@/components/ui/DotMap";
 
 export default function ProfilePage() {
@@ -44,7 +45,7 @@ export default function ProfilePage() {
           <DotMap />
           <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
           <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
-            <img src="/src/assets/ageninlitewhite2.webp" alt="" className="w-64 h-auto" />
+            <img src={logoWhite} alt="AgeninLite" className="w-64 h-auto" />
           </div>
         </div>
 

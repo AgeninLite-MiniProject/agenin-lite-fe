@@ -8,6 +8,7 @@ import { useDownlineDetail } from "@/hooks/useDownlineDetail";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { DotMap } from "@/components/ui/DotMap";
 import Image500 from "@/assets/500-error.webp";
+import logoWhite from "@/assets/ageninlitewhite2.webp";
 
 export default function DownlineDetailPage() {
 
@@ -77,7 +78,7 @@ export default function DownlineDetailPage() {
         {/* Pattern / Logo Overlay */}
         <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
         <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
-          <img src="/src/assets/ageninlitewhite2.webp" alt="" className="w-64 h-auto" />
+          <img src={logoWhite} alt="AgeninLite" className="w-64 h-auto" />
         </div>
 
         <Avatar className="relative z-10 h-24 w-24 md:h-28 md:w-28 border-4 border-white/20 shadow-sm bg-blue-800 shrink-0">

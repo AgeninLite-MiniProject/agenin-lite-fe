@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import apiClient from "@/lib/axios";
 import { useAuthStore } from "@/store/auth.store";
+import logoBlue from "@/assets/ageninliteBlue.webp";
 
 export const menuItems = [
   { label: "Home", path: "/dashboard", icon: Home },
@@ -57,7 +58,7 @@ const Navbar = () => {
         {/* LEFT — Logo */}
         <Link to="/dashboard" className="flex items-center gap-2">
           <img
-            src="/src/assets/ageninliteBlue.webp"
+            src={logoBlue}
             alt="AgeninLite Logo"
             className="h-6"
           />

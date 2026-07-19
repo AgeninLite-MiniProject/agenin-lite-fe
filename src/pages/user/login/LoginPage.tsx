@@ -8,6 +8,8 @@ import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
 import { motion } from "framer-motion";
+import logoWhite from "@/assets/ageninlitewhite2.webp";
+import logoBlue from "@/assets/ageninliteBlue.webp";
 
 // --- Animasi Peta Titik (Dot Map) disesuaikan dengan warna biru AgeninLite ---
 type RoutePoint = {
@@ -251,7 +253,7 @@ export default function LoginPage() {
                 className="mb-6"
               >
                 <img
-                  src="/src/assets/ageninlitewhite2.webp"
+                  src={logoWhite}
                   alt="AgeninLite Logo"
                   className="h-14 w-auto drop-shadow-md"
                 />
@@ -286,7 +288,7 @@ export default function LoginPage() {
               {/* Mobile Logo */}
               <div className="flex lg:hidden flex-col items-center justify-center space-y-4 mb-8">
                 <img
-                  src="/src/assets/ageninliteBlue.webp"
+                  src={logoBlue}
                   alt="AgeninLite Logo"
                   className="h-8 w-auto"
                 />
