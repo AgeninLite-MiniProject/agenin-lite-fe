@@ -117,7 +117,7 @@ export default function TransactionPage() {
               </div>
             ) : isError ? (
               <div className="col-span-full">
-                <ErrorState 
+                <ErrorState
                   title="Gagal memuat produk"
                   message="Terjadi kesalahan sistem saat mengambil katalog produk dari server."
                   imageSrc={Image500}
@@ -135,33 +135,29 @@ export default function TransactionPage() {
                 return (
                   <Card
                     key={product.product_id}
-                    className={`group rounded-2xl transition-all duration-200 relative overflow-hidden border-t-4 flex flex-col ${
-                      isSelected
+                    className={`group rounded-2xl transition-all duration-200 relative overflow-hidden border-t-4 flex flex-col ${isSelected
                         ? 'border-t-primary border-primary/20 shadow-md ring-1 ring-primary/40 -translate-y-0.5 bg-white'
                         : !isActive
                           ? 'border-t-slate-200 border-slate-100 shadow-sm bg-slate-50/60 opacity-70'
                           : 'border-t-primary/80 border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-200 bg-white'
-                    }`}
+                      }`}
                   >
                     <CardContent className="p-5 md:p-6 flex flex-col h-full gap-5">
                       {/* Top row: soft icon square + status badge + selected check */}
                       <div className="flex items-start justify-between">
-                        <div className={`w-11 h-11 rounded-xl border-2 flex items-center justify-center transition-colors ${
-                          isActive
+                        <div className={`w-11 h-11 rounded-xl border-2 flex items-center justify-center transition-colors ${isActive
                             ? 'border-primary/65 bg-white hover:bg-primary/5'
                             : 'border-slate-200 bg-white opacity-100'
-                        }`}>
-                          <Package className={`w-5 h-5 ${
-                            isActive ? 'text-primary' : 'text-slate-400'
-                          }`} strokeWidth={1.75} />
+                          }`}>
+                          <Package className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-slate-400'
+                            }`} strokeWidth={1.75} />
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Badge className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
-                            isActive
+                          <Badge className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${isActive
                               ? 'bg-transparent text-emerald-700 border border-emerald-300 hover:bg-transparent'
                               : 'bg-slate-100 text-slate-500 border-0 hover:bg-slate-100'
-                          }`}>
+                            }`}>
                             {product.product_status}
                           </Badge>
                           {isSelected && (
@@ -174,15 +170,13 @@ export default function TransactionPage() {
 
                       {/* Name + price — the only "loud" content on the card */}
                       <div>
-                        <h3 className={`font-bold text-[15px] leading-snug mb-1.5 ${
-                          isActive ? 'text-slate-900' : 'text-slate-500'
-                        }`}>
+                        <h3 className={`font-bold text-[15px] leading-snug mb-1.5 ${isActive ? 'text-slate-900' : 'text-slate-500'
+                          }`}>
                           {product.product_name}
                         </h3>
                         <div className="flex items-baseline gap-1.5">
-                          <p className={`text-xl md:text-2xl font-extrabold tracking-tight ${
-                            isActive ? 'text-slate-900' : 'text-slate-500'
-                          }`}>
+                          <p className={`text-xl md:text-2xl font-extrabold tracking-tight ${isActive ? 'text-slate-900' : 'text-slate-500'
+                            }`}>
                             {formatCurrency(product.selling_price)}
                           </p>
                           <span className="text-[11px] font-medium text-slate-400">/ unit</span>
@@ -206,11 +200,10 @@ export default function TransactionPage() {
                           <Button
                             disabled={!isActive}
                             onClick={() => handleToggleProduct(product.product_id)}
-                            className={`w-full rounded-full h-10 text-[14px] font-semibold transition-all ${
-                              isActive
+                            className={`w-full rounded-full h-10 text-[14px] font-semibold transition-all ${isActive
                                 ? 'bg-gradient-to-br from-blue-700 to-blue-900/85 hover:bg-primary/90'
                                 : 'bg-slate-200 text-slate-400 cursor-not-allowed hover:bg-slate-200'
-                            }`}
+                              }`}
                           >
                             {isActive ? 'Tambah ke Transaksi' : 'Tidak tersedia'}
                           </Button>
@@ -294,7 +287,7 @@ export default function TransactionPage() {
                 {hasItems && (
                   <div className="flex items-center justify-between bg-green-50/80 px-3 py-2 rounded-lg border border-green-100">
                     <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-700">
-                      Total Fee
+                      Komisi Agen
                     </div>
                     <span className="font-bold text-[13px] text-green-700">{formatCurrency(totalEstimasiFee)}</span>
                   </div>
