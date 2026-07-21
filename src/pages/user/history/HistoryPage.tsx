@@ -13,6 +13,7 @@ import {
 import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
 import { ErrorState } from "@/components/ui/ErrorState";
 import Image500 from "@/assets/500-error.webp";
+import logoWhite from "@/assets/ageninlitewhite2.webp";
 import { DotMap } from "@/components/ui/DotMap";
 import { formatRupiah, formatDateId, formatTrxId } from "@/lib/utils/format";
 import { cn } from "@/lib/utils";
@@ -117,11 +118,7 @@ const HistoryPage = () => {
         {/* Pattern / Logo Overlay */}
         <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
         <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
-          <img
-            src="/src/assets/ageninlitewhite2.webp"
-            alt=""
-            className="w-64 h-auto"
-          />
+          <img src={logoWhite} alt="AgeninLite" className="w-64 h-auto" />
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between w-full gap-6 md:gap-0">

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import logoMark from "@/assets/logoAgeninlite-A.webp";
 
 const Footer = () => {
   return (
@@ -7,7 +7,7 @@ const Footer = () => {
         {/* LEFT — Brand Logo */}
         <div className="flex-1 w-full md:w-auto text-center md:text-left">
           <img
-            src="/src/assets/logoAgeninlite-A.webp"
+            src={logoMark}
             alt="AgeninLite Logo"
             className="h-8"
           />
