@@ -53,6 +53,7 @@ export const TransactionItemLineSchema = z.object({
   quantity: z.number().int(),
   itemAmount: z.number(),
   profit: z.number(),
+  agentFeeAmount: z.number(),
 });
 export type TransactionItemLine = z.infer<typeof TransactionItemLineSchema>;
 
@@ -80,20 +81,3 @@ export const TransactionListResponseV2Schema = z.object({
   totalPages: z.number().int().min(0),
 });
 export type TransactionListResponseV2 = z.infer<typeof TransactionListResponseV2Schema>;
-
-// Detail shape (returned by GET /api/transactions/{id}, used by the inline expand)
-export const TransactionDetailResponseSchema = z.object({
-  id: z.string().uuid(),
-  status: TransactionStatusSchema,
-  amount: z.number(),
-  profit: z.number(),
-  agentFeeAmount: z.number(),
-  superAgentFeeAmount: z.number(),
-  createdAt: z.string(),
-  completedAt: z.string().nullable(),
-  description: z.string().nullable(),
-  sellerId: z.string().uuid(),
-  sellerName: z.string(),
-  items: z.array(TransactionItemLineSchema),
-});
-export type TransactionDetailResponse = z.infer<typeof TransactionDetailResponseSchema>;

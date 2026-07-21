@@ -11,7 +11,6 @@ import {
   Package,
 } from "lucide-react";
 import { useTransactionListQuery } from "@/hooks/useTransactionListQuery";
-import { useTransactionDetailQuery } from "@/hooks/useTransactionDetailQuery";
 import { ErrorState } from "@/components/ui/ErrorState";
 import Image500 from "@/assets/500-error.webp";
 import { DotMap } from "@/components/ui/DotMap";
@@ -54,72 +53,27 @@ const STATUS_CONFIG: Record<
   },
 };
 
-const STATUS_TABS: Array<{ value: TransactionStatus | "ALL"; label: string }> = [
-  { value: "ALL", label: "All" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "PENDING", label: "Pending" },
-  { value: "FAILED", label: "Failed" },
-  { value: "CANCELLED", label: "Cancelled" },
-];
+const STATUS_TABS: Array<{ value: TransactionStatus | "ALL"; label: string }> =
+  [
+    { value: "ALL", label: "All" },
+    { value: "COMPLETED", label: "Completed" },
+    { value: "PENDING", label: "Pending" },
+    { value: "FAILED", label: "Failed" },
+    { value: "CANCELLED", label: "Cancelled" },
+  ];
 
 function getStatusIcon(status: TransactionStatus) {
   switch (status) {
     case "COMPLETED":
-      return <CheckCircle2 className="h-5 w-5 text-green-600" strokeWidth={1.5} />;
+      return (
+        <CheckCircle2 className="h-5 w-5 text-green-600" strokeWidth={1.5} />
+      );
     case "PENDING":
       return <Hourglass className="h-5 w-5 text-amber-600" strokeWidth={1.5} />;
     case "FAILED":
     case "CANCELLED":
       return <XCircle className="h-5 w-5 text-red-500" strokeWidth={1.5} />;
   }
-}
-
-function ExpandedItems({ trxId }: { trxId: string }) {
-  const { data, isLoading, isError } = useTransactionDetailQuery(trxId);
-
-  if (isLoading) {
-    return (
-      <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-muted-foreground flex items-center justify-center py-4">
-        <span className="animate-pulse">Memuat detail produk...</span>
-      </div>
-    );
-  }
-  if (isError || !data) {
-    return (
-      <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-red-600">
-        Gagal memuat detail transaksi.
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-3 pt-4 border-t border-slate-100">
-      <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/80">
-        <p className="text-[11px] font-semibold text-slate-500 mb-3 uppercase tracking-wider">
-          Detail Produk ({data.items.length})
-        </p>
-        <div className="space-y-3">
-          {data.items.map((item) => (
-            <div
-              key={item.itemId}
-              className="flex justify-between items-center text-[13px] bg-white p-3 rounded-xl border border-slate-100 shadow-sm"
-            >
-              <div className="min-w-0 pr-3">
-                <h3 className="font-bold text-slate-800 truncate">
-                  {item.productName ?? "(Produk telah dihapus)"} <span className="text-slate-500 font-medium text-[12px] ml-1">x{item.quantity}</span>
-                </h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">Total Harga: {formatRupiah(item.itemAmount)}</p>
-              </div>
-              <div className="text-right shrink-0">
-                <p className="text-[10px] text-slate-400 mb-0.5 font-medium">Komisi Item</p>
-                <p className="text-green-600 font-semibold text-[13px]">+ {formatRupiah(item.profit)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
 }
 
 const HistoryPage = () => {
@@ -136,13 +90,8 @@ const HistoryPage = () => {
     });
   };
 
-  const {
-    data,
-    isLoading,
-    isError,
-    isFetching,
-    isPlaceholderData,
-  } = useTransactionListQuery({ status, page, size: 20 });
+  const { data, isLoading, isError, isFetching, isPlaceholderData } =
+    useTransactionListQuery({ status, page, size: 20 });
 
   const handleStatusChange = (next: TransactionStatus | "ALL") => {
     setStatus(next);
@@ -164,11 +113,15 @@ const HistoryPage = () => {
 
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
         <DotMap />
-        
+
         {/* Pattern / Logo Overlay */}
         <div className="absolute inset-0 bg-black/10 z-0 pointer-events-none"></div>
         <div className="absolute -left-10 -bottom-10 opacity-10 pointer-events-none z-0">
-          <img src="/src/assets/ageninlitewhite2.webp" alt="" className="w-64 h-auto" />
+          <img
+            src="/src/assets/ageninlitewhite2.webp"
+            alt=""
+            className="w-64 h-auto"
+          />
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between w-full gap-6 md:gap-0">
@@ -185,7 +138,7 @@ const HistoryPage = () => {
               </p>
             </div>
           </div>
-          
+
           <div className="md:border-l border-white/20 md:pl-8 pt-4 md:pt-0 border-t md:border-t-0 flex flex-col md:items-end md:text-right">
             <p className="text-xs md:text-sm font-medium text-blue-200 uppercase tracking-widest mb-1">
               Total Transaksi Selesai
@@ -232,7 +185,7 @@ const HistoryPage = () => {
             </Card>
           ))
         ) : isError ? (
-          <ErrorState 
+          <ErrorState
             title="Gagal memuat riwayat"
             message="Terjadi kesalahan sistem saat mengambil data riwayat transaksi dari server."
             imageSrc={Image500}
@@ -240,7 +193,10 @@ const HistoryPage = () => {
         ) : data && data.transactions.length === 0 ? (
           <Card className="rounded-2xl border-slate-100">
             <CardContent className="p-10 text-center">
-              <Package className="h-10 w-10 text-slate-300 mx-auto mb-3" strokeWidth={1.5} />
+              <Package
+                className="h-10 w-10 text-slate-300 mx-auto mb-3"
+                strokeWidth={1.5}
+              />
               <p className="text-sm text-muted-foreground">
                 Belum ada transaksi pada filter ini.
               </p>
@@ -276,7 +232,8 @@ const HistoryPage = () => {
                         {trx.createdAt ? formatDateId(trx.createdAt) : ""}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {trx.totalQuantity} Unit • Total: {formatRupiah(trx.amount)}
+                        {trx.totalQuantity} Unit • Total:{" "}
+                        {formatRupiah(trx.amount)}
                       </p>
                     </div>
 
@@ -310,7 +267,43 @@ const HistoryPage = () => {
                     </div>
                   </button>
 
-                  {expandedIds.has(trx.id) && <ExpandedItems trxId={trx.id} />}
+                  {expandedIds.has(trx.id) && (
+                    <div className="mt-3 pt-4 border-t border-slate-100">
+                      <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/80">
+                        <p className="text-[11px] font-semibold text-slate-500 mb-3 uppercase tracking-wider">
+                          Detail Produk ({trx.items.length})
+                        </p>
+                        <div className="space-y-3">
+                          {trx.items.map((item) => (
+                            <div
+                              key={item.itemId}
+                              className="flex justify-between items-center text-[13px] bg-white p-3 rounded-xl border border-slate-100 shadow-sm"
+                            >
+                              <div className="min-w-0 pr-3">
+                                <h3 className="font-bold text-slate-800 truncate">
+                                  {item.productName ?? "(Produk telah dihapus)"}{" "}
+                                  <span className="text-slate-500 font-medium text-[12px] ml-1">
+                                    x{item.quantity}
+                                  </span>
+                                </h3>
+                                <p className="text-[11px] text-slate-500 mt-0.5">
+                                  Total Harga: {formatRupiah(item.itemAmount)}
+                                </p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <p className="text-[10px] text-slate-400 mb-0.5 font-medium">
+                                  Komisi Item
+                                </p>
+                                <p className="text-green-600 font-semibold text-[13px]">
+                                  + {formatRupiah(item.agentFeeAmount)}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             );
