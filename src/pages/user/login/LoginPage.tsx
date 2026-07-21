@@ -10,6 +10,8 @@ import { useAuthStore } from "@/store/auth.store";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/ageninlitewhite2.webp";
 import logoBlue from "@/assets/ageninliteBlue.webp";
+import { toIndonesianE164 } from "@/lib/phone";
+import { PhoneNumberInput } from "@/components/ui/PhoneNumberInput";
 
 // --- Animasi Peta Titik (Dot Map) disesuaikan dengan warna biru AgeninLite ---
 type RoutePoint = {
@@ -184,8 +186,10 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
+    const payload = {...data, phone_number: toIndonesianE164(data.phone_number),}
+    
     try {
-      const response = await apiClient.post('/api/auth/login', data);
+      const response = await apiClient.post('/api/auth/login', payload);
       
       if(response.status === 200) {
         const { access_token, refresh_token, role, name } = response.data;
@@ -211,6 +215,12 @@ export default function LoginPage() {
         }
         
         switch (errorCode) {
+          case "AUTH_0005":
+            setError("phone_number", {
+              type: "server",
+              message: "Format nomor telepon tidak valid.",
+            });
+            break;
           case 'AUTH_0010':
             setError('phone_number', { type: 'manual', message: 'Nomor telepon atau password salah!' });
             setError('password', { type: 'manual', message: 'Nomor telepon atau password salah!' });
@@ -306,16 +316,11 @@ export default function LoginPage() {
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                     Nomor Telepon
                   </label>
-                  <input
+                  <PhoneNumberInput
                     id="phone"
-                    type="tel"
-                    placeholder="+628xxxxxxxxxx"
+                    placeholder="87734567890"
+                    hasError={Boolean(errors.phone_number)}
                     {...register("phone_number")}
-                    className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
-                      errors.phone_number
-                        ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
-                        : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
-                    }`}
                   />
                   {errors.phone_number && (
                     <p className="text-sm text-red-500 mt-1">{errors.phone_number.message}</p>

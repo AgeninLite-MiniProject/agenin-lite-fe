@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import logoWhite from "@/assets/ageninlitewhite2.webp";
 import logoBlue from "@/assets/ageninliteBlue.webp";
+import { toIndonesianE164 } from "@/lib/phone";
+import { PhoneNumberInput } from "@/components/ui/PhoneNumberInput";
 
 // --- Animasi Peta Titik (Dot Map) disesuaikan dengan warna biru AgeninLite ---
 type RoutePoint = {
@@ -186,7 +188,10 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    const { confirm_password, ...payload } = data;
+    const { confirm_password, phone_number, ...formValues } = data;
+
+    const payload = {...formValues, phone_number: toIndonesianE164(phone_number),};
+
     if (!payload.email) delete payload.email; 
     if (!payload.referral_code) delete payload.referral_code;
     
@@ -214,6 +219,9 @@ export default function RegisterPage() {
             break;
           case 'AUTH_0004':
             setError('email', { type: 'manual', message: 'Email ini sudah terdaftar!' });
+            break;
+          case 'AUTH_0005':
+            setError('phone_number', { type: 'server', message: 'Format nomor telepon tidak valid!' });
             break;
           case 'AUTH_0006':
             setError('referral_code', { type: 'manual', message: 'Kode referral tidak valid atau tidak ditemukan.' });
@@ -333,27 +341,22 @@ export default function RegisterPage() {
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                     Nomor Telepon
                   </label>
-                  <input
+                  <PhoneNumberInput
                     id="phone"
-                    type="tel"
-                    placeholder="+628xxxxxxxxxx"
+                    placeholder="877xxxxxxxx"
+                    hasError={Boolean(errors.phone_number)}
                     {...register("phone_number")}
-                    className={`block w-full rounded-lg border bg-white h-12 px-4 outline-none transition-colors focus:ring-2 focus:ring-offset-1 ${
-                      errors.phone_number
-                        ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
-                        : "border-gray-300 focus:ring-blue-600/20 focus:border-blue-600"
-                    }`}
                   />
                   {errors.phone_number ? (
                     <p className="text-sm text-red-500 mt-1">{errors.phone_number.message}</p>
                   ) : (
-                    <p className="text-xs text-gray-400 mt-1">Gunakan format internasional, misal: +628123456789</p>
+                    <p className="text-xs text-gray-400 mt-1">Masukkan nomor setelah +62, contoh: 87734567890</p>
                   )}
                 </div>
 
                 {/* Email */}
                 <div className="space-y-1.5">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-gray-400 font-normal">(Opsional)</span></label>
+                  <label htmlFor="email" className="flex items-center justify-between text-sm font-medium text-gray-700"><span>Email</span> <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">Opsional</span></label>
                   <input
                     id="email"
                     type="email"
