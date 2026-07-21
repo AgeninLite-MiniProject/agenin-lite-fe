@@ -103,7 +103,7 @@ export default function PendingTransactionPage() {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : isError ? (
-          <ErrorState 
+          <ErrorState
             title="Gagal memuat transaksi"
             message="Terjadi kesalahan sistem saat mengambil daftar transaksi pending dari server."
             imageSrc={Image500}
@@ -127,18 +127,17 @@ export default function PendingTransactionPage() {
                     </div>
 
                     <div className="mb-4">
-                      <button 
+                      <button
                         onClick={() => toggleExpand(trx.id)}
                         className="flex items-center gap-2 text-[13px] font-medium text-primary transition-colors"
                       >
                         {trx.items && trx.items.length > 0 ? `Lihat ${trx.items.length} Produk` : "Tidak ada produk"}
                         <ChevronDown className={`w-4 h-4 transition-transform ${expandedIds.has(trx.id) ? "rotate-180" : ""}`} />
                       </button>
-                      
-                      <div 
-                        className={`grid transition-all duration-300 ease-in-out ${
-                          expandedIds.has(trx.id) ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
-                        }`}
+
+                      <div
+                        className={`grid transition-all duration-300 ease-in-out ${expandedIds.has(trx.id) ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+                          }`}
                       >
                         <div className="overflow-hidden">
                           {trx.items && trx.items.length > 0 && (
@@ -173,7 +172,7 @@ export default function PendingTransactionPage() {
                         <p className="font-bold text-[14px] text-slate-900">{formatCurrency(trx.amount)}</p>
                       </div>
                       <div>
-                        <p className="text-[11px] font-medium text-slate-500 mb-0.5">Total Fee</p>
+                        <p className="text-[11px] font-medium text-slate-500 mb-0.5">Komisi Agen</p>
                         <p className="font-bold text-[14px] text-green-600">
                           {formatCurrency(calculateEstimatedFee(trx))}
                         </p>
@@ -190,9 +189,9 @@ export default function PendingTransactionPage() {
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button 
+                        <Button
                           disabled={updateStatusMutation.isPending}
-                          variant="outline" 
+                          variant="outline"
                           className="rounded-full h-9 text-primary border-blue-700 hover:bg-white hover:text-primary font-semibold text-[13px] px-4 w-full sm:w-auto">
                           Update Status <ChevronDown className="w-4 h-4 ml-1.5 opacity-90" />
                         </Button>

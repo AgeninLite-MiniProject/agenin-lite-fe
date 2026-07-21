@@ -19,7 +19,9 @@ export const registerSchema = z
     password: z
       .string()
       .min(8, { message: "Password Minimal 8 Karakter!" })
-      .max(15, { message: "Password Maksimal 15 Karakter!" }),
+      .max(15, { message: "Password Maksimal 15 Karakter!" })
+      .regex(/[a-zA-Z]/, { message: "Password wajib mengandung minimal 1 huruf!" })
+      .regex(/[0-9]/, { message: "Password wajib mengandung minimal 1 angka!" }),
     confirm_password: z
       .string()
       .min(1, { message: "Konfirmasi Password Wajib Diisi!" }),
