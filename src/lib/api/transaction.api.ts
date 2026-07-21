@@ -7,11 +7,9 @@ import apiClient from "../axios";
 import {
   TransactionListResponseSchema,
   TransactionListResponseV2Schema,
-  TransactionDetailResponseSchema,
   type TransactionFilter,
   type TransactionListResponse,
   type TransactionListResponseV2,
-  type TransactionDetailResponse,
 } from "@/schemas/transaction.schema";
 
 // ─── Query key ───────────────────────────────────────────────────────
@@ -19,9 +17,6 @@ import {
 // and by future invalidateQueries() calls from other pages.
 export const transactionListQueryKey = (filter: TransactionFilter) =>
   ["transaction-list", filter] as const;
-
-export const transactionDetailQueryKey = (id: string) =>
-  ["transaction-detail", id] as const;
 
 // ─── API surface ─────────────────────────────────────────────────────
 // Only this object is exported. Page and hook only ever see this.
@@ -58,12 +53,6 @@ export const transactionApi = {
 
     const response = await apiClient.get("/api/transactions", { params });
     return TransactionListResponseV2Schema.parse(response.data.data);
-  },
-
-  // Fetches full detail of a single transaction (used by expand).
-  getDetail: async (id: string): Promise<TransactionDetailResponse> => {
-    const response = await apiClient.get(`/api/transactions/${id}`);
-    return TransactionDetailResponseSchema.parse(response.data.data);
   },
 
   create: async (payload: { items: { productId: string; quantity: number }[]; description?: string }) => {

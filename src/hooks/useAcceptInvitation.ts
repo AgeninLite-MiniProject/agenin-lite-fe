@@ -47,7 +47,7 @@ export function useAcceptInvitationMutation() {
     mutationFn: (inviterId: string): Promise<AcceptInvitationResponse> =>
       invitationApi.accept(inviterId),
 
-    onSuccess: (response, inviterId) => {
+    onSuccess: () => {
       toast.success("Undangan diterima.");
       queryClient.invalidateQueries({ queryKey: receivedInvitationsQueryKey });
     },
