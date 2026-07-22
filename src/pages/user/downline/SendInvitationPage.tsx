@@ -4,15 +4,16 @@ import Image500 from "@/assets/500-error.webp";
 import { usePhoneSearchQuery } from "@/hooks/usePhoneSearch";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Play, Search, X, Check } from "lucide-react";
+import { Play, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import type { PhoneSearchUser } from "@/lib/api/phone-search.api";
 import { useSentPendingInvitationsQuery } from "@/hooks/useSentInvitations";
 import { useSendInvitationMutation } from "@/hooks/useSendInvitation";
 import { useCancelInvitationMutation } from "@/hooks/useCancelInvitation";
+import { toIndonesianE164 } from "@/lib/phone";
+import { PhoneNumberInput } from "@/components/ui/PhoneNumberInput";
 
 type SearchPhase = "idle" | "searching" | "results" | "empty" | "too-short";
 
@@ -40,7 +41,7 @@ export default function SendInvitationPage() {
       setPicked(null);
       return;
     }
-    if (q.length < 3) {
+    if (q.length < 3 || !q.startsWith("8")) {
       setDebouncedPhone("");
       setResults([]);
       setPhase("too-short");
@@ -49,7 +50,7 @@ export default function SendInvitationPage() {
 
     setPhase("searching");
     debounceTimer.current = setTimeout(() => {
-      setDebouncedPhone(q);
+      setDebouncedPhone(toIndonesianE164(q));
     }, 300);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -176,13 +177,12 @@ export default function SendInvitationPage() {
                 Cari Nomor Telepon
               </Label>
               <div className="relative">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
-                <Input
-                  inputMode="numeric"
-                  placeholder="Ketik minimal 3 digit nomor..."
-                  className="rounded-full h-12 pl-11 pr-5 border-slate-200/80 bg-white"
+                <PhoneNumberInput
                   value={phoneQuery}
-                  onChange={(e) => setPhoneQuery(e.target.value)}
+                  onChange={(event) => setPhoneQuery(event.target.value)}
+                  placeholder="877..."
+                  containerClassName="rounded-full border-slate-200/80"
+                  className="pr-5"
                 />
               </div>
               <p className="text-[11px] text-slate-400 px-1">
@@ -201,7 +201,7 @@ export default function SendInvitationPage() {
 
                 {phase === "too-short" && (
                   <div className="p-4 text-sm text-slate-400 text-center">
-                    Ketik minimal 3 digit nomor untuk mulai mencari.
+                    Ketik minimal 3 digit setelah +62 dan awali dengan angka 8.
                   </div>
                 )}
 

@@ -1,15 +1,15 @@
+import { INDONESIAN_MOBILE_REGEX } from "@/lib/phone";
 import * as z from "zod";
+
+const phoneNumberSchema = z
+  .string()
+  .min(1, { message: "Nomor Telepon Wajib Diisi!" })
+  .regex(INDONESIAN_MOBILE_REGEX, { message: "Nomor harus dimulai dengan 8 dan terdiri dari 9-12 digit.", });
 
 export const registerSchema = z
   .object({
     name: z.string().min(1, { message: "Nama Lengkap Wajib Diisi!" }).max(100, "Maksimal 100 karakter!"),
-    phone_number: z
-      .string()
-      .min(1, { message: "Nomor Telepon Wajib Diisi!" })
-      .max(20, { message: "Maksimal 20 Karakter!" })
-      .regex(/^\+[1-9]\d{1,14}$/, {
-        message: "Format E.164 Wajib! (contoh: +628...)",
-      }),
+    phone_number: phoneNumberSchema,
     email: z
       .string()
       .email({ message: "Format Email Tidak Valid!" })
@@ -19,7 +19,9 @@ export const registerSchema = z
     password: z
       .string()
       .min(8, { message: "Password Minimal 8 Karakter!" })
-      .max(15, { message: "Password Maksimal 15 Karakter!" }),
+      .max(15, { message: "Password Maksimal 15 Karakter!" })
+      .regex(/[a-zA-Z]/, { message: "Password wajib mengandung minimal 1 huruf!" })
+      .regex(/[0-9]/, { message: "Password wajib mengandung minimal 1 angka!" }),
     confirm_password: z
       .string()
       .min(1, { message: "Konfirmasi Password Wajib Diisi!" }),
@@ -34,13 +36,7 @@ export const registerSchema = z
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-  phone_number: z
-    .string()
-    .min(1, { message: "Nomor Telepon Wajib Diisi!" })
-    .max(20, { message: "Maksimal 20 Karakter!" })
-    .regex(/^\+[1-9]\d{1,14}$/, {
-      message: "Format E.164 Wajib! (contoh: +628...)",
-    }),
+  phone_number: phoneNumberSchema,
   password: z
     .string()
     .min(1, { message: "Password Wajib Diisi!" })
