@@ -226,7 +226,7 @@ export default function LoginPage() {
             setError('password', { type: 'manual', message: 'Nomor telepon atau password salah!' });
             break;
           case 'AUTH_0011':
-            toast.error('Akun ini telah di-soft-delete oleh Admin.');
+            toast.error('Akun ini telah di-ban oleh Admin.');
             break;
           default:
             const cleanMessage = backendMessage.includes(':') 
