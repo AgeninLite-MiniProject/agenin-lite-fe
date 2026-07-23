@@ -40,6 +40,8 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let isHandlingBanned = false;
+
 // Response Interceptor: Menangani error 401 dan 403 (banned account)
 apiClient.interceptors.response.use(
   (response) => response,
@@ -51,10 +53,19 @@ apiClient.interceptors.response.use(
       originalRequest.url?.includes('/auth/logout');
 
     if ((error.response?.status === 403 || error.response?.data?.error_code === 'AUTH_0011') && !isAuthEndpoint) {
-      toast.error('Akun ini telah di-ban oleh Admin.', { id: 'banned-toast' });
-      useAuthStore.getState().logout();
-      window.location.href = '/login';
-      return Promise.reject(error);
+      if (!isHandlingBanned) {
+        isHandlingBanned = true;
+        toast.dismiss();
+        toast.error('Akun ini telah di-ban oleh Admin.', { id: 'banned-toast', duration: 4000 });
+
+        setTimeout(() => {
+          useAuthStore.getState().logout();
+          window.location.href = '/login';
+          isHandlingBanned = false;
+        }, 3000);
+      }
+
+      return new Promise(() => { });
     }
 
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
