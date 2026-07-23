@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { useAuthStore } from '@/store/auth.store';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
@@ -39,15 +40,22 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Menangani error 401 dan melakukan auto-refresh token
+// Response Interceptor: Menangani error 401 dan 403 (banned account)
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    const isAuthEndpoint = originalRequest.url?.includes('/auth/login') || 
-                           originalRequest.url?.includes('/auth/register') ||
-                           originalRequest.url?.includes('/auth/logout');
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/login') ||
+      originalRequest.url?.includes('/auth/register') ||
+      originalRequest.url?.includes('/auth/logout');
+
+    if ((error.response?.status === 403 || error.response?.data?.error_code === 'AUTH_0011') && !isAuthEndpoint) {
+      toast.error('Akun ini telah di-ban oleh Admin.', { id: 'banned-toast' });
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       if (isRefreshing) {
@@ -94,7 +102,7 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         // Jika refresh gagal, tolak semua antrean request
         processQueue(refreshError, null);
-        
+
         useAuthStore.getState().logout();
         window.location.href = '/login';
         return Promise.reject(refreshError);
