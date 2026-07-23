@@ -17,7 +17,7 @@ const MainLayout = () => {
             <div className="flex-1 flex flex-col">
               <Outlet/>
             </div>
-            <div className="shrink-0 mt-auto">
+            <div className="shrink-0 mt-auto hidden md:block">
               <Footer/>
             </div>
         </main>

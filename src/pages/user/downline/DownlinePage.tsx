@@ -100,13 +100,13 @@ const DownlinePage = () => {
           />
         </div>
 
-        <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full shrink-0">
+        <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full shrink-0 w-fit max-w-full overflow-x-auto">
           <Button
             onClick={() => setFilterStatus("ALL")}
             variant="ghost"
             size="sm"
             className={cn(
-              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all whitespace-nowrap shrink-0",
               filterStatus === "ALL"
                 ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
@@ -119,7 +119,7 @@ const DownlinePage = () => {
             variant="ghost"
             size="sm"
             className={cn(
-              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all whitespace-nowrap shrink-0",
               filterStatus === "ACTIVE"
                 ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
@@ -132,7 +132,7 @@ const DownlinePage = () => {
             variant="ghost"
             size="sm"
             className={cn(
-              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+              "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all whitespace-nowrap shrink-0",
               filterStatus === "PASSIVE"
                 ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/85 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                 : "text-slate-600 hover:text-slate-900"
