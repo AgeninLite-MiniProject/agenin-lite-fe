@@ -94,7 +94,7 @@ const Navbar = () => {
                 />
                 <AvatarFallback>{userInitials}</AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-foreground">
+              <span className="hidden sm:inline text-sm font-medium text-foreground">
                 {userName}
               </span>
             </DropdownMenuTrigger>
@@ -122,7 +122,7 @@ const Navbar = () => {
                   </span>
                 ) : (
                   <>
-                    <LogOut className="size-4" />
+                    <LogOut className="size-4" /> 
                     Logout
                   </>
                 )}
