@@ -147,7 +147,7 @@ const HistoryPage = () => {
         </div>
       </div>
 
-      <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full">
+      <div className="inline-flex items-center bg-slate-200/50 p-1 rounded-full w-fit max-w-full overflow-x-auto">
         {STATUS_TABS.map((tab) => {
           const isActive = status === tab.value;
           return (
@@ -157,7 +157,7 @@ const HistoryPage = () => {
               size="sm"
               onClick={() => handleStatusChange(tab.value)}
               className={cn(
-                "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all",
+                "rounded-full h-8 px-4 md:px-5 text-xs md:text-sm font-medium transition-all whitespace-nowrap shrink-0",
                 isActive
                   ? "border-0 bg-gradient-to-br from-blue-700 to-blue-900/75 text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-sm"
                   : "text-slate-600 hover:text-slate-900",
