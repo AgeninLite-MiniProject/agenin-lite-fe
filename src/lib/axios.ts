@@ -64,7 +64,7 @@ apiClient.interceptors.response.use(
           isHandlingBanned = false;
         }, 3000);
       }
-      // Kembalikan pending promise agar try...catch di komponen tidak memicu toast tambahan
+
       return new Promise(() => { });
     }
 
