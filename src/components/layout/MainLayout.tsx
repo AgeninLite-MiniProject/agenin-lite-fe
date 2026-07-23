@@ -23,7 +23,7 @@ const MainLayout = () => {
         </main>
 
         {/* MOBILE BOTTOM NAVIGATION */}
-        <nav className="md:hidden absolute bottom-0 left-0 right-0 z-[9999] bg-white border-t border-border flex items-center justify-around h-[68px] shadow-[0_-4px_15px_-5px_rgba(0,0,0,0.1)]">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-border flex items-center justify-around h-[68px] shadow-[0_-4px_15px_-5px_rgba(0,0,0,0.1)]">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -38,7 +38,7 @@ const MainLayout = () => {
               >
                 <div className={cn(
                   "flex items-center justify-center p-1.5 rounded-full transition-all",
-                  active ? "bg-primary/10" : "bg-transparent"
+                  active ? "bg-transparent" : "bg-transparent"
                 )}>
                   <Icon className="w-[22px] h-[22px]" strokeWidth={active ? 2.5 : 2} />
                 </div>
