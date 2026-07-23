@@ -219,7 +219,7 @@ export default function TransactionPage() {
 
         {/* DESKTOP RIGHT COLUMN - CART DETAIL */}
         <div className="hidden lg:flex lg:flex-col sticky top-6 z-10">
-          <Card className="rounded-[20px] border-slate-100 shadow-lg bg-white overflow-hidden flex flex-col h-auto max-h-[calc(100vh-140px)]">
+          <Card className="rounded-[20px] border-slate-100 shadow-lg bg-white overflow-hidden flex flex-col h-auto max-h-[calc(100vh-3rem)]">
 
             <div className="p-5 border-b border-slate-100 shrink-0 flex flex-col items-center justify-center gap-2.5">
               <div className="flex-shrink-0 w-14 h-14 rounded-full bg-white border-2 border-blue-700 shadow-sm flex items-center justify-center">
@@ -230,27 +230,31 @@ export default function TransactionPage() {
               </h2>
             </div>
 
-            <CardContent className="p-0 flex-1 overflow-y-auto">
+            <CardContent className="p-0 flex-1 overflow-y-auto min-h-0">
               {hasItems ? (
                 <div className="p-5 space-y-4">
                   {cartItems.map(({ product, quantity }) => (
-                    <div key={product!.product_id} className="flex items-start justify-between gap-4 pb-4 border-b border-slate-50 last:border-0 last:pb-0">
-                      <div className="flex-1">
-                        <h3 className="font-bold text-[14px] text-slate-900 leading-snug mb-1">{product!.product_name}</h3>
+                    <div key={product!.product_id} className="flex items-center justify-between gap-3 pb-4 border-b border-slate-50 last:border-0 last:pb-0">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-[14px] text-slate-900 leading-snug mb-1 truncate">{product!.product_name}</h3>
                         <p className="text-[12px] text-slate-500">{formatCurrency(product!.selling_price)}</p>
                       </div>
 
-                      <div className="flex items-center gap-2 border border-slate-200 rounded-full px-1 py-1 bg-white shrink-0">
+                      <div className="flex items-center gap-2 border border-slate-200 rounded-full px-1.5 py-1 bg-white shrink-0 shadow-sm">
                         <button
+                          type="button"
                           onClick={() => handleUpdateQuantity(product!.product_id, -1)}
                           className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
+                          title="Kurangi kuantitas"
                         >
                           <Minus className="h-3 w-3" />
                         </button>
-                        <span className="font-semibold text-xs min-w-[12px] text-center text-slate-900">{quantity}</span>
+                        <span className="font-semibold text-xs min-w-[14px] text-center text-slate-900">{quantity}</span>
                         <button
+                          type="button"
                           onClick={() => handleUpdateQuantity(product!.product_id, 1)}
                           className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
+                          title="Tambah kuantitas"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
@@ -267,18 +271,8 @@ export default function TransactionPage() {
             </CardContent>
 
             <div className="p-5 border-t border-slate-100 bg-slate-50/50 shrink-0">
-              <div className="mb-5">
-                {hasItems && (
-                  <div className="mb-4 space-y-2 border-b border-slate-200/60 pb-4">
-                    {cartItems.map(({ product, quantity }) => (
-                      <div key={product!.product_id} className="flex items-center justify-between text-[12px] text-slate-600">
-                        <span className="truncate pr-4">{product!.product_name} <span className="text-slate-400 font-medium">x{quantity}</span></span>
-                        <span className="font-semibold text-slate-800 shrink-0">{formatCurrency(product!.selling_price * quantity)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <div className="flex items-center justify-between mb-2">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
                   <p className="text-[13px] font-medium text-slate-500">Total Harga</p>
                   <p className="text-2xl font-bold text-slate-900 tracking-tight">
                     {formatCurrency(totalHarga)}
@@ -297,7 +291,8 @@ export default function TransactionPage() {
               <Button
                 disabled={!hasItems || createTxMutation.isPending}
                 onClick={handleCreateTransaction}
-                className="w-full rounded-full h-11 mt-4 text-[14px] font-semibold bg-gradient-to-br from-blue-700 to-blue-900/85 hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400">
+                className="w-full rounded-full h-11 mt-4 text-[14px] font-semibold bg-gradient-to-br from-blue-700 to-blue-900/85 hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400 shadow-sm"
+              >
                 {createTxMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Buat Transaksi Sekarang"}
               </Button>
             </div>
